@@ -3,33 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebSprint - Sign Up</title>
-    <link rel="stylesheet" href="css/home.css">
+    <title>WebSprint Sign Up</title>
+
+    <link rel="stylesheet" href="css/signup.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="container">
+    <div class="overlay"></div>
 
-        <h1>Create Account</h1>
-        <p>Join WebSprint and start learning web development.</p>
+    <div class="signin-card">
 
-        <form>
-            <input type="text" placeholder="Full Name" required>
+        <h1>CREATE YOUR ACCOUNT</h1>
 
-            <input type="email" placeholder="Email Address" required>
+        <p class="subtitle">
+            Join the adventure and start your WebSprint journey
+        </p>
 
-            <input type="password" placeholder="Create Password" required>
-
-            <input type="password" placeholder="Confirm Password" required>
-
-            <button type="button" onclick="location.href='login.html'">
-                Sign Up
+        <div class="tabs">
+            <button onclick="window.location.href='index.html'">
+                LOGIN
             </button>
-        </form>
 
-        <p>
+            <button class="active">
+                SIGN UP
+            </button>
+        </div>
+
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" placeholder="Choose a username">
+        </div>
+
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" placeholder="Enter your email">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="Create a password">
+        </div>
+
+        <div class="input-group">
+            <label>Confirm Password</label>
+            <input type="password" placeholder="Confirm your password">
+        </div>
+
+        <div class="terms">
+            <input type="checkbox">
+
+            <span>
+                I agree to the
+                <a href="#">Terms of Service</a>
+                and
+                <a href="#">Privacy Policy</a>
+            </span>
+        </div>
+
+        <button class="sign-btn" onclick="window.location.href='index.html'">
+            ▶ SIGN UP
+        </button>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <p class="login-text">
             Already have an account?
-            <a href="login.html">Login</a>
+            <a href="index.html">LOGIN</a>
         </p>
 
     </div>

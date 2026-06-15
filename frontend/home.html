@@ -3,15 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebSprint - Home</title>
+
+    <title>WebSprint</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Pixel Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
-    <h1>WebSprint</h1>
 
-    <button onclick="window.location.href='choice.html'">
-          Start Game
-    </button>
-    
+    <div class="overlay"></div>
+
+    <div class="stars"></div>
+
+    <main class="hero">
+
+        <h2 class="subtitle">BEGIN YOUR</h2>
+
+        <h1 class="title">
+            WEBSPRINT
+        </h1>
+
+       <!--- <h2 class="quest">QUEST</h2>-->
+
+        <p class="description">
+            Master HTML, CSS & JavaScript through
+            interactive challenges and<br> level-based gameplay.
+        </p>
+
+        
+        <button class="play-btn" onclick="location.href='index.html'">
+            ▶ PLAY
+        </button>
+
+        <div class="stats">
+
+            <div class="stat">
+                <span class="icon">🏆</span>
+                <h3>30+</h3>
+                <p>LEVELS</p>
+            </div>
+
+            <div class="stat">
+                <span class="icon">&lt;/&gt;</span>
+                <h3>3</h3>
+                <p>TECHNOLOGIES</p>
+            </div>
+
+            <div class="stat">
+                <span class="icon">⚡</span>
+                <h3>∞</h3>
+                <p>XP POINTS</p>
+            </div>
+
+            <div class="stat">
+                <span class="icon">❤</span>
+                <h3>LIVES</h3>
+                <p>SYSTEM</p>
+            </div>
+
+        </div>
+
+    </main>
+
 </body>
 </html>

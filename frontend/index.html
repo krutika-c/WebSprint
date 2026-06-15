@@ -2,29 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebSprint -Login</title>
-    <link rel="stylesheet" href="css/index.css"></head>
+    <title>WebSprint Login</title>
+    <link rel="stylesheet" href="css/index.css">
+
+    <!-- Pixel Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
 <body>
 
-    <div class="container">
+    <div class="overlay"></div>
 
-        <h1 >WebSprint </h1>
+    <div class="login-card">
 
-        <!--<p>
-            Learn HTML, CSS and JavaScript through
-            interactive challenges and quizzes.
-        </p>-->
+        <h1>WELCOME BACK</h1>
 
-        <div class="buttons">
-            <button onclick="location.href='login.html'">
-                Login
-            </button>
+        <p class="subtitle">
+            Login to continue your WebSprint journey
+        </p>
 
-            <button onclick="location.href='signup.html'">
-                Sign Up
+        <div class="tabs">
+            <button class="active">LOGIN</button>
+            <button onclick="window.location.href='signup.html'">
+              SIGN UP
             </button>
         </div>
+
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" placeholder="Enter your email">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="Enter your password">
+        </div>
+
+        <a href="#" class="forgot">Forgot Password?</a>
+
+        <button class="login-btn" onclick="window.location.href='choice.html'">
+            ▶ LOGIN
+        </button>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+       <!----<div class="socials">
+            <button>G</button>
+            <button>Git</button>
+            <button>D</button>
+       </div>-->
+
+        <p class="signup-text">
+            Don't have an account?
+            <a href="signup.html">SIGN UP</a>
+        </p>
 
     </div>
 

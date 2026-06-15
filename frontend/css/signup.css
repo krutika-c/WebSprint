@@ -11,27 +11,30 @@ body{
     align-items:center;
     background:url("../Images/pbg.jpg") center center/cover no-repeat;
     font-family:'Segoe UI',sans-serif;
+
     position:relative;
     overflow:hidden;
 }
 
-/* Dark Overlay */
+/* Overlay */
 
 .overlay{
     position:absolute;
     inset:0;
+
 }
 
-/* Login Card */
+/* Card */
 
-.login-card{
+.signin-card{
     position:relative;
     z-index:2;
 
-    width:500px;
+    width:450px;
+
     padding:30px 20px;
 
-    background:rgba(0,0,0,0.55);
+    background:rgba(0,0,0,0.45);
 
     backdrop-filter:blur(6px);
 
@@ -39,36 +42,37 @@ body{
 
     border-radius:18px;
 
+    /*color:white;*/
+
     box-shadow:
     0 0 25px rgba(0,255,220,.2),
     inset 0 0 20px rgba(0,255,220,.05);
-
     color:white;
 }
 
 /* Heading */
 
-.login-card h1{
+.signin-card h1{
     text-align:center;
 
-    font-family:'Press Start 2P',cursive;
+    font-family:'Press Start 2P', cursive;
 
-    font-size:24px;
+    font-size:20px;
 
     color:#43ffe2;
 
     margin-bottom:20px;
 
     text-shadow:
-    0 0 0px #43ffe2,
-    0 0 10px #43ffe2;
+        0 0 0px #43ffe2,
+        0 0 8px #43ffe2;
 }
 
 .subtitle{
     text-align:center;
     color:#d0d0d0;
     margin-bottom:35px;
-    font-size:15px;
+    font-size:13px;
 }
 
 /* Tabs */
@@ -76,23 +80,25 @@ body{
 .tabs{
     display:flex;
     gap:12px;
-    margin-bottom:30px;
+    margin-bottom:25px;
 }
 
 .tabs button{
     flex:1;
+
     height:40px;
 
     background:transparent;
 
     border:1px solid rgba(255,255,255,.15);
 
-    color:#cfcfcf;
-
     border-radius:10px;
 
-    font-family:'Press Start 2P';
-    font-size:12px;
+    color:#cfcfcf;
+
+    font-family:'Press Start 2P', cursive;
+
+    font-size:10px;
 
     cursor:pointer;
 }
@@ -102,8 +108,7 @@ body{
 
     border:1px solid #43ffe2;
 
-    box-shadow:
-    0 0 15px rgba(67,255,226,.6);
+    box-shadow:0 0 15px rgba(67,255,226,.6);
 }
 
 /* Inputs */
@@ -114,20 +119,22 @@ body{
 
 .input-group label{
     display:block;
-    margin-bottom:10px;
+    margin-bottom:8px;
     font-weight:600;
+    color:white;
 }
 
 .input-group input{
     width:100%;
-    height:60px;
-    background:rgba(255,255,255,.03);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:10px;
+    height:30px;
     padding:0 18px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:10px;
     color:white;
     font-size:16px;
 }
+
 .input-group input::placeholder{
     color:#8f8f8f;
 }
@@ -137,21 +144,41 @@ body{
 
     border-color:#43ffe2;
 
-    box-shadow:0 0 15px rgba(67,255,226,.3);
+    box-shadow:0 0 15px rgba(67,255,226,.25);
 }
 
-.forgot{
-    float:right;
-    color:#43ffe2;
+/* Terms */
+
+.terms{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:10px;
+
+    color:#d0d0d0;
+
+    font-size:14px;
+}
+
+.terms input{
+    width:18px;
+    height:18px;
+}
+
+.terms a{
+    color:#35ffd6;
     text-decoration:none;
-    margin-bottom:25px;
 }
 
-/* Login Button */
+/* Button */
 
-.login-btn{
+.sign-btn{
     width:100%;
-    height:75px;
+
+    height:50px;
 
     margin-top:25px;
 
@@ -163,70 +190,49 @@ body{
 
     color:black;
 
-    font-family:'Press Start 2P';
+    font-family:'Press Start 2P', cursive;
 
-    font-size:18px;
+    font-size:14px;
 
     cursor:pointer;
 
-    box-shadow:
-    0 0 20px #43ffe2,
-    0 0 50px rgba(67,255,226,.5);
-
     transition:.3s;
+
+    box-shadow:
+        0 0 20px #43ffe2,
+        0 0 40px rgba(67,255,226,.5);
 }
 
-.login-btn:hover{
+.sign-btn:hover{
     transform:translateY(-3px);
 
     box-shadow:
-    0 0 30px #43ffe2,
-    0 0 60px #43ffe2;
+        0 0 30px #43ffe2,
+        0 0 60px #43ffe2;
 }
 
 /* Divider */
 
 .divider{
     text-align:center;
+
     margin:35px 0;
-    color:#bbb;
+
+    color:#bdbdbd;
 }
 
-/* Social Buttons */
+/* Bottom */
 
-.socials{
-    display:flex;
-    justify-content:center;
-    gap:18px;
-}
-
-.socials button{
-    width:80px;
-    height:60px;
-
-    border-radius:10px;
-
-    background:rgba(255,255,255,.05);
-
-    border:1px solid rgba(255,255,255,.1);
-
-    color:white;
-
-    font-weight:bold;
-
-    cursor:pointer;
-}
-
-/* Bottom Text */
-
-.signup-text{
+.login-text{
     text-align:center;
-    margin-top:30px;
+
     color:#cfcfcf;
 }
 
-.signup-text a{
+.login-text a{
     color:#43ffe2;
+
     text-decoration:none;
+
     font-weight:bold;
 }
