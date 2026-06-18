@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up · WebSprint</title>
-    <meta name="description" content="Create your WebSprint account and start learning to code." />
+    <title>Login · WebSprint</title>
+    <meta name="description" content="Log in to WebSprint and continue your coding journey." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
         rel="stylesheet"
     />
-    
     <link rel="stylesheet" href="css/base.css" />
 </head>
 <body>
 
-    
+   
     <header class="site-header">
         <div class="brand">
             <span class="brand__logo">&lt;#&gt;</span>
@@ -27,18 +26,11 @@
     
     <main class="auth">
         <div class="auth__card">
-            <h1 class="auth__title">Create Account</h1>
-            <p class="auth__subtitle">Join WebSprint and start your coding journey</p>
+            <h1 class="auth__title">Welcome Back</h1>
+            <p class="auth__subtitle">Log in to keep leveling up your skills</p>
 
-            <form id="signupForm" novalidate>
+            <form id="loginForm" novalidate>
                 
-                <div class="field" id="f-name">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Code Master" />
-                    <p class="field__error">Please enter your name.</p>
-                </div>
-
-              
                 <div class="field" id="f-email">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="you@example.com" />
@@ -48,30 +40,33 @@
                 
                 <div class="field" id="f-password">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="At least 6 characters" />
+                    <input type="password" id="password" name="password" placeholder="••••••••" />
                     <p class="field__error">Password must be at least 6 characters.</p>
                 </div>
 
                
-                <div class="field" id="f-confirm">
-                    <label for="confirm">Confirm Password</label>
-                    <input type="password" id="confirm" name="confirm" placeholder="Re-enter password" />
-                    <p class="field__error">Passwords do not match.</p>
+                <div class="auth__row">
+                    <label class="muted">
+                        <input type="checkbox" /> Remember me
+                    </label>
+                    <a href="#">Forgot password?</a>
                 </div>
 
                
-                <button type="submit" class="btn btn--primary btn--block">Create Account →</button>
+                <a href="h1.html" class="btn btn--primary btn--block">Log In →</a>
+
+
             </form>
 
-            
+         
             <div class="divider">OR</div>
 
             
-            <button class="btn btn--ghost btn--block">Sign up with Google</button>
+            <button class="btn btn--ghost btn--block">Continue with Google</button>
 
-            
+           
             <p class="auth__foot">
-                Already have an account? <a href="login.html">Log in</a>
+                Don't have an account? <a href="signup.html">Sign up</a>
             </p>
         </div>
     </main>

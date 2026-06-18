@@ -1,64 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>WebSprint Login</title>
-    <link rel="stylesheet" href="css/index.css">
-
-    <!-- Pixel Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<title>Login</title>
+<link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
 
-    <div class="overlay"></div>
+<div class="auth-box">
 
-    <div class="login-card">
+<h1>WEBSPRINT</h1>
 
-        <h1>WELCOME BACK</h1>
+<input type="email" placeholder="Email">
 
-        <p class="subtitle">
-            Login to continue your WebSprint journey
-        </p>
+<input type="password" placeholder="Password">
 
-        <div class="tabs">
-            <button class="active">LOGIN</button>
-            <button onclick="window.location.href='signup.html'">
-              SIGN UP
-            </button>
-        </div>
+<button onclick="location.href='home.html'">
+Login
+</button>
 
-        <div class="input-group">
-            <label>Email</label>
-            <input type="email" placeholder="Enter your email">
-        </div>
+<p>
+Don't have an account?
+<a href="signup.html">Signup</a>
+</p>
 
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" placeholder="Enter your password">
-        </div>
-
-        <a href="#" class="forgot">Forgot Password?</a>
-
-        <button class="login-btn" onclick="window.location.href='choice.html'">
-            ▶ LOGIN
-        </button>
-
-        <div class="divider">
-            <span>OR</span>
-        </div>
-
-       <!----<div class="socials">
-            <button>G</button>
-            <button>Git</button>
-            <button>D</button>
-       </div>-->
-
-        <p class="signup-text">
-            Don't have an account?
-            <a href="signup.html">SIGN UP</a>
-        </p>
-
-    </div>
+</div>
 
 </body>
 </html>

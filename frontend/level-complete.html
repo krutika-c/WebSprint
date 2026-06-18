@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Level Complete · WebSprint</title>
+    <meta name="description" content="You completed an HTML level on WebSprint." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet"
+    />
+     <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    
+    <link rel="stylesheet" href="css/level-done.css" />
+</head>
+<body>
+
+    
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand">
+                <span class="brand__logo">&lt;#&gt;</span>
+                <span class="brand__name">WEBSPRINT</span>
+            </div>
+            <nav class="main-nav">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="choose-topic.html" class="nav-link">Topics</a>
+                <a href="achievements.html" class="nav-link">Achievements</a>
+
+               
+                <a href="settings.html" class="nav-link nav-link--icon" aria-label="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </a>
+
+               
+                <a href="profile.html" class="nav-link nav-link--profile" aria-label="Profile">
+                    <span class="profile-avatar--nav">CM</span>
+                    <span class="profile-caret">▾</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+   
+    <section class="course-hero course-hero--compact">
+        <div class="course-hero__bg"></div>
+        <div class="course-hero__content">
+            <div class="course-hero__badge">
+                <span class="badge badge--beginner">🎉 COMPLETED</span>
+                <span class="badge badge--course">LEVEL 1</span>
+            </div>
+            <h1 class="course-hero__title">Level Complete!</h1>
+            <p class="course-hero__desc">
+                Amazing work! You have completed HTML Level 1.
+            </p>
+        </div>
+    </section>
+
+    
+    <main id="shell" data-active="courses">
+
+       
+        <div class="card celebrate">
+            <div class="celebrate__trophy">🏆</div>
+            <h2 class="celebrate__title">Level Complete!</h2>
+            <p class="celebrate__subtitle">Amazing work! You have completed HTML Level 1.</p>
+            <div class="reward-row">
+                <div class="reward">
+                    <span class="reward__icon">⭐</span>
+                    <span class="reward__text">+100 XP</span>
+                </div>
+                <div class="reward">
+                    <span class="reward__icon">🎖️</span>
+                    <span class="reward__text">+1 Badge</span>
+                </div>
+            </div>
+            <p class="unlock-note">🔓 HTML Level 2 is unlocked</p>
+            <a href="html-roadmap.html" class="btn btn--primary btn--block">Continue Learning →</a>
+        </div>
+
+       
+        <div class="page-indicator">3. LEVEL COMPLETE</div>
+
+    </main>
+
+    <script src="script.js" defer></script>
+</body>
+</html>

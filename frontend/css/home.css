@@ -125,29 +125,33 @@ body{
 }
 
 
-/* WEBSPRINT */
-
-
 .title{
-   font-family:'Press Start 2P', cursive;
-   transform: translateX(-50px);
-
-
-   font-size:70px;
-
-
-   color:white;
-
-
-   line-height:1.1;
-
-
-   /*text-shadow:
-   0 0 0px #9dede9,
-   0 0 0px #7efdeb,
-   0 0 60px #7efdeb;*/
+    color:white;
+    font-size:65px;
+    line-height:1.2;
+    margin-left: -150px;
+   
+    font-family: 'Press Start 2P', cursive;
+    text-shadow:
+    0 0 0px rgba(255,255,255,.4),
+    0 0 10px rgba(255,255,255,.2);
+}
+.logo{
+    color:#8fffe2;
+   
+    text-shadow:
+    0 0 0px #8fffe2,
+    0 0 10px #8fffe2;
 }
 
+.sprint{
+    color:#8fffe2;
+
+    text-shadow:
+    0 0 0px rgba(143,255,226,.7),
+    0 0 10px rgba(143,255,226,.5),
+    0 0 10px rgba(143,255,226,.3);
+}
 
 /* QUEST */
 
@@ -210,16 +214,16 @@ body{
 
 
    cursor:pointer;
+   background:transparent;
+
+    border:2px solid #42ffe2;
+
+    color:#42ffe2;
 
 
    font-family:'Press Start 2P', cursive;
    font-size:20px;
 
-
-   color:black;
-
-
-   background:#2affd5;
 
 
    border-radius:15px;
@@ -236,11 +240,12 @@ body{
 
 .play-btn:hover{
    transform:scale(1.05);
+   background:#42ffe2;
 
-
+    color:black;
    box-shadow:
-   0 0 30px #2affd5,
-   0 0 60px #2affd5;
+   0 0 0px #2affd5,
+   0 0 20px #2affd5;
 }
 
 
