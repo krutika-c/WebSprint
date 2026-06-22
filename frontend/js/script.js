@@ -6,7 +6,7 @@
      gets the navigation rendered automatically.
   ---------------------------------------------------------- */
   const NAV_ITEMS = [
-    { id: "home",         label: "Home",         href: "dashboard.html" },
+    { id: "home",         label: "Home",         href: "h1.html" },
     { id: "courses",      label: "Courses",      href: "choose-topic.html" },
     { id: "progress",     label: "Progress",     href: "dashboard.html" },
     { id: "achievements", label: "Achievements", href: "achievements.html" },
@@ -49,9 +49,7 @@
       buildSidebar(active) +
       '<main class="main">' + inner + "</main>";
   }
-  /* ----------------------------------------------------------
-     2. Generic tab switching (lesson page, etc.)
-  ---------------------------------------------------------- */
+  
   document.querySelectorAll("[data-tabs]").forEach(function (group) {
     const tabs = group.querySelectorAll(".tab");
     tabs.forEach(function (tab) {
@@ -61,9 +59,7 @@
       });
     });
   });
-  /* ----------------------------------------------------------
-     3. Quiz option selection
-  ---------------------------------------------------------- */
+  
   document.querySelectorAll(".options").forEach(function (group) {
     group.querySelectorAll(".option").forEach(function (opt) {
       opt.addEventListener("click", function () {
@@ -74,9 +70,7 @@
       });
     });
   });
-  /* ----------------------------------------------------------
-     4. Challenge: Run code -> render into live output
-  ---------------------------------------------------------- */
+
   const runBtn = document.getElementById("runCode");
   const editor = document.getElementById("editor");
   const output = document.getElementById("output");
@@ -99,9 +93,7 @@
       });
     }
   }
-  /* ----------------------------------------------------------
-     5. Achievements filter tabs
-  ---------------------------------------------------------- */
+  
   const filterTabs = document.querySelectorAll(".filter-tab");
   if (filterTabs.length) {
     filterTabs.forEach(function (tab) {
@@ -117,9 +109,7 @@
       });
     });
   }
-  /* ----------------------------------------------------------
-     6. Auth form validation (login + signup)
-  ---------------------------------------------------------- */
+  
   function showError(fieldId, message) {
     const field = document.getElementById(fieldId);
     if (!field) return;
