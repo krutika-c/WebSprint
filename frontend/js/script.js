@@ -5,50 +5,6 @@
      Any page with <div id="shell" data-active="dashboard"></div>
      gets the navigation rendered automatically.
   ---------------------------------------------------------- */
-  const NAV_ITEMS = [
-    { id: "home",         label: "Home",         href: "h1.html" },
-    { id: "courses",      label: "Courses",      href: "choose-topic.html" },
-    { id: "progress",     label: "Progress",     href: "dashboard.html" },
-    { id: "achievements", label: "Achievements", href: "achievements.html" },
-    { id: "tests",        label: "Tests",        href: "genre-test.html" },
-    { id: "settings",     label: "Settings",     href: "settings.html" },
-  ];
-  function buildSidebar(active) {
-    const links = NAV_ITEMS.map(function (item) {
-      const cls = item.id === active ? "nav-link is-active" : "nav-link";
-      return (
-        '<a class="' + cls + '" href="' + item.href + '">' +
-        '<span class="dot">●</span>' + item.label +
-        "</a>"
-      );
-    }).join("\n");
-    return '<aside class="sidebar">\n' + links + "\n</aside>";
-  }
-  function buildTopbar() {
-    return [
-      '<header class="topbar">',
-      '  <a class="brand" href="dashboard.html">',
-      '    <span class="brand__logo">&lt;/&gt;</span>',
-      '    <span class="brand__name">WEBSPRINT</span>',
-      "  </a>",
-      '  <div class="topbar__right">',
-      '    <span class="xp-chip">🔥 1450 XP</span>',
-      '    <button class="icon-btn" aria-label="Notifications">🔔</button>',
-      '    <div class="avatar">CM</div>',
-      "  </div>",
-      "</header>",
-    ].join("\n");
-  }
-  const shell = document.getElementById("shell");
-  if (shell) {
-    const active = shell.getAttribute("data-active") || "";
-    const inner = shell.innerHTML;        /* keep page main content */
-    shell.classList.add("app");
-    shell.innerHTML =
-      buildTopbar() +
-      buildSidebar(active) +
-      '<main class="main">' + inner + "</main>";
-  }
   
   document.querySelectorAll("[data-tabs]").forEach(function (group) {
     const tabs = group.querySelectorAll(".tab");
