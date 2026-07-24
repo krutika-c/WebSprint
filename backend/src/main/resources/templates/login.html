@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login · WebSprint</title>
+    <meta name="description" content="Log in to WebSprint and continue your coding journey." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+</head>
+<body>
+
+   
+    <header class="site-header">
+        <div class="brand">
+            <span class="brand__logo">&lt;#&gt;</span>
+                <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+        </div>
+    </header>
+
+    
+    <main class="auth">
+        <div class="auth__card">
+            <h1 class="auth__title">Welcome Back</h1>
+            <p class="auth__subtitle">Log in to keep leveling up your skills</p>
+
+            
+            <div th:if="${param.error}" class="auth__error">
+    Invalid email or password.
+</div>
+
+<div th:if="${param.logout}" class="auth__notice">
+    You have been logged out.
+</div>
+            <form th:action="@{/login}" method="post" novalidate>
+                
+    <div class="field" id="f-email">
+        <label for="username">Email</label>
+        <input type="text" id="username" name="username" placeholder="you@example.com" />
+    </div>
+
+    <div class="field" id="f-password">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" />
+    </div>
+
+    <div class="auth__row">
+        <label class="muted">
+            <input type="checkbox" name="remember-me" /> Remember me
+        </label>
+        <a href="#">Forgot password?</a>
+    </div>
+
+    <button type="submit" class="btn btn--primary btn--block">Log In →</button>
+</form>
+
+         
+            <div class="divider">OR</div>
+
+            
+            <button class="btn btn--ghost btn--block" type="button" disabled>Continue with Google</button>
+
+           
+            <p class="auth__foot">
+    Don't have an account? <a th:href="@{/req/signup}">Sign up</a>
+</p>
+
+        </div>
+    </main>
+
+    <script th:src="@{/js/script.js}" defer></script>
+</body>
+</html>
