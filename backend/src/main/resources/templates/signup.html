@@ -28,6 +28,9 @@
             <h1 class="auth__title">Create Account</h1>
             <p class="auth__subtitle">Join WebSprint and start your coding journey</p>
 
+            <p th:if="${emailError}" th:text="${emailError}" class="auth__error"></p>
+            <p th:if="${passwordError}" th:text="${passwordError}" class="auth__error"></p>
+
             <!-- Native form POST — field names (fullName, email, password, confirmPassword)
                  map directly onto SignupRequest in RegistrationController -->
             <form th:action="@{/req/signup}" method="post" novalidate>
