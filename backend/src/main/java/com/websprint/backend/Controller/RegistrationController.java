@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.websprint.backend.Model.MyAppUser;
 import com.websprint.backend.Model.MyAppUserRepository;
@@ -25,23 +26,31 @@ public class RegistrationController {
     }
 
     @PostMapping(value = "/req/signup", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String createUser(@ModelAttribute SignupRequest request) {
+    public String createUser(@ModelAttribute SignupRequest request,
+                         RedirectAttributes redirectAttributes) {
 
-        if (request.getPassword() == null || !request.getPassword().equals(request.getConfirmPassword())) {
-            // Simplest possible handling for now — send them back to the form.
-            // Swap for a flash-attribute error message once you want nicer UX.
-            return "redirect:/req/signup?error=passwordMismatch";
-        }
-
-        MyAppUser user = new MyAppUser();
-        user.setFull_name(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setPassword_hash(passwordEncoder.encode(request.getPassword()));
-        user.setAuth_provider("local"); // static placeholder until Google auth is wired up
-        user.setCreated_at(Instant.now());
-
-        myAppUserRepository.save(user);
-
-        return "redirect:/login";
+    if (myAppUserRepository.findByEmail(request.getEmail()).isPresent()) {
+        redirectAttributes.addFlashAttribute("emailError", "Email already registered");
+        return "redirect:/req/signup";
     }
+
+    if (request.getPassword() == null || !request.getPassword().equals(request.getConfirmPassword())) {
+
+        redirectAttributes.addFlashAttribute("passwordError", "Passwords do not match");
+        return "redirect:/req/signup";
+    }
+
+    MyAppUser user = new MyAppUser();
+    user.setFull_name(request.getFullName());
+    user.setEmail(request.getEmail());
+    user.setPassword_hash(passwordEncoder.encode(request.getPassword()));
+    user.setAuth_provider("local");
+    user.setCreated_at(Instant.now());
+
+    myAppUserRepository.save(user);
+
+    redirectAttributes.addFlashAttribute("success", "Account created successfully!");
+
+    return "redirect:/login";
+}
 }
