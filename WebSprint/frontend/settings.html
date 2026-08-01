@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings · WebSprint</title>
+    <meta name="description" content="Manage your WebSprint app settings, accessibility, learning preferences and connected accounts." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/dsahboard.css" />
+    <link rel="stylesheet" href="css/settings.css" />
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="dashboard.html" class="brand" style="text-decoration: none;">
+                <span class="brand__logo">&lt;#&gt;</span>
+                <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </a>
+            <nav class="main-nav">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="choose-topic.html" class="nav-link">Topics</a>
+                <a href="achivements.html" class="nav-link">Achievements</a>
+                <a href="settings.html" class="nav-link nav-link--icon" aria-label="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </a>
+                <a href="profile.html" class="nav-link nav-link--profile" aria-label="Profile">
+                    <span class="profile-avatar--nav">CM</span>
+                    <span class="profile-caret">▾</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="course-hero course-hero--compact">
+        <div class="course-hero__bg"></div>
+        <div class="course-hero__content">
+            <div class="course-hero__badge">
+                <span class="badge badge--beginner">⚙️ APP</span>
+                <span class="badge badge--course">SETTINGS</span>
+            </div>
+            <h1 class="course-hero__title">Settings</h1>
+            <p class="course-hero__desc">
+                Accessibility, learning preferences and connected accounts
+            </p>
+        </div>
+    </section>
+
+    <main id="shell" data-active="settings">
+
+        <div class="settings-stack">
+
+            <!-- ─── Accessibility & Language ─── -->
+            <div class="card">
+                <span class="section-label">Accessibility & Language</span>
+
+                <div class="kv">
+                    <span>Language</span>
+                    <select class="select">
+                        <option>English</option>
+                        <option>Hindi</option>
+                        <option>Spanish</option>
+                        <option>French</option>
+                    </select>
+                </div>
+
+                <div class="kv">
+                    <span>Font Size</span>
+                    <div class="toggle-group">
+                        <button class="btn btn--ghost" data-fontsize="small">Small</button>
+                        <button class="btn btn--ghost is-active" data-fontsize="medium">Medium</button>
+                        <button class="btn btn--ghost" data-fontsize="large">Large</button>
+                    </div>
+                </div>
+
+                <div class="kv">
+                    <span>Reduce Motion</span>
+                    <label class="switch">
+                        <input type="checkbox" />
+                        <span class="switch__track"></span>
+                    </label>
+                </div>
+
+                <div class="kv">
+                    <span>High Contrast Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" />
+                        <span class="switch__track"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- ─── Learning Preferences ─── -->
+            <div class="card">
+                <span class="section-label">Learning Preferences</span>
+
+                <div class="kv">
+                    <span>Daily Goal</span>
+                    <select class="select">
+                        <option>1 lesson / day</option>
+                        <option selected>3 lessons / day</option>
+                        <option>5 lessons / day</option>
+                        <option>No goal</option>
+                    </select>
+                </div>
+
+                <div class="kv">
+                    <span>Difficulty</span>
+                    <div class="toggle-group">
+                        <button class="btn btn--ghost" data-difficulty="beginner">Beginner</button>
+                        <button class="btn btn--ghost is-active" data-difficulty="intermediate">Intermediate</button>
+                        <button class="btn btn--ghost" data-difficulty="advanced">Advanced</button>
+                    </div>
+                </div>
+
+                <div class="kv">
+                    <span>Daily Reminder Time</span>
+                    <input type="time" class="select" value="18:00" style="width: auto;" />
+                </div>
+
+                <div class="kv">
+                    <span>Weekly Summary Email</span>
+                    <label class="switch">
+                        <input type="checkbox" checked />
+                        <span class="switch__track"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- ─── Connected Accounts ─── -->
+            <div class="card">
+                <span class="section-label">Connected Accounts</span>
+
+                <div class="provider-row">
+                    <div class="provider-row__info">
+                        <span class="provider-icon">🐙</span>
+                        <span>GitHub</span>
+                    </div>
+                    <button class="btn btn--ghost">Connect</button>
+                </div>
+
+                <div class="provider-row">
+                    <div class="provider-row__info">
+                        <span class="provider-icon">🔍</span>
+                        <span>Google</span>
+                    </div>
+                    <button class="btn btn--ghost is-connected">Connected</button>
+                </div>
+
+                <div class="provider-row">
+                    <div class="provider-row__info">
+                        <span class="provider-icon">💬</span>
+                        <span>Discord</span>
+                    </div>
+                    <button class="btn btn--ghost">Connect</button>
+                </div>
+            </div>
+
+            <!-- ─── Data & Privacy ─── -->
+            <div class="card">
+                <span class="section-label">Data & Privacy</span>
+
+                <div class="kv">
+                    <span>Public Profile Visibility</span>
+                    <label class="switch">
+                        <input type="checkbox" checked />
+                        <span class="switch__track"></span>
+                    </label>
+                </div>
+
+                <div class="kv">
+                    <span>Download My Data</span>
+                    <button class="btn btn--ghost">Export</button>
+                </div>
+
+                <div class="danger-zone">
+                    <span class="section-label">Danger Zone</span>
+                    <p class="stat__lbl" style="margin-bottom:0.8rem;">
+                        Deleting your account is permanent and cannot be undone.
+                    </p>
+                    <button class="btn btn--danger">Delete Account</button>
+                </div>
+            </div>
+
+            <!-- ─── Preferences ─── -->
+            <div class="card">
+                <span class="section-label">Preferences</span>
+
+                <div class="kv">
+                    <span>Theme</span>
+                    <div class="toggle-group">
+                        <button class="btn btn--ghost is-active" data-theme="dark">Dark</button>
+                        <button class="btn btn--ghost" data-theme="light">Light</button>
+                    </div>
+                </div>
+
+                <div class="kv">
+                    <span>Email Notifications</span>
+                    <label class="switch">
+                        <input type="checkbox" checked />
+                        <span class="switch__track"></span>
+                    </label>
+                </div>
+
+                <div class="kv">
+                    <span>Push Notifications</span>
+                    <label class="switch">
+                        <input type="checkbox" />
+                        <span class="switch__track"></span>
+                    </label>
+                </div>
+
+                <div class="kv">
+                    <span>Streak Reminders</span>
+                    <label class="switch">
+                        <input type="checkbox" checked />
+                        <span class="switch__track"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- ─── About ─── -->
+            <div class="card">
+                <span class="section-label">About</span>
+
+                <div class="kv">
+                    <span>App Version</span>
+                    <b>1.0.0</b>
+                </div>
+
+                <div class="kv">
+                    <span>Terms of Service</span>
+                    <a href="#" class="btn btn--ghost">View</a>
+                </div>
+
+                <div class="kv">
+                    <span>Privacy Policy</span>
+                    <a href="#" class="btn btn--ghost">View</a>
+                </div>
+
+                <div class="kv">
+                    <span>Contact Support</span>
+                    <a href="#" class="btn btn--ghost">Contact</a>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/script.js" defer></script>
+    <script>
+        (function () {
+            "use strict";
+            document.querySelectorAll(".toggle-group").forEach(function (group) {
+                const btns = group.querySelectorAll(".btn");
+                btns.forEach(function (btn) {
+                    btn.addEventListener("click", function () {
+                        btns.forEach(function (b) { b.classList.remove("is-active"); });
+                        btn.classList.add("is-active");
+                    });
+                });
+            });
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge · Mission 1 · WebSprint</title>
+    <meta name="description" content="Complete the coding mission and submit your solution on WebSprint." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/c.css" />
+</head>
+<body>
+
+    <!-- ═══ SITE HEADER with navigation ═══ -->
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand">
+                <span class="brand__logo">&lt;#&gt;</span>
+                <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </div>
+            <nav class="main-nav">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="choose-topic.html" class="nav-link">Topics</a>
+                <a href="achivements.html" class="nav-link">Achievements</a>
+
+
+               
+                <a href="settings.html" class="nav-link nav-link--icon" aria-label="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </a>
+
+               
+                <a href="profile.html" class="nav-link nav-link--profile" aria-label="Profile">
+                    <span class="profile-avatar--nav">CM</span>
+                    <span class="profile-caret">▾</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ═══ HERO SECTION (compact for missions) ═══ -->
+    <section class="course-hero course-hero--compact">
+        <div class="course-hero__bg"></div>
+        <div class="course-hero__content">
+            <div class="course-hero__badge">
+                <span class="badge badge--beginner">⚡ MISSION</span>
+                <span class="badge badge--course">1 / 6</span>
+            </div>
+            <h1 class="course-hero__title">Create a Heading &amp; Paragraph</h1>
+            <p class="course-hero__desc">
+                Complete the coding mission and submit your solution.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main id="shell" data-active="courses">
+
+        <!-- Back button -->
+        <div class="lesson-header">
+            <a href="lesson.html" class="back-btn">← Back to Lesson</a>
+            <span class="pager">Mission 1</span>
+        </div>
+
+        <!-- ─── Challenge Layout ─── -->
+        <div class="challenge-grid">
+
+            <!-- Left column: Instructions + Code Editor -->
+            <div class="challenge-left">
+
+                <!-- Instructions -->
+                <div class="card challenge__instructions">
+                    <p class="section-label">Instructions</p>
+                    <ul class="checklist">
+                        <li>Create an <code>&lt;h1&gt;</code> heading</li>
+                        <li>Add a <code>&lt;p&gt;</code> paragraph</li>
+                        <li>Your output should match the preview</li>
+                    </ul>
+                </div>
+
+                <!-- Code Editor -->
+                <div class="card challenge__editor">
+                    <p class="section-label">Code Editor</p>
+                    <textarea id="editor" class="editor" spellcheck="false">&lt;h1&gt;Mission 1&lt;/h1&gt;
+&lt;p&gt;I am learning HTML on WebSprint.&lt;/p&gt;</textarea>
+                    <div class="editor-actions">
+                        <button id="resetCode" class="btn btn--ghost">Reset</button>
+                        <button id="runCode" class="btn btn--primary">Run Code</button>
+                        <button id="submitCode" class="btn btn--primary">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right column: Preview -->
+            <div class="challenge-right">
+                <div class="card challenge__preview">
+                    <p class="section-label">Preview</p>
+                    <div id="output" class="live-output"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Page indicator -->
+        <div class="page-indicator">3. CHALLENGE · MISSION 1</div>
+
+    </main>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
