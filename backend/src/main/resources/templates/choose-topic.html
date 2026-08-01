@@ -11,9 +11,9 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
         rel="stylesheet"
     />
-     <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/header.css" />
-    <link rel="stylesheet" href="css/topic.css" />
+     <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/topic.css}" />
 </head>
 <body>
 
@@ -25,13 +25,13 @@
                 <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
             </div>
             <nav class="main-nav">
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-                <a href="choose-topic.html" class="nav-link">Topics</a>
-                <a href="achivements.html" class="nav-link">Achievements</a>
+                <a th:href="@{/dashboard}" class="nav-link">Dashboard</a>
+                <a th:href="@{/choose-topic}" class="nav-link">Topics</a>
+                <a th:href="@{/achivements}" class="nav-link">Achievements</a>
 
 
                
-                <a href="settings.html" class="nav-link nav-link--icon" aria-label="Settings">
+                <a th:href="@{/settings}" class="nav-link nav-link--icon" aria-label="Settings">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
                         <circle cx="12" cy="12" r="3"/>
@@ -39,7 +39,7 @@
                 </a>
 
                
-                <a href="profile.html" class="nav-link nav-link--profile" aria-label="Profile">
+                <a th:href="@{/profile}" class="nav-link nav-link--profile" aria-label="Profile">
                     <span class="profile-avatar--nav">CM</span>
                     <span class="profile-caret">▾</span>
                 </a>
@@ -71,7 +71,7 @@
                     <span>Progress</span>
                     <span>0%</span>
                 </div>
-                <a href="html-roadmap.html" class="btn btn--html btn--block">Start Learning →</a>
+                <a th:href="@{/html-roadmap}" class="btn btn--html btn--block">Start Learning →</a>
             </div>
 
             <!-- CSS -->
@@ -87,7 +87,7 @@
                     <span>Progress</span>
                     <span>0%</span>
                 </div>
-                <a href="css-roadmap.html" class="btn btn--css btn--block">Start Learning →</a>
+                <a th:href="@{/css-roadmap}" class="btn btn--css btn--block">Start Learning →</a>
             </div>
 
             <!-- JavaScript -->
@@ -103,7 +103,7 @@
                     <span>Progress</span>
                     <span>0%</span>
                 </div>
-                <a href="js-roadmap.html" class="btn btn--js btn--block">Start Learning →</a>
+                <a th:href="@{/js-roadmap}" class="btn btn--js btn--block">Start Learning →</a>
             </div>
         </div>
 
@@ -139,6 +139,6 @@
 
     </main>
 
-    <script src="script.js" defer></script>
+    <script th:src="@{script.js}" defer></script>
 </body>
 </html>
