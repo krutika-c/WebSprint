@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Choose Your Topic · WebSprint</title>
+    <meta name="description" content="Pick a technology and start your learning journey." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet"
+    />
+     <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/topic.css}" />
+</head>
+<body>
+
+    
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand">
+                <span class="brand__logo">&lt;#&gt;</span>
+                <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </div>
+            <nav class="main-nav">
+                <a th:href="@{/dashboard}" class="nav-link">Dashboard</a>
+                <a th:href="@{/choose-topic}" class="nav-link">Topics</a>
+                <a th:href="@{/achivements}" class="nav-link">Achievements</a>
+
+
+               
+                <a th:href="@{/settings}" class="nav-link nav-link--icon" aria-label="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </a>
+
+               
+                <a th:href="@{/profile}" class="nav-link nav-link--profile" aria-label="Profile">
+                    <span class="profile-avatar--nav">CM</span>
+                    <span class="profile-caret">▾</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <main id="shell" data-active="courses">
+
+        
+        <div class="page-head">
+            <h1 class="page-title">CHOOSE YOUR TOPIC</h1>
+            <p class="page-subtitle">Select a technology to start your learning journey</p>
+        </div>
+
+
+        <div class="grid grid--3">
+
+            <!-- HTML -->
+            <div class="card topic-card is-html">
+                <div class="topic-icon is-html">&lt;/&gt;</div>
+                <h3>HTML</h3>
+                <p>Learn the structure of the web and build the foundation of every website.</p>
+                <span class="badge badge--beginner">⚡ Beginner</span>
+                <div class="progress">
+                    <div class="progress__fill" style="width: 0%"></div>
+                </div>
+                <div class="progress__meta">
+                    <span>Progress</span>
+                    <span>0%</span>
+                </div>
+                <a th:href="@{/html-roadmap}" class="btn btn--html btn--block">Start Learning →</a>
+            </div>
+
+            <!-- CSS -->
+            <div class="card topic-card is-css">
+                <div class="topic-icon is-css">#</div>
+                <h3>CSS</h3>
+                <p>Style your webpages with colors, fonts and make them beautiful.</p>
+                <span class="badge badge--beginner">⚡ Beginner</span>
+                <div class="progress">
+                    <div class="progress__fill" style="width: 0%"></div>
+                </div>
+                <div class="progress__meta">
+                    <span>Progress</span>
+                    <span>0%</span>
+                </div>
+                <a th:href="@{/css-roadmap}" class="btn btn--css btn--block">Start Learning →</a>
+            </div>
+
+            <!-- JavaScript -->
+            <div class="card topic-card is-js">
+                <div class="topic-icon is-js">JS</div>
+                <h3>JavaScript</h3>
+                <p>Add interactivity and bring your websites to life with JavaScript.</p>
+                <span class="badge badge--beginner">⚡ Beginner</span>
+                <div class="progress">
+                    <div class="progress__fill" style="width: 0%"></div>
+                </div>
+                <div class="progress__meta">
+                    <span>Progress</span>
+                    <span>0%</span>
+                </div>
+                <a th:href="@{/js-roadmap}" class="btn btn--js btn--block">Start Learning →</a>
+            </div>
+        </div>
+
+        
+        <div class="feature-section">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h4>Learn. Practice. Level Up!</h4>
+                <p>Master each technology step by step with hands-on challenges, real projects and fun scenarios.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <span class="feature-item__icon">🛠️</span>
+                    <span class="feature-item__label">Hands-on Practice</span>
+                    <span class="feature-item__value">0%</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-item__icon">📈</span>
+                    <span class="feature-item__label">Level Based Learning</span>
+                    <span class="feature-item__value">0%</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-item__icon">🎯</span>
+                    <span class="feature-item__label">Track Your Progress</span>
+                    <span class="feature-item__value">0%</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="page-indicator">1. CHOOSE TOPIC PAGE</div>
+
+    </main>
+
+    <script th:src="@{script.js}" defer></script>
+</body>
+</html>

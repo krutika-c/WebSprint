@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WebSprint | Learn HTML, CSS & JavaScript</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+
+    <link rel="stylesheet" th:href="@{/css/h1.css}" />
+</head>
+<body>
+
+    <div class="overlay"></div>
+    <div class="stars"></div>
+
+    <main class="hero">
+
+        <div class="brand">
+
+         
+
+          <h1 class="title">
+              <span class="logo">&lt;#&gt;</span>WEB<span class="sprint">SPRINT</span>
+          </h1>
+
+       </div>
+
+        <p class="description">
+            An arcade-inspired platform to master HTML, CSS and JavaScript.
+            Complete lessons, conquer quizzes, earn XP and level up your
+            web development skills one challenge at a time.
+        </p>
+
+        <div class="buttons">
+            <a th:href="@{/choose-topic}" class="play-btn">▶ START GAME</a>
+            <!--<a href="choose-topic.html" class="skip-btn">SKIP TEST →</a>-->
+        </div>
+
+        <div class="stats">
+
+            <div class="stat-cell">
+                <span class="icon">⚡</span>
+                <h3>3</h3>
+                <p>TECHNOLOGIES</p>
+            </div>
+
+            <div class="stat-cell">
+                <span class="icon">🎯</span>
+                <h3>3</h3>
+                <p>LEVELS</p>
+            </div>
+
+            <div class="stat-cell">
+                <span class="icon">❤</span>
+                <h3>LIVES</h3>
+                <p>SYSTEM</p>
+            </div>
+
+            <div class="stat-cell">
+                <span class="icon">🏆</span>
+                <h3>Infinity</h3>
+                <p>XP POINTS</p>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

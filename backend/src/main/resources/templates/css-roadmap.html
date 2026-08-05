@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Roadmap · WebSprint</title>
+    <meta name="description" content="Learn CSS step by step with the WebSprint roadmap." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/roadmap.css}" />
+     <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+
+</head>
+<body>
+
+
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand">
+                <span class="brand__logo">&lt;#&gt;</span>
+                <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </div>
+            <nav class="main-nav">
+                <a th:href="@{/dashboard}" class="nav-link">Dashboard</a>
+                <a th:href="@{/choose-topic}" class="nav-link">Topics</a>
+                <a th:href="@{/achivements}" class="nav-link">Achievements</a>
+
+               
+                <a th:href="@{/settings}" class="nav-link nav-link--icon" aria-label="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </a>
+
+               
+                <a th:href="@{/profile}" class="nav-link nav-link--profile" aria-label="Profile">
+                    <span class="profile-avatar--nav">CM</span>
+                    <span class="profile-caret">▾</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+   
+    <section class="course-hero" data-bg="css">
+        <div class="course-hero__bg"></div>
+        <div class="course-hero__content">
+            <div class="course-hero__badge">
+                <span class="badge badge--beginner">⚡ BEGINNER</span>
+                <span class="badge badge--course">COURSE</span>
+            </div>
+            <h1 class="course-hero__title">CSS</h1>
+            <p class="course-hero__desc">
+                Learn to use CSS selectors and properties to stylize your HTML pages with
+                colors, fonts, sizing, layouts, and more!
+            </p>
+            
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main id="shell" data-active="courses">
+
+        <!-- Page heading -->
+        <div class="page-head">
+            <h2 class="page-title">CSS Roadmap</h2>
+            <p class="page-subtitle">Learn CSS step by step</p>
+        </div>
+
+        <!-- ─── Roadmap Layout ─── -->
+        <div class="roadmap">
+
+            <!-- Steps list -->
+            <div class="roadmap__list">
+
+                <!-- Step 1: Completed -->
+                <div class="step is-done">
+                    <span class="step__num">✓</span>
+                    <div class="step__body">
+                        <h4>CSS Basics</h4>
+                        <p>Learn about selectors and properties.</p>
+                    </div>
+                    <span class="step__status is-done">Completed</span>
+                </div>
+
+                <!-- Step 2: Locked -->
+                <div class="step is-locked">
+                    <span class="step__num">2</span>
+                    <div class="step__body">
+                        <h4>Colors &amp; Backgrounds</h4>
+                        <p>Add colors and backgrounds to elements.</p>
+                    </div>
+                    <span class="step__status is-locked">🔒 Locked</span>
+                </div>
+
+                <!-- Step 3: Locked -->
+                <div class="step is-locked">
+                    <span class="step__num">3</span>
+                    <div class="step__body">
+                        <h4>Box Model</h4>
+                        <p>Understand margin, padding and border.</p>
+                    </div>
+                    <span class="step__status is-locked">🔒 Locked</span>
+                </div>
+
+                <!-- Step 4: Locked -->
+                <div class="step is-locked">
+                    <span class="step__num">4</span>
+                    <div class="step__body">
+                        <h4>Flexbox</h4>
+                        <p>Build flexible layouts with Flexbox.</p>
+                    </div>
+                    <span class="step__status is-locked">🔒 Locked</span>
+                </div>
+
+                <!-- Step 5: Locked -->
+                <div class="step is-locked">
+                    <span class="step__num">5</span>
+                    <div class="step__body">
+                        <h4>Grid</h4>
+                        <p>Create powerful layouts using CSS Grid.</p>
+                    </div>
+                    <span class="step__status is-locked">🔒 Locked</span>
+                </div>
+
+                <!-- Step 6: Locked -->
+                <div class="step is-locked">
+                    <span class="step__num">6</span>
+                    <div class="step__body">
+                        <h4>Animations</h4>
+                        <p>Make your website come alive.</p>
+                    </div>
+                    <span class="step__status is-locked">🔒 Locked</span>
+                </div>
+
+                <!-- Step 7: Locked -->
+                <div class="step is-locked">
+                    <span class="step__num">7</span>
+                    <div class="step__body">
+                        <h4>Final Project</h4>
+                        <p>Build a responsive webpage.</p>
+                    </div>
+                    <span class="step__status is-locked">🔒 Locked</span>
+                </div>
+            </div>
+
+            <!-- ─── Progress Sidebar ─── -->
+            <aside class="roadmap__sidebar card">
+                <p class="section-label">Your Progress</p>
+                <div class="ring-wrap">
+                    <div class="ring" style="--val: 0">
+                        <div class="ring__label">
+                            <b>0%</b>
+                            <span>0 of 7 completed</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="kv"><span>XP Earned</span><b>0 XP</b></div>
+                <div class="kv"><span>Next Reward</span><b>🏆 Level 1</b></div>
+            </aside>
+
+        </div>
+
+        <!-- Page indicator -->
+        <div class="page-indicator">2. CSS ROADMAP</div>
+
+    </main>
+
+    <script th:src="@{script.js}" defer></script>
+</body>
+</html>
