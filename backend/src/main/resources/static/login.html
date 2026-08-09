@@ -11,7 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
         rel="stylesheet"
     />
-    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" href="css/base.css" />
 </head>
 <body>
 
@@ -29,19 +29,11 @@
             <h1 class="auth__title">Welcome Back</h1>
             <p class="auth__subtitle">Log in to keep leveling up your skills</p>
 
-            
-            <div th:if="${param.error}" class="auth__error">
-    Invalid email or password.
-</div>
-
-<div th:if="${param.logout}" class="auth__notice">
-    You have been logged out.
-</div>
-            <form th:action="@{/login}" method="post" novalidate>
+            <form id="loginForm" novalidate>
                 
     <div class="field" id="f-email">
-        <label for="username">Email</label>
-        <input type="text" id="username" name="username" placeholder="you@example.com" />
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" placeholder="you@example.com" />
     </div>
 
     <div class="field" id="f-password">
@@ -63,18 +55,16 @@
             <div class="divider">OR</div>
 
             
-            <a th:href="@{/oauth2/authorization/google}" class="btn btn--ghost btn--block">
-                Continue with Google
-            </a>
+            <button class="btn btn--ghost btn--block" type="button" disabled>Continue with Google</button>
 
            
             <p class="auth__foot">
-    Don't have an account? <a th:href="@{/req/signup}">Sign up</a>
+    Don't have an account? <a href="signup">Sign up</a>
 </p>
 
         </div>
     </main>
 
-    <script th:src="@{/js/script.js}" defer></script>
+    <script src="js/script.js" defer></script>
 </body>
 </html>

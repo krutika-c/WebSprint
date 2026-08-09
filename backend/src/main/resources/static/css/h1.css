@@ -19,7 +19,7 @@ body{
     overflow-x:hidden;
 
     background:
-    url("../Images/pbg.jpg");
+    url("/Images/pbg.jpg");
 
     background-size:cover;
     background-position:center;

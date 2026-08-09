@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,7 +12,7 @@
         rel="stylesheet"
     />
 
-    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" href="css/base.css" />
 </head>
 <body>
 
@@ -28,15 +28,13 @@
             <h1 class="auth__title">Create Account</h1>
             <p class="auth__subtitle">Join WebSprint and start your coding journey</p>
 
-            <p th:if="${emailError}" th:text="${emailError}" class="auth__error"></p>
-            <p th:if="${passwordError}" th:text="${passwordError}" class="auth__error"></p>
-
-            <!-- Native form POST — field names (fullName, email, password, confirmPassword)
+            
+            <!-- Native form POST — field names (name, email, password, password)
                  map directly onto SignupRequest in RegistrationController -->
-            <form th:action="@{/req/signup}" method="post" novalidate>
+            <form id="signupForm" novalidate>
                 <div class="field" id="f-name">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" name="fullName" placeholder="Code Master" required />
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Code Master" required />
                 </div>
 
                 <div class="field" id="f-email">
@@ -50,8 +48,8 @@
                 </div>
 
                 <div class="field" id="f-confirm">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required />
+                    <label for="confirm">Confirm Password</label>
+                    <input type="password" id="confirm" name="confirm" placeholder="Re-enter password" required />
                 </div>
 
                 <button type="submit" class="btn btn--primary btn--block">Create Account →</button>
@@ -63,11 +61,11 @@
             <button class="btn btn--ghost btn--block" type="button" disabled>Sign up with Google</button>
 
             <p class="auth__foot">
-                Already have an account? <a th:href="@{/login}">Log in</a>
+                Already have an account? <a href="login">Log in</a>
             </p>
         </div>
     </main>
 
-    <script th:src="@{/js/script.js}" defer></script>
+    <script src="js/script.js" defer></script>
 </body>
 </html>

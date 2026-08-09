@@ -10,7 +10,7 @@ body{
    min-height:100vh;
    overflow:hidden;
    image-rendering:pixelated;
-   background:url("../Images/pbg.jpg");
+   background:url("/Images/pbg.jpg");
    background-size:cover;
    background-position:center;
    background-repeat:no-repeat;

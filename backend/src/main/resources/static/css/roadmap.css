@@ -914,19 +914,19 @@ body {
 .course-hero[data-bg="html"] .course-hero__bg {
     background:
         linear-gradient(135deg, rgba(11, 13, 16, 0.5) 0%, rgba(11, 13, 16, 0.5) 50%, rgba(11, 13, 16, 0.5) 100%),
-        url(../Images/html.jpg) center/cover no-repeat;
+        url(/Images/html.jpg) center/cover no-repeat;
 }
 
 .course-hero[data-bg="css"] .course-hero__bg {
     background:
         linear-gradient(135deg, rgba(11, 13, 16, 0.5) 0%, rgba(11, 13, 16, 0.5) 50%, rgba(11, 13, 16, 0.5) 100%),
-        url(../Images/css.jpg) center/cover no-repeat;
+        url(/Images/css.jpg) center/cover no-repeat;
 }
 
 .course-hero[data-bg="js"] .course-hero__bg {
     background:
         linear-gradient(135deg, rgba(11, 13, 16, 0.5) 0%, rgba(11, 13, 16, 0.5) 50%, rgba(11, 13, 16, 0.5) 100%),
-        url(../Images/js.jpg) center/cover no-repeat;
+        url(/Images/js.jpg) center/cover no-repeat;
 }
 
 
