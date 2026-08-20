@@ -15,53 +15,48 @@
 </head>
 <body>
 
-   
     <header class="site-header">
         <div class="brand">
             <span class="brand__logo">&lt;#&gt;</span>
-                <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
         </div>
     </header>
 
-    
     <main class="auth">
         <div class="auth__card">
             <h1 class="auth__title">Welcome Back</h1>
             <p class="auth__subtitle">Log in to keep leveling up your skills</p>
 
             <form id="loginForm" novalidate>
-                
-    <div class="field" id="f-email">
-        <label for="email">Email</label>
-        <input type="text" id="email" name="email" placeholder="you@example.com" />
-    </div>
+                <div class="field" id="f-email">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" placeholder="you@example.com" />
+                    <span class="field__error"></span>
+                </div>
 
-    <div class="field" id="f-password">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="••••••••" />
-    </div>
+                <div class="field" id="f-password">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" />
+                    <span class="field__error"></span>
+                </div>
 
-    <div class="auth__row">
-        <label class="muted">
-            <input type="checkbox" name="remember-me" /> Remember me
-        </label>
-        <a href="#">Forgot password?</a>
-    </div>
+                <div class="auth__row">
+                    <label class="muted">
+                        <input type="checkbox" name="remember-me" /> Remember me
+                    </label>
+                    <a href="#">Forgot password?</a>
+                </div>
 
-    <button type="submit" class="btn btn--primary btn--block">Log In →</button>
-</form>
+                <button type="submit" class="btn btn--primary btn--block">Log In →</button>
+            </form>
 
-         
             <div class="divider">OR</div>
 
-            
             <a class="btn btn--ghost btn--block" href="/oauth2/authorization/google">Continue with Google</a>
 
-           
             <p class="auth__foot">
-    Don't have an account? <a href="signup">Sign up</a>
-</p>
-
+                Don't have an account? <a href="signup">Sign up</a>
+            </p>
         </div>
     </main>
 

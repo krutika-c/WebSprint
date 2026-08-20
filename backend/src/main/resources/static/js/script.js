@@ -2,10 +2,9 @@
   "use strict";
 
   /* ----------------------------------------------------------
-     NEW — authFetch. Reusable helper for any future call to a
+     authFetch. Reusable helper for any future call to a
      protected endpoint (lessons, quizzes, progress). Attaches
-     the JWT automatically. Nothing else in this file uses it
-     yet, but it's here so later pages don't repeat this by hand.
+     the JWT automatically.
   ---------------------------------------------------------- */
   window.authFetch = function (url, options) {
     options = options || {};
@@ -16,12 +15,9 @@
   };
 
   /* ----------------------------------------------------------
-     1. Inject the shared topbar + sidebar
-     Any page with <div id="shell" data-active="dashboard"></div>
-     gets the navigation rendered automatically.
-     UNCHANGED — left exactly as pasted.
+     1. Shared page wiring — tabs, options, code runner, filters.
+     UNCHANGED.
   ---------------------------------------------------------- */
-
   document.querySelectorAll("[data-tabs]").forEach(function (group) {
     const tabs = group.querySelectorAll(".tab");
     tabs.forEach(function (tab) {
@@ -82,121 +78,161 @@
     });
   }
 
+  /* ----------------------------------------------------------
+     2. Inline error helpers.
+     These render the message INSIDE the field's own container
+     (a red-bordered box with red text right under the input) —
+     never a browser alert()/confirm() popup.
+  ---------------------------------------------------------- */
   function showError(fieldId, message) {
     const field = document.getElementById(fieldId);
     if (!field) return;
     field.classList.add("has-error");
-    const err = field.querySelector(".field__error");
-    if (err) err.textContent = message;
+    let err = field.querySelector(".field__error");
+    if (!err) {
+      // Create the error element on the fly if the HTML doesn't already
+      // have one, so this always works even on pages you haven't added
+      // <p class="field__error"> to yet.
+      err = document.createElement("p");
+      err.className = "field__error";
+      field.appendChild(err);
+    }
+    err.textContent = message;
   }
+
+  function clearError(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+    field.classList.remove("has-error");
+    const err = field.querySelector(".field__error");
+    if (err) err.textContent = "";
+  }
+
   function clearErrors(form) {
     form.querySelectorAll(".field").forEach(function (f) {
       f.classList.remove("has-error");
+      const err = f.querySelector(".field__error");
+      if (err) err.textContent = ""; // FIXED: previously left stale text behind
     });
   }
+
+  function wireLiveClear(inputEl, fieldId) {
+    if (!inputEl) return;
+    inputEl.addEventListener("input", function () { clearError(fieldId); });
+  }
+
   function isEmail(value) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
 
+  function isValidName(value) {
+    return /^[A-Za-z][A-Za-z\s'-]{1,}$/.test(value);
+  }
+
+  // Full strength rule: 6+ chars, at least one letter, one number,
+  // one symbol. Returns null when the password passes.
+  function validatePasswordStrength(password) {
+    if (!password) return "Password is required.";
+    if (password.length < 6) return "Password must be at least 6 characters long.";
+    if (!/[A-Za-z]/.test(password)) return "Password must contain at least one letter.";
+    if (!/\d/.test(password)) return "Password must contain at least one number.";
+    if (!/[!@#$%^&*(),.?":{}|<>_]/.test(password)) return "Password must contain at least one special symbol.";
+    return null;
+  }
+
   /* ----------------------------------------------------------
-     CHANGED — login now calls /api/login instead of just
-     redirecting. Validation rules above the fetch() call are
-     untouched from the pasted version.
+     3. Login — real field name is "username" (Spring Security's
+     default), even though it holds an email address.
   ---------------------------------------------------------- */
   const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      clearErrors(loginForm);
-      const email = loginForm.email.value.trim();
-      const password = loginForm.password.value;
-      let ok = true;
-      if (!isEmail(email)) {
-        showError("f-email", "Enter a valid email address.");
-        ok = false;
-      }
-      if (password.length < 6) {
-        showError("f-password", "Password must be at least 6 characters.");
-        ok = false;
-      }
-      if (!ok) return;
+if (loginForm) {
+  loginForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    clearErrors(loginForm);
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    let ok = true;
+    if (!isEmail(email)) {
+      showError("f-email", "Enter a valid email address.");
+      ok = false;
+    }
+    if (password.length < 6) {
+      showError("f-password", "Password must be at least 6 characters.");
+      ok = false;
+    }
+    if (!ok) return;
 
-      try {
-        const res = await fetch("/api/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, password: password }),
-        });
-        const data = await res.json();
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, password: password }),
+      });
+      const data = await res.json();
 
-        if (res.ok) {
-          localStorage.setItem("token", data.token);
-          window.location.href = "dashboard";
-        } else {
-          showError("f-password", data.error || "Login failed. Try again.");
-        }
-      } catch (err) {
-        showError("f-password", "Could not reach the server. Try again.");
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        window.location.href = "dashboard";
+      } else {
+        showError("f-password", data.error || "Login failed. Try again.");
       }
-    });
-  }
+    } catch (err) {
+      showError("f-password", "Could not reach the server. Try again.");
+    }
+  });
+}
 
-  /* ----------------------------------------------------------
-     CHANGED — signup now calls /api/signup instead of just
-     redirecting. Validation rules above the fetch() call are
-     untouched from the pasted version.
-  ---------------------------------------------------------- */
-  const signupForm = document.getElementById("signupForm");
-  if (signupForm) {
-    signupForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      clearErrors(signupForm);
-      const name = signupForm.name.value.trim();
-      const email = signupForm.email.value.trim();
-      const password = signupForm.password.value;
-      const confirm = signupForm.confirm.value;
-      let ok = true;
-      if (name.length < 2) {
-        showError("f-name", "Please enter your name.");
-        ok = false;
-      }
-      if (!isEmail(email)) {
-        showError("f-email", "Enter a valid email address.");
-        ok = false;
-      }
-      if (password.length < 6) {
-        showError("f-password", "Password must be at least 6 characters.");
-        ok = false;
-      }
-      if (confirm !== password) {
-        showError("f-confirm", "Passwords do not match.");
-        ok = false;
-      }
-      if (!ok) return;
+const signupForm = document.getElementById("signupForm");
+if (signupForm) {
+  signupForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    clearErrors(signupForm);
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirm = document.getElementById("confirm").value;
+    let ok = true;
+    if (name.length < 2) {
+      showError("f-name", "Please enter your name.");
+      ok = false;
+    }
+    if (!isEmail(email)) {
+      showError("f-email", "Enter a valid email address.");
+      ok = false;
+    }
+    if (password.length < 6) {
+      showError("f-password", "Password must be at least 6 characters.");
+      ok = false;
+    }
+    if (confirm !== password) {
+      showError("f-confirm", "Passwords do not match.");
+      ok = false;
+    }
+    if (!ok) return;
 
-      try {
-        // field names match SignupRequest.java: fullName, email, password, confirmPassword
-        const res = await fetch("/api/signup", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            fullName: name,
-            email: email,
-            password: password,
-            confirmPassword: confirm,
-          }),
-        });
-        const data = await res.json();
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: name,
+          email: email,
+          password: password,
+          confirmPassword: confirm,
+        }),
+      });
+      const data = await res.json();
 
-        if (res.ok) {
-          localStorage.setItem("token", data.token);
-          window.location.href = "choose-topic";
-        } else {
-          showError("f-email", data.error || "Could not create account.");
-        }
-      } catch (err) {
-        showError("f-email", "Could not reach the server. Try again.");
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        window.location.href = "choose-topic";
+      } else {
+        showError("f-email", data.error || "Could not create account.");
       }
-    });
-  }
+    } catch (err) {
+      showError("f-email", "Could not reach the server. Try again.");
+    }
+  });
+}
+
 })();
