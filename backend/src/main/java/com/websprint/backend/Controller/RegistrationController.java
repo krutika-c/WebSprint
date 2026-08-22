@@ -15,13 +15,12 @@ import com.websprint.backend.Model.SignupRequest;
 import com.websprint.backend.Security.JwtUtil;
 
 // CHANGED from @Controller to @RestController — this now returns JSON
-// (a token or an error message) instead of redirecting a browser page.
 @RestController
 public class RegistrationController {
 
     private final MyAppUserRepository myAppUserRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil; // NEW dependency
+    private final JwtUtil jwtUtil;
 
     public RegistrationController(MyAppUserRepository myAppUserRepository,
                                    PasswordEncoder passwordEncoder,
@@ -31,14 +30,9 @@ public class RegistrationController {
         this.jwtUtil = jwtUtil;
     }
 
-    // CHANGED — path from "/req/signup" to "/api/signup", and reads a
-    // JSON body (@RequestBody) instead of a URL-encoded HTML form
-    // (@ModelAttribute + consumes = APPLICATION_FORM_URLENCODED_VALUE).
     @PostMapping("/api/signup")
     public ResponseEntity<?> createUser(@RequestBody SignupRequest request) {
 
-        // Same validation logic as before — just returns a JSON error
-        // response instead of a redirect + flash attribute.
         if (myAppUserRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(409).body(Map.of("error", "Email already registered"));
         }
@@ -56,8 +50,7 @@ public class RegistrationController {
 
         myAppUserRepository.save(user);
 
-        // NEW — log the user in immediately by handing back a token,
-        // the same as /api/login would. Saves them a separate login step.
+        // log the user in immediately by handing back a token,
         String token = jwtUtil.generateToken(user.getEmail());
         return ResponseEntity.ok(Map.of("token", token));
     }
