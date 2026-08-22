@@ -11,44 +11,39 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
         rel="stylesheet"
     />
-    
     <link rel="stylesheet" href="css/base.css" />
 </head>
 <body>
 
-    
     <header class="site-header">
-        <a class="brand" >
+        <div class="brand">
             <span class="brand__logo">&lt;#&gt;</span>
             <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
-        </a>
+        </div>
     </header>
 
-    
     <main class="auth">
         <div class="auth__card">
             <h1 class="auth__title">Create Account</h1>
             <p class="auth__subtitle">Join WebSprint and start your coding journey</p>
 
+            <!-- Native form POST — field names (name, email, password, confirm)
+                 map onto SignupRequest in RegistrationController -->
             <form id="signupForm" novalidate>
-                
                 <div class="field" id="f-name">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Code Master" />
-                    <p class="field__error">Please enter your name.</p>
+                    <input type="text" id="name" name="name" placeholder="Code Master" required />
+                    <span class="field__error"></span>
                 </div>
 
-              
                 <div class="field" id="f-email">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="you@example.com" />
-                    <p class="field__error">Enter a valid email address.</p>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required />
+                    <span class="field__error"></span>
                 </div>
 
-                
                 <div class="field" id="f-password">
                     <label for="password">Password</label>
-
                     <div class="password-wrapper">
                         <input
                             type="password"
@@ -66,13 +61,11 @@
                             <i data-lucide="eye"></i>
                         </button>
                     </div>
-
-                    <p class="field__error">Password must be at least 6 characters.</p>
+                    <span class="field__error"></span>
                 </div>
 
                 <div class="field" id="f-confirm">
                     <label for="confirm">Confirm Password</label>
-
                     <div class="password-wrapper">
                         <input
                             type="password"
@@ -90,26 +83,23 @@
                             <i data-lucide="eye"></i>
                         </button>
                     </div>
-
-                    <p class="field__error">Passwords do not match.</p>
+                    <span class="field__error"></span>
                 </div>
-               
+
                 <button type="submit" class="btn btn--primary btn--block">Create Account →</button>
             </form>
 
-            
             <div class="divider">OR</div>
 
-            
-            <button class="btn btn--ghost btn--block">Sign up with Google</button>
+            <a class="btn btn--ghost btn--block" href="http://localhost:8080/oauth2/authorization/google">Sign up with Google</a>
 
-            
             <p class="auth__foot">
                 Already have an account? <a href="login.html">Log in</a>
             </p>
         </div>
     </main>
-    <script src="https://unpkg.com/lucide@latest"></script>
+
+     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/script.js" defer></script>
     <script src="js/password.js" defer></script>
 </body>

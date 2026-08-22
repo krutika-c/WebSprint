@@ -57,7 +57,7 @@
     if (submitBtn) {
       submitBtn.addEventListener("click", function () {
         output.innerHTML = editor.value;
-        window.location.href = "level-complete";
+        window.location.href = "level-complete.html";
       });
     }
   }
@@ -163,7 +163,7 @@ if (loginForm) {
     if (!ok) return;
 
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch("http://localhost:8080/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email, password: password }),
@@ -172,7 +172,7 @@ if (loginForm) {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        window.location.href = "dashboard";
+        window.location.href = "h1.html";
       } else {
         showError("f-password", data.error || "Login failed. Try again.");
       }
@@ -211,7 +211,7 @@ if (signupForm) {
     if (!ok) return;
 
     try {
-      const res = await fetch("/api/signup", {
+      const res = await fetch("http://localhost:8080/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -225,7 +225,7 @@ if (signupForm) {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        window.location.href = "choose-topic";
+        window.location.href = "choose-topic.html";
       } else {
         showError("f-email", data.error || "Could not create account.");
       }

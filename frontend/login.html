@@ -15,32 +15,28 @@
 </head>
 <body>
 
-   
     <header class="site-header">
         <div class="brand">
-            <span class="brand__logo">&lt;#&gt;</span>
+                <span class="brand__logo">&lt;#&gt;</span>
                 <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </a>
         </div>
     </header>
 
-    
     <main class="auth">
         <div class="auth__card">
             <h1 class="auth__title">Welcome Back</h1>
             <p class="auth__subtitle">Log in to keep leveling up your skills</p>
 
             <form id="loginForm" novalidate>
-                
                 <div class="field" id="f-email">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="you@example.com" />
-                    <p class="field__error">Enter a valid email address.</p>
+                    <input type="text" id="email" name="email" placeholder="you@example.com" />
+                    <span class="field__error"></span>
                 </div>
 
-                
                 <div class="field" id="f-password">
                     <label for="password">Password</label>
-
                     <div class="password-wrapper">
                         <input type="password" id="password" name="password" placeholder="••••••••" />
 
@@ -48,38 +44,31 @@
                             <i data-lucide="eye"></i>
                         </button>
                     </div>
-
-                    <p class="field__error">Password must be at least 6 characters.</p>
+                    <span class="field__error"></span>
                 </div>
 
-               
                 <div class="auth__row">
                     <label class="muted">
-                        <input type="checkbox" /> Remember me
+                        <input type="checkbox" name="remember-me" /> Remember me
                     </label>
                     <a href="#">Forgot password?</a>
                 </div>
 
-               
-                <a href="h1.html" class="btn btn--primary btn--block">Log In →</a>
-
-
+                <button type="submit" class="btn btn--primary btn--block">Log In →</button>
             </form>
 
-         
             <div class="divider">OR</div>
 
-            
-            <button class="btn btn--ghost btn--block">Continue with Google</button>
+            <a class="btn btn--ghost btn--block" href="http://localhost:8080/oauth2/authorization/google">Continue with Google</a>
 
-           
             <p class="auth__foot">
                 Don't have an account? <a href="signup.html">Sign up</a>
             </p>
         </div>
     </main>
+
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="js/script.js" defer></script>
     <script src="js/password.js" defer></script>
+    <script src="js/script.js" defer></script>
 </body>
 </html>

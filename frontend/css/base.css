@@ -616,3 +616,19 @@ body {
         padding: 1.5rem 1rem;
     }
 }
+
+.field__error {
+    display: none;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #ff6b6b;
+}
+
+.field.has-error input {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 1px rgba(255, 107, 107, 0.25);
+}
+
+.field.has-error .field__error {
+    display: block;
+}
