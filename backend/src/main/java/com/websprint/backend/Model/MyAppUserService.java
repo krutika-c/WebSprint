@@ -14,11 +14,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor // Lombok automatically creates the constructor for repository injection
 public class MyAppUserService implements UserDetailsService {
 
-    // Removed @Autowired. Lombok handles injection via constructor because of @AllArgsConstructor
     private final MyAppUserRepository repository; 
 
     @Override
-public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Optional<MyAppUser> user = repository.findByEmail(username);
 
     if (user.isPresent()) {

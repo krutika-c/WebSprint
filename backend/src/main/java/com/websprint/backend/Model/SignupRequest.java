@@ -1,10 +1,5 @@
 package com.websprint.backend.Model;
 
-/**
- * Matches the field names used in signup.html's <form> (fullName, email,
- * password, confirmPassword). Kept separate from MyAppUser so the entity's
- * columns (full_name, password_hash, ...) never have to change.
- */
 public class SignupRequest {
 
     private String fullName;

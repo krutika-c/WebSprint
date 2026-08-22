@@ -1,6 +1,5 @@
 package com.websprint.backend.Model;
 
-// NEW FILE — matches the JSON body { "email": "...", "password": "..." }
 // sent by the login form's fetch() call.
 public class LoginRequest {
 
