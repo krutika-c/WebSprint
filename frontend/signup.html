@@ -18,7 +18,7 @@
 
     
     <header class="site-header">
-        <a class="brand" href="h1.html">
+        <a class="brand" >
             <span class="brand__logo">&lt;#&gt;</span>
             <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
         </a>
@@ -48,17 +48,51 @@
                 
                 <div class="field" id="f-password">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="At least 6 characters" />
+
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="At least 6 characters"
+                        />
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-target="password"
+                            aria-label="Show password"
+                        >
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+
                     <p class="field__error">Password must be at least 6 characters.</p>
                 </div>
 
-               
                 <div class="field" id="f-confirm">
                     <label for="confirm">Confirm Password</label>
-                    <input type="password" id="confirm" name="confirm" placeholder="Re-enter password" />
+
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="confirm"
+                            name="confirm"
+                            placeholder="Re-enter password"
+                        />
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-target="confirm"
+                            aria-label="Show password"
+                        >
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+
                     <p class="field__error">Passwords do not match.</p>
                 </div>
-
                
                 <button type="submit" class="btn btn--primary btn--block">Create Account →</button>
             </form>
@@ -75,7 +109,8 @@
             </p>
         </div>
     </main>
-
-    <script src="script.js" defer></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/password.js" defer></script>
 </body>
 </html>

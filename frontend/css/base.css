@@ -441,7 +441,60 @@ body {
     color: #7a8796;
     margin-top: 0.2rem;
 }
+/*password*/
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
 
+.password-wrapper input {
+    width: 100%;
+    padding-right: 45px;
+    box-sizing: border-box;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    border: none;
+    background: transparent;
+    padding: 5px;
+
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+}
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    border: none;
+    background: transparent;
+
+    padding: 6px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #777;
+}
+
+.password-toggle:hover {
+    color: #222;
+}
+
+.password-toggle svg {
+    width: 19px;
+    height: 19px;
+    stroke-width: 2;
+}
 /* Feature section */
 .feature-section {
     margin-top: 2.5rem;
