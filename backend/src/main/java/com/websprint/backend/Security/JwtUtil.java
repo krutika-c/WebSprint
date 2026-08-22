@@ -10,8 +10,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
-// NEW FILE — did not exist in the session-based version.
-// This is the "ID card printer + ID card checker" for JWT auth.
 @Component
 public class JwtUtil {
 

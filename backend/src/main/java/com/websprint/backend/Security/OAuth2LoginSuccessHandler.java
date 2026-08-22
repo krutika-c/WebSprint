@@ -56,6 +56,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         // the browser here directly, so there's no JS around to hand a
         // JSON response to. We pass the token in the URL and let a small
         // static page grab it and store it properly.
-        response.sendRedirect("/oauth-success.html?token=" + token);
+        response.sendRedirect("http://127.0.0.1:5500/oauth-success.html?token=" + token);
     }
 }

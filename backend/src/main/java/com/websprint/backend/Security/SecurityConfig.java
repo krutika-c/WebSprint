@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.websprint.backend.Model.MyAppUserService;
 
@@ -24,14 +25,17 @@ public class SecurityConfig {
 
     private final MyAppUserService appUserService;
     private final JwtAuthFilter jwtAuthFilter;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler; // ADDED BACK
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final ApiAuthEntryPoint apiAuthEntryPoint;
 
     public SecurityConfig(MyAppUserService appUserService,
                            JwtAuthFilter jwtAuthFilter,
-                           OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
+                           OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler,
+                           ApiAuthEntryPoint apiAuthEntryPoint) {
         this.appUserService = appUserService;
         this.jwtAuthFilter = jwtAuthFilter;
         this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
+        this.apiAuthEntryPoint = apiAuthEntryPoint;
     }
 
     @Bean
@@ -62,6 +66,8 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
 
+                .cors(cors -> {})
+
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
@@ -69,32 +75,11 @@ public class SecurityConfig {
                     registry.requestMatchers(
                             "/api/login",
                             "/api/signup",
-                            "/css/**",
-                            "/js/**",
-                            "/Images/**",
-                            "/favicon.ico",
-                            "/login",
-                            "/signup",
-                            "/achivements",
-                            "/challengs",
-                            "/choose-topic",
-                            "/css-roadmap",
-                            "/dashboard",
-                            "/genre-test",
-                            "/h1",
-                            "/html-roadmap",
-                            "/js-roadmap",
-                            "/level-complete",
-                            "/profile",
-                            "/settings",
-                            "/signup",
-                            "/test-result",
+                            "/api/subjects/**",
+                            "/api/levels/**",
                             "/oauth2/authorization/google",
-                            "/oauth-success.html",
                             "/oauth2/**",
-                            "/login/oauth2/code/**",
-                            "/*.html",
-                            "/"
+                            "/login/oauth2/code/**"
                     ).permitAll();
 
                     registry.anyRequest().authenticated();
@@ -104,6 +89,13 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .successHandler(oAuth2LoginSuccessHandler)
                 )
+
+                .exceptionHandling(ex -> ex
+                    .defaultAuthenticationEntryPointFor(
+                    apiAuthEntryPoint,
+                    new AntPathRequestMatcher("/api/**")
+    )
+)
 
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 

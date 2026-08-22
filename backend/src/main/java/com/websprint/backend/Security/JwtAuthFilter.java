@@ -17,8 +17,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-// NEW FILE — did not exist in the session-based version.
-// Since there is no session anymore, something has to check "who is this?"
 // on EVERY incoming request, by reading the Authorization header instead
 // of relying on a cookie. This filter is that check. It runs once per
 // request, before Spring even routes it to a @Controller method.
