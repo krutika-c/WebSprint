@@ -1,0 +1,89 @@
+
+.celebrate {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.celebrate__trophy {
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.celebrate__title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.8rem;
+    color: #f0f6fc;
+    margin-bottom: 0.5rem;
+}
+
+.celebrate__subtitle {
+    font-size: 1rem;
+    color: #a8b3c0;
+    margin-bottom: 1.5rem;
+}
+
+/* ─── Reward Row ─── */
+.reward-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 0;
+}
+
+.reward {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(139, 255, 176, 0.06);
+    border: 1px solid rgba(139, 255, 176, 0.1);
+    border-radius: 30px;
+    padding: 0.4rem 1.2rem 0.4rem 0.8rem;
+}
+
+.reward__icon {
+    font-size: 1.2rem;
+}
+
+.reward__text {
+    font-weight: 600;
+    color: #e0e6ed;
+    font-size: 0.95rem;
+}
+
+/* ─── Unlock Note ─── */
+.unlock-note {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #8bffb0;
+    background: rgba(139, 255, 176, 0.06);
+    border: 1px solid rgba(139, 255, 176, 0.1);
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    margin: 1.5rem 0 2rem 0;
+    display: inline-block;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 480px) {
+    .celebrate {
+        padding: 2rem 1.2rem;
+    }
+
+    .celebrate__title {
+        font-size: 1.4rem;
+    }
+
+    .reward-row {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: center;
+    }
+
+    .reward {
+        width: 100%;
+        justify-content: center;
+    }
+}
