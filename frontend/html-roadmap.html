@@ -15,7 +15,7 @@
       <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/header.css" />
 </head>
-<body>
+<body data-subject="HTML">
 
     
     <header class="site-header">
@@ -80,72 +80,15 @@
         <div class="roadmap">
 
          
-            <div class="roadmap__list">
-
-              
-                <a href="lesson.html" class="step is-done">
-                    <span class="step__num">✓</span>
-                    <div class="step__body">
-                        <h4>HTML Basics</h4>
-                        <p>Learn what HTML is and how it works.</p>
-                    </div>
-                    <span class="step__status is-done">Completed</span>
-                </a>
-
-               
-                <div class="step is-locked">
-                    <span class="step__num">2</span>
-                    <div class="step__body">
-                        <h4>Tags &amp; Elements</h4>
-                        <p>Learn about headings, paragraphs and more.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
-
-               
-                <div class="step is-locked">
-                    <span class="step__num">3</span>
-                    <div class="step__body">
-                        <h4>Lists &amp; Tables</h4>
-                        <p>Organize content using lists and tables.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
-
-               
-                <div class="step is-locked">
-                    <span class="step__num">4</span>
-                    <div class="step__body">
-                        <h4>Forms</h4>
-                        <p>Create forms and take user input.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
-
-                
-                <div class="step is-locked">
-                    <span class="step__num">5</span>
-                    <div class="step__body">
-                        <h4>Semantic HTML</h4>
-                        <p>Write cleaner and more meaningful code.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
-
-                
-                <div class="step is-locked">
-                    <span class="step__num">6</span>
-                    <div class="step__body">
-                        <h4>Mini Project</h4>
-                        <p>Build a simple webpage.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
+            <div class="roadmap__list" id="levels-container">
+                <!-- Levels will be loaded from backend -->
             </div>
 
            
             <aside class="roadmap__sidebar card">
+
                 <p class="section-label">Your Progress</p>
+
                 <div class="ring-wrap">
                     <div class="ring" style="--val: 16">
                         <div class="ring__label">
@@ -154,10 +97,43 @@
                         </div>
                     </div>
                 </div>
-                <div class="kv"><span>XP Earned</span><b>250 XP</b></div>
-                <div class="kv"><span>Next Reward</span><b>🏆 Level 2</b></div>
-            </aside>
 
+                <div class="kv">
+                    <span>XP Earned</span>
+                    <b>250 XP</b>
+                </div>
+
+                <div class="kv">
+                    <span>Next Reward</span>
+                    <b>🏆 Level 2</b>
+                </div>
+
+
+                <!-- Continue Quiz Card -->
+                <div class="roadmap-quiz-card">
+
+                    <div class="roadmap-quiz-icon">
+                        ✓
+                    </div>
+
+                    <div class="roadmap-quiz-content">
+                        <span class="roadmap-quiz-label">NEXT STEP</span>
+
+                        <h3>Test Your Knowledge</h3>
+
+                        <p>
+                            Complete the quiz to continue your roadmap.
+                        </p>
+                    </div>
+
+                    <a href="questions.html?levelId=1" class="roadmap-quiz-btn">
+                        Start Quiz
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+            </aside>
         </div>
 
         
@@ -165,6 +141,10 @@
 
     </main>
 
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/levels.js"></script>
     <script src="js/script.js" defer></script>
+    
 </body>
 </html>
