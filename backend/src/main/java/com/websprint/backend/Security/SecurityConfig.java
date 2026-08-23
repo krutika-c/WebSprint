@@ -60,45 +60,46 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
+    return httpSecurity
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> {})
+            .sessionManagement(session ->
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .cors(cors -> {})
+            .authorizeHttpRequests(registry -> {
+                registry.requestMatchers(
+                        "/api/login",
+                        "/api/signup",
+                        "/api/subjects/**",
+                        "/api/levels/**",
+                        "/oauth2/authorization/google",
+                        "/oauth2/**",
+                        "/login/oauth2/code/**"
+                ).permitAll();
 
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                registry.anyRequest().authenticated();
+            })
 
-                .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers(
-                            "/api/login",
-                            "/api/signup",
-                            "/api/subjects/**",
-                            "/api/levels/**",
-                            "/oauth2/authorization/google",
-                            "/oauth2/**",
-                            "/login/oauth2/code/**"
-                    ).permitAll();
+            .oauth2Login(oauth -> oauth
+                    .loginPage("/login")
+                    .authorizationEndpoint(endpoint -> endpoint
+                            .authorizationRequestRepository(new HttpCookieOAuth2AuthorizationRequestRepository())
+                    )
+                    .successHandler(oAuth2LoginSuccessHandler)
+            )
 
-                    registry.anyRequest().authenticated();
-                })
-
-                .oauth2Login(oauth -> oauth
-                        .loginPage("/login")
-                        .successHandler(oAuth2LoginSuccessHandler)
-                )
-
-                .exceptionHandling(ex -> ex
+            .exceptionHandling(ex -> ex
                     .defaultAuthenticationEntryPointFor(
-                    apiAuthEntryPoint,
-                    new AntPathRequestMatcher("/api/**")
-    )
-)
+                            apiAuthEntryPoint,
+                            new AntPathRequestMatcher("/api/**")
+                    )
+            )
 
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-                .build();
-    }
+            .build();
+}
 }

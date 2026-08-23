@@ -3,6 +3,7 @@ package com.websprint.backend.Security;
 import java.io.IOException;
 import java.time.Instant;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -20,6 +21,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
     private final MyAppUserRepository userRepository;
 
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
+
     public OAuth2LoginSuccessHandler(JwtUtil jwtUtil, MyAppUserRepository userRepository) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
@@ -32,11 +36,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
         String email = oauthUser.getAttribute("email");
         String name = oauthUser.getAttribute("name");
-        String googleId = oauthUser.getAttribute("sub"); // Google's unique user id
+        String googleId = oauthUser.getAttribute("sub");
 
-        // Match by email — if this person already has a local account
-        // (signed up with a password), we attach their Google login to
-        // that SAME account instead of creating a duplicate.
         MyAppUser user = userRepository.findByEmail(email).orElseGet(() -> {
             MyAppUser newUser = new MyAppUser();
             newUser.setEmail(email);
@@ -52,10 +53,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String token = jwtUtil.generateToken(user.getEmail());
 
-        // This is a browser REDIRECT, not a fetch() call — Google sent
-        // the browser here directly, so there's no JS around to hand a
-        // JSON response to. We pass the token in the URL and let a small
-        // static page grab it and store it properly.
-        response.sendRedirect("http://127.0.0.1:5500/oauth-success.html?token=" + token);
+        response.sendRedirect(frontendUrl + "/frontend/oauth-success.html?token=" + token);
     }
 }
