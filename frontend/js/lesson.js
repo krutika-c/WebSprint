@@ -1,26 +1,57 @@
+// ==================================================
+// LESSON PAGE
+// ==================================================
+
 document.addEventListener("DOMContentLoaded", () => {
     loadLesson();
 });
 
+
+// ==================================================
+// LOAD LESSON
+// ==================================================
 
 async function loadLesson() {
 
     try {
 
         // ---------------------------------------
-        // Get level ID from URL
-        // Example:
-        // lesson.html?levelId=1
+        // GET URL PARAMETERS
         // ---------------------------------------
 
-        const params = new URLSearchParams(window.location.search);
+        const params =
+            new URLSearchParams(window.location.search);
 
         const levelId =
-            parseInt(params.get("levelId")) || 1;
+            Number(params.get("levelId"));
+
+        const subject =
+            params.get("subject") ||
+            document.body.dataset.subject ||
+            "HTML";
+
+        console.log("Current subject:", subject);
+        console.log("Current level ID:", levelId);
 
 
         // ---------------------------------------
-        // Get elements
+        // CHECK LEVEL ID
+        // ---------------------------------------
+
+        if (!levelId) {
+
+            console.error("Level ID not found");
+
+            showLessonError(
+                "No lesson was selected."
+            );
+
+            return;
+        }
+
+
+        // ---------------------------------------
+        // GET HTML ELEMENTS
         // ---------------------------------------
 
         const lessonNumber =
@@ -33,301 +64,551 @@ async function loadLesson() {
             document.getElementById("lesson-title");
 
         const lessonDescription =
-            document.getElementById("lesson-description");
+    document.getElementById("lesson-description");
 
-        const lessonContent =
-            document.getElementById("lesson-content");
+const lessonContent =
+    document.getElementById("lesson-content");
 
-        const nextLesson =
-            document.getElementById("next-lesson");
-
-
-        // ---------------------------------------
-        // Get all levels
-        // ---------------------------------------
-
-        const levels = await getLevels("HTML");
+const lessonSubject =
+    document.getElementById("lesson-subject");
 
 
         // ---------------------------------------
-        // Find current level by ID
+        // GET LEVELS
         // ---------------------------------------
 
-        const currentLevel = levels.find(
-            level => Number(level.id) === levelId
+        const levels =
+            await getLevels(subject);
+
+        console.log(
+            `${subject} levels:`,
+            levels
         );
+
+
+        // ---------------------------------------
+        // FIND CURRENT LEVEL
+        // ---------------------------------------
+
+        const currentLevel =
+            levels.find(
+                level =>
+                    Number(level.id) === levelId
+            );
 
 
         if (!currentLevel) {
 
-            lessonTitle.textContent =
-                "Lesson Not Found";
+            console.error(
+                "Current level not found:",
+                levelId
+            );
 
-            lessonDescription.textContent =
-                "The requested lesson could not be found.";
-
-            lessonContent.innerHTML =
-                "<p>Lesson not available.</p>";
-
-            nextLesson.style.display = "none";
+            showLessonError(
+                "The requested lesson could not be found."
+            );
 
             return;
         }
 
 
+        console.log(
+            "Current level:",
+            currentLevel
+        );
+
+
         // ---------------------------------------
-        // Display lesson number
+        // CURRENT LEVEL NUMBER
         // ---------------------------------------
 
         const currentNumber =
             Number(currentLevel.levelNumber);
 
-        lessonNumber.textContent =
-            `LESSON ${currentNumber}/20`;
 
-        lessonPager.textContent =
-            `${currentNumber} / 20`;
+        // ---------------------------------------
+        // LESSON NUMBER
+        // ---------------------------------------
+
+        if (lessonNumber) {
+
+            lessonNumber.textContent =
+                `LESSON ${String(currentNumber).padStart(2, "0")}`;
+
+        }
 
 
         // ---------------------------------------
-        // Display title
+        // LESSON PAGER
         // ---------------------------------------
 
-        lessonTitle.textContent =
-            currentLevel.title;
+        if (lessonPager) {
+
+            lessonPager.textContent =
+                `${String(currentNumber).padStart(2, "0")} / ${levels.length}`;
+
+        }
 
 
         // ---------------------------------------
-        // Get lesson
+        // LESSON TITLE
+        // ---------------------------------------
+
+        if (lessonTitle) {
+
+            lessonTitle.textContent =
+                currentLevel.title;
+
+        }
+
+
+        // ---------------------------------------
+        // LESSON DESCRIPTION
+        // ---------------------------------------
+
+        if (lessonDescription) {
+
+            lessonDescription.textContent =
+                `${currentLevel.difficulty} · ${subject}`;
+
+        }
+        if (lessonSubject) {
+
+    lessonSubject.textContent =
+        subject;
+
+}
+
+
+        // ---------------------------------------
+        // GET LESSON
         // ---------------------------------------
 
         const lessonId =
-            currentLevel.lessonId || currentLevel.id;
+            currentLevel.lessonId ||
+            currentLevel.id;
+
+        console.log(
+            "Loading lesson:",
+            lessonId
+        );
+
 
         const lesson =
             await getLesson(lessonId);
 
 
+        console.log(
+            "Lesson received:",
+            lesson
+        );
+
+
         // ---------------------------------------
-        // Display lesson content
+        // DISPLAY LESSON
         // ---------------------------------------
 
-        if (lesson.contentMarkdown) {
+        if (
+            lesson &&
+            lesson.contentMarkdown
+        ) {
 
             lessonContent.innerHTML =
-                markdownToHTML(lesson.contentMarkdown);
-
-        } else {
-
-            lessonContent.innerHTML =
-                "<p>No lesson content available.</p>";
-
-        }
-
-
-        // ---------------------------------------
-        // Next Lesson
-        // ---------------------------------------
-
-        if (currentNumber < 20) {
-
-            const nextLevel =
-                levels.find(
-                    level =>
-                        Number(level.levelNumber) ===
-                        currentNumber + 1
+                markdownToHTML(
+                    lesson.contentMarkdown
                 );
 
-            nextLesson.style.display = "flex";
-
-            nextLesson.textContent =
-                "Next Lesson →";
-
-            if (nextLevel) {
-
-                nextLesson.href =
-                    `lesson.html?levelId=${nextLevel.id}`;
-
-            }
-
         } else {
 
-            nextLesson.textContent =
-                "Complete Course ✓";
+            lessonContent.innerHTML = `
+                <p class="pixel-loading">
+                    No lesson content available.
+                </p>
+            `;
 
-            nextLesson.href =
-                "html-roadmap.html";
         }
 
 
-    } catch (error) {
+        // ---------------------------------------
+        // SETUP NAVIGATION
+        // ---------------------------------------
 
-        console.error("Lesson loading error:", error);
+        setupLessonNavigation(
+            levels,
+            currentLevel,
+            subject
+        );
 
-        document.getElementById("lesson-title").textContent =
-            "Unable to Load Lesson";
 
-        document.getElementById("lesson-description").textContent =
-            "Something went wrong while loading this lesson.";
+        // ---------------------------------------
+        // SETUP QUIZ BUTTON
+        // ---------------------------------------
 
-        document.getElementById("lesson-content").innerHTML =
-            `
-            <p style="color:#ff7a7a;">
-                Failed to load lesson.
-            </p>
-            `;
+        setupQuizButton(
+            levelId,
+            subject
+        );
+
     }
+
+    catch (error) {
+
+        console.error(
+            "Lesson loading error:",
+            error
+        );
+
+        showLessonError(
+            "Something went wrong while loading this lesson."
+        );
+
+    }
+
 }
 
 
+
 // ==================================================
-// SIMPLE MARKDOWN → HTML
+// MARKDOWN → HTML
 // ==================================================
 
 function markdownToHTML(markdown) {
 
+    if (!markdown) {
+        return "";
+    }
+
+
+    // ---------------------------------------
+    // USE MARKED
+    // ---------------------------------------
+
+    if (
+        typeof marked !== "undefined" &&
+        typeof marked.parse === "function"
+    ) {
+
+        return marked.parse(markdown);
+
+    }
+
+
+    // ---------------------------------------
+    // FALLBACK
+    // ---------------------------------------
+
     let html = markdown;
 
-    html = html
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+
+    // Escape HTML
+    html =
+        html
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
 
 
     // Headings
-    html = html.replace(
-        /^#### (.*)$/gm,
-        "<h4>$1</h4>"
-    );
+    html =
+        html.replace(
+            /^#### (.*)$/gm,
+            "<h4>$1</h4>"
+        );
 
-    html = html.replace(
-        /^### (.*)$/gm,
-        "<h3>$1</h3>"
-    );
+    html =
+        html.replace(
+            /^### (.*)$/gm,
+            "<h3>$1</h3>"
+        );
 
-    html = html.replace(
-        /^## (.*)$/gm,
-        "<h2>$1</h2>"
-    );
+    html =
+        html.replace(
+            /^## (.*)$/gm,
+            "<h2>$1</h2>"
+        );
 
-    html = html.replace(
-        /^# (.*)$/gm,
-        "<h1>$1</h1>"
-    );
+    html =
+        html.replace(
+            /^# (.*)$/gm,
+            "<h1>$1</h1>"
+        );
 
 
     // Bold
-    html = html.replace(
-        /\*\*(.*?)\*\*/g,
-        "<strong>$1</strong>"
-    );
+    html =
+        html.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
 
 
     // Italic
-    html = html.replace(
-        /\*(.*?)\*/g,
-        "<em>$1</em>"
-    );
+    html =
+        html.replace(
+            /\*(.*?)\*/g,
+            "<em>$1</em>"
+        );
 
 
-    // Paragraphs
-    html = html.replace(
-        /\r?\n\r?\n/g,
-        "</p><p>"
-    );
+    // Inline code
+    html =
+        html.replace(
+            /`([^`]+)`/g,
+            "<code>$1</code>"
+        );
 
-    html = "<p>" + html + "</p>";
+
+    // New lines
+    html =
+        html.replace(
+            /\r?\n/g,
+            "<br>"
+        );
 
 
     return html;
 }
-const params = new URLSearchParams(window.location.search);
-const currentLevelId = Number(params.get("levelId"));
 
-const prevButton = document.getElementById("prev-lesson");
-const nextButton = document.getElementById("next-lesson");
 
-async function setupLessonNavigation() {
 
-    try {
+// ==================================================
+// QUIZ BUTTON
+// ==================================================
 
-        // Get all HTML levels
-        const levels = await getLevels("HTML");
+function setupQuizButton(
+    levelId,
+    subject
+) {
 
-        // Find current lesson
-        const currentIndex = levels.findIndex(
-            level => Number(level.id) === currentLevelId
+    const quizButton =
+        document.getElementById("start-quiz");
+
+
+    if (!quizButton) {
+
+        console.error(
+            "START QUIZ button not found"
         );
 
-        if (currentIndex === -1) {
-            console.error("Current lesson not found");
-            return;
-        }
+        return;
+    }
 
 
-        // =========================
-        // PREVIOUS
-        // =========================
+    // ---------------------------------------
+    // SET CORRECT QUIZ URL
+    // ---------------------------------------
 
-        if (currentIndex === 0) {
-
-            prevButton.disabled = true;
-            prevButton.style.opacity = "0.3";
-            prevButton.style.cursor = "not-allowed";
-
-        } else {
-
-            const previousLevel = levels[currentIndex - 1];
-
-            prevButton.disabled = false;
-
-            prevButton.onclick = () => {
-
-                window.location.href =
-                    `lesson.html?levelId=${previousLevel.id}`;
-
-            };
-
-        }
+    quizButton.href =
+        `questions.html?levelId=${levelId}&subject=${encodeURIComponent(subject)}`;
 
 
-        // =========================
-        // NEXT
-        // =========================
+    console.log(
+        "Quiz URL:",
+        quizButton.href
+    );
 
-        if (currentIndex === levels.length - 1) {
 
-            nextButton.textContent = "COURSE COMPLETE ✓";
-            nextButton.removeAttribute("href");
+    // ---------------------------------------
+    // CLICK HANDLER
+    // ---------------------------------------
 
-            nextButton.onclick = () => {
-                window.location.href = "html-roadmap.html";
-            };
+    quizButton.onclick = () => {
 
-        } else {
+        window.location.href =
+            `questions.html?levelId=${levelId}&subject=${encodeURIComponent(subject)}`;
 
-            const nextLevel = levels[currentIndex + 1];
+    };
 
-            nextButton.onclick = (event) => {
+}
+
+
+
+// ==================================================
+// LESSON NAVIGATION
+// ==================================================
+
+function setupLessonNavigation(
+    levels,
+    currentLevel,
+    subject
+) {
+
+    const prevButton =
+        document.getElementById("prev-lesson");
+
+    const nextButton =
+        document.getElementById("next-lesson");
+
+
+    if (!prevButton || !nextButton) {
+
+        console.error(
+            "Lesson navigation buttons not found"
+        );
+
+        return;
+    }
+
+
+    // ---------------------------------------
+    // CURRENT INDEX
+    // ---------------------------------------
+
+    const currentIndex =
+        levels.findIndex(
+            level =>
+                Number(level.id) ===
+                Number(currentLevel.id)
+        );
+
+
+    if (currentIndex === -1) {
+
+        console.error(
+            "Current lesson not found"
+        );
+
+        return;
+    }
+
+
+    console.log(
+        `${subject} navigation index:`,
+        currentIndex
+    );
+
+
+    // ==================================================
+    // PREVIOUS
+    // ==================================================
+
+    if (currentIndex === 0) {
+
+        prevButton.disabled = true;
+
+        prevButton.style.opacity = "0.3";
+
+        prevButton.style.cursor =
+            "not-allowed";
+
+    }
+
+    else {
+
+        const previousLevel =
+            levels[currentIndex - 1];
+
+
+        prevButton.disabled = false;
+
+        prevButton.style.opacity = "1";
+
+        prevButton.style.cursor =
+            "pointer";
+
+
+        prevButton.onclick = () => {
+
+            window.location.href =
+                `lesson.html?levelId=${previousLevel.id}&subject=${encodeURIComponent(subject)}`;
+
+        };
+
+    }
+
+
+
+    // ==================================================
+    // NEXT
+    // ==================================================
+
+    if (
+        currentIndex ===
+        levels.length - 1
+    ) {
+
+        nextButton.textContent =
+            "COURSE COMPLETE ✓";
+
+
+        nextButton.onclick =
+            (event) => {
 
                 event.preventDefault();
 
                 window.location.href =
-                    `lesson.html?levelId=${nextLevel.id}`;
+                    `${subject.toLowerCase()}-roadmap.html`;
 
             };
 
-        }
+    }
 
-    } catch (error) {
+    else {
 
-        console.error(
-            "Could not setup lesson navigation:",
-            error
-        );
+        const nextLevel =
+            levels[currentIndex + 1];
+
+
+        nextButton.textContent =
+            "NEXT LESSON →";
+
+
+        nextButton.onclick =
+            (event) => {
+
+                event.preventDefault();
+
+                window.location.href =
+                    `lesson.html?levelId=${nextLevel.id}&subject=${encodeURIComponent(subject)}`;
+
+            };
 
     }
 
 }
 
-setupLessonNavigation();
+
+
+// ==================================================
+// ERROR
+// ==================================================
+
+function showLessonError(message) {
+
+    const title =
+        document.getElementById("lesson-title");
+
+    const description =
+        document.getElementById("lesson-description");
+
+    const content =
+        document.getElementById("lesson-content");
+
+
+    if (title) {
+
+        title.textContent =
+            "LESSON NOT FOUND";
+
+    }
+
+
+    if (description) {
+
+        description.textContent =
+            "Unable to load this lesson.";
+
+    }
+
+
+    if (content) {
+
+        content.innerHTML = `
+            <div class="lesson-error">
+                <p>${message}</p>
+            </div>
+        `;
+
+    }
+
+}

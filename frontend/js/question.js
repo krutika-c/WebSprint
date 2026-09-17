@@ -1,11 +1,21 @@
-document.addEventListener("DOMContentLoaded", () => {
-    loadQuestions();
-});
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadQuestions();
+
+    }
+);
 
 
 let questions = [];
+
 let currentQuestionIndex = 0;
+
 let levelId = null;
+
+let subject = "HTML";
+
 
 
 // ==================================================
@@ -16,41 +26,86 @@ async function loadQuestions() {
 
     try {
 
-        // Get levelId from URL
-        // Example:
-        // question.html?levelId=1
+        // ---------------------------------------
+        // Get URL parameters
+        // ---------------------------------------
 
         const params =
-            new URLSearchParams(window.location.search);
+            new URLSearchParams(
+                window.location.search
+            );
+
 
         levelId =
-            Number(params.get("levelId")) || 1;
+            Number(
+                params.get("levelId")
+            ) || 1;
 
 
-        console.log("Loading questions for level:", levelId);
+        subject =
+            params.get("subject") ||
+            "HTML";
 
 
-        // Get questions from backend
+        console.log(
+            "Current subject:",
+            subject
+        );
+
+
+        console.log(
+            "Loading questions for level:",
+            levelId
+        );
+
+
+        // ---------------------------------------
+        // Get questions
+        // ---------------------------------------
 
         questions =
-            await getQuestions(levelId);
+            await getQuestions(
+                levelId
+            );
 
 
-        console.log("Questions received:", questions);
+        console.log(
+            "Questions received:",
+            questions
+        );
 
 
+        // ---------------------------------------
         // No questions
+        // ---------------------------------------
 
-        if (!questions || questions.length === 0) {
+        if (
+            !questions ||
+            questions.length === 0
+        ) {
 
-            document.getElementById("question-text").textContent =
-                "No questions available.";
+            const questionText =
+                document.getElementById(
+                    "question-text"
+                );
+
+
+            if (questionText) {
+
+                questionText.textContent =
+                    "No questions available.";
+
+            }
+
 
             return;
+
         }
 
 
+        // ---------------------------------------
         // Show first question
+        // ---------------------------------------
 
         showQuestion();
 
@@ -61,216 +116,342 @@ async function loadQuestions() {
             error
         );
 
-        document.getElementById("question-text").textContent =
-            "Unable to load questions.";
+
+        const questionText =
+            document.getElementById(
+                "question-text"
+            );
+
+
+        if (questionText) {
+
+            questionText.textContent =
+                "Unable to load questions.";
+
+        }
 
     }
 
 }
 
 
+
 // ==================================================
-// DISPLAY CURRENT QUESTION
+// DISPLAY QUESTION
 // ==================================================
 
 function showQuestion() {
 
     const question =
-        questions[currentQuestionIndex];
+        questions[
+            currentQuestionIndex
+        ];
 
 
     const questionText =
-        document.getElementById("question-text");
+        document.getElementById(
+            "question-text"
+        );
+
 
     const optionsContainer =
-        document.getElementById("options-container");
+        document.getElementById(
+            "options-container"
+        );
+
 
     const progress =
-        document.getElementById("question-progress");
+        document.getElementById(
+            "question-progress"
+        );
+
 
     const level =
-        document.getElementById("quiz-level");
+        document.getElementById(
+            "quiz-level"
+        );
+
 
     const feedback =
-        document.getElementById("answer-feedback");
+        document.getElementById(
+            "answer-feedback"
+        );
+
 
     const nextButton =
-        document.getElementById("next-question");
+        document.getElementById(
+            "next-question"
+        );
 
 
+    // ---------------------------------------
     // Question text
+    // ---------------------------------------
 
     questionText.textContent =
         question.questionText;
 
 
-    // Question number
+    // ---------------------------------------
+    // Progress
+    // ---------------------------------------
 
     progress.textContent =
         `QUESTION ${currentQuestionIndex + 1} / ${questions.length}`;
 
 
-    // Level number
+    // ---------------------------------------
+    // Level
+    // ---------------------------------------
 
     level.textContent =
         levelId;
 
 
-    // Clear previous options
+    // ---------------------------------------
+    // Clear options
+    // ---------------------------------------
 
-    optionsContainer.innerHTML = "";
+    optionsContainer.innerHTML =
+        "";
 
 
+    // ---------------------------------------
     // Clear feedback
+    // ---------------------------------------
 
-    feedback.innerHTML = "";
-
-
-    // Hide next button
-
-    nextButton.style.display = "none";
+    feedback.innerHTML =
+        "";
 
 
-    // Reset progress bar
+    // ---------------------------------------
+    // Hide next
+    // ---------------------------------------
+
+    nextButton.style.display =
+        "none";
+
+
+    // ---------------------------------------
+    // Progress bar
+    // ---------------------------------------
 
     const progressFill =
-        document.getElementById("quiz-progress-fill");
+        document.getElementById(
+            "quiz-progress-fill"
+        );
+
 
     if (progressFill) {
 
         const percentage =
-            ((currentQuestionIndex + 1) / questions.length) * 100;
+            (
+                (
+                    currentQuestionIndex + 1
+                )
+                /
+                questions.length
+            )
+            * 100;
+
 
         progressFill.style.width =
             `${percentage}%`;
+
     }
 
 
+    // ---------------------------------------
     // Create options
+    // ---------------------------------------
 
-    question.options.forEach(option => {
+    question.options.forEach(
+        option => {
 
-        const button =
-            document.createElement("button");
-
-
-        button.type = "button";
-
-        button.className =
-            "quiz-option";
+            const button =
+                document.createElement(
+                    "button"
+                );
 
 
-        button.innerHTML = `
-
-            <span class="option-label">
-                ${option.optionLabel}
-            </span>
-
-            <span class="option-text">
-                ${option.optionText}
-            </span>
-
-        `;
+            button.type =
+                "button";
 
 
-        // When option is clicked
+            button.className =
+                "quiz-option";
 
-        button.addEventListener("click", () => {
 
-            submitAnswer(
-                question,
-                option
+            button.innerHTML = `
+                <span class="option-label">
+                    ${option.optionLabel}
+                </span>
+
+                <span class="option-text">
+                    ${option.optionText}
+                </span>
+            `;
+
+
+            // --------------------------------
+            // Click answer
+            // --------------------------------
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    submitAnswer(
+                        question,
+                        option
+                    );
+
+                }
             );
 
-        });
 
+            optionsContainer.appendChild(
+                button
+            );
 
-        optionsContainer.appendChild(button);
-
-    });
+        }
+    );
 
 }
+
 
 
 // ==================================================
 // SUBMIT ANSWER
 // ==================================================
 
-async function submitAnswer(question, option) {
+async function submitAnswer(
+    question,
+    option
+) {
 
     const optionsContainer =
-        document.getElementById("options-container");
+        document.getElementById(
+            "options-container"
+        );
+
 
     const feedback =
-        document.getElementById("answer-feedback");
+        document.getElementById(
+            "answer-feedback"
+        );
+
 
     const nextButton =
-        document.getElementById("next-question");
+        document.getElementById(
+            "next-question"
+        );
 
 
-    // Disable all options
+    // ---------------------------------------
+    // Disable options
+    // ---------------------------------------
 
     const buttons =
-        optionsContainer.querySelectorAll(".quiz-option");
+        optionsContainer.querySelectorAll(
+            ".quiz-option"
+        );
 
-    buttons.forEach(button => {
 
-        button.disabled = true;
+    buttons.forEach(
+        button => {
 
-    });
+            button.disabled =
+                true;
+
+        }
+    );
 
 
     try {
+
+        // ---------------------------------------
+        // Submit answer
+        // ---------------------------------------
 
         const result =
             await apiFetch(
                 `/api/levels/${levelId}/questions/${question.id}/answer`,
                 {
+
                     method: "POST",
 
-                    body: JSON.stringify({
-                        optionId: option.id
-                    })
+                    body:
+                        JSON.stringify(
+                            {
+                                optionId:
+                                    option.id
+                            }
+                        )
+
                 }
             );
 
 
-        console.log("Answer result:", result);
+        console.log(
+            "Answer result:",
+            result
+        );
 
 
+        // ---------------------------------------
         // Correct
+        // ---------------------------------------
 
         if (result.correct) {
 
             feedback.innerHTML = `
                 <div class="answer-correct">
+
                     ✓ Correct!
-                    <p>${result.explanation || ""}</p>
+
+                    <p>
+                        ${result.explanation || ""}
+                    </p>
+
                 </div>
             `;
 
         }
 
+
+        // ---------------------------------------
         // Wrong
+        // ---------------------------------------
 
         else {
 
             feedback.innerHTML = `
                 <div class="answer-wrong">
+
                     ✕ Incorrect
-                    <p>${result.explanation || ""}</p>
+
+                    <p>
+                        ${result.explanation || ""}
+                    </p>
+
                 </div>
             `;
 
         }
 
 
+        // ---------------------------------------
         // Show next button
+        // ---------------------------------------
 
-        nextButton.style.display = "inline-flex";
+        nextButton.style.display =
+            "inline-flex";
 
 
-        // If last question
+        // ---------------------------------------
+        // Last question
+        // ---------------------------------------
 
         if (
             currentQuestionIndex ===
@@ -292,59 +473,75 @@ async function submitAnswer(question, option) {
 
         feedback.innerHTML = `
             <div class="answer-wrong">
+
                 Unable to submit answer.
                 Please try again.
+
             </div>
         `;
 
 
         // Re-enable options
 
-        buttons.forEach(button => {
+        buttons.forEach(
+            button => {
 
-            button.disabled = false;
+                button.disabled =
+                    false;
 
-        });
+            }
+        );
 
     }
 
 }
 
 
+
 // ==================================================
 // NEXT QUESTION
 // ==================================================
 
-document.addEventListener("click", (event) => {
+document.addEventListener(
+    "click",
+    event => {
 
-    if (
-        event.target.id !==
-        "next-question"
-    ) {
-        return;
+        if (
+            event.target.id !==
+            "next-question"
+        ) {
+
+            return;
+
+        }
+
+
+        // ---------------------------------------
+        // More questions
+        // ---------------------------------------
+
+        if (
+            currentQuestionIndex <
+            questions.length - 1
+        ) {
+
+            currentQuestionIndex++;
+
+            showQuestion();
+
+        }
+
+
+        // ---------------------------------------
+        // Quiz finished
+        // ---------------------------------------
+
+        else {
+
+            window.location.href =
+                `level-complete.html?levelId=${levelId}&subject=${subject}`;
+
+        }
+
     }
-
-
-    // More questions
-
-    if (
-        currentQuestionIndex <
-        questions.length - 1
-    ) {
-
-        currentQuestionIndex++;
-
-        showQuestion();
-
-    }
-
-    // Quiz finished
-
-    else {
-
-        window.location.href =
-            `level-complete.html?levelId=${levelId}`;
-
-    }
-
-});
+);

@@ -4,31 +4,54 @@
 <head>
 
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>HTML Lesson · WebSprint</title>
+    <title>Lesson · WebSprint</title>
 
     <meta
         name="description"
-        content="Learn HTML step by step with WebSprint."
+        content="Learn step by step with WebSprint."
     >
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700;800&family=Press+Start+2P&display=swap"
         rel="stylesheet"
     >
 
+
     <!-- CSS -->
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/learn.css">
+
+    <link
+        rel="stylesheet"
+        href="css/base.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/learn.css"
+    >
 
 </head>
 
@@ -43,7 +66,10 @@
 
     <div class="header-inner">
 
-        <a href="h1.html" class="brand">
+        <a
+            href="h1.html"
+            class="brand"
+        >
 
             <span class="brand__logo">
                 &lt;#&gt;
@@ -65,12 +91,14 @@
                 Dashboard
             </a>
 
+
             <a
                 href="choose-topic.html"
                 class="nav-link"
             >
                 Topics
             </a>
+
 
             <a
                 href="achivements.html"
@@ -148,7 +176,11 @@
 
             <span class="pixel-cursor"></span>
 
-            HTML / COURSE
+            <span id="lesson-subject">
+                HTML
+            </span>
+
+            / COURSE
 
             <span class="slash">
                 //
@@ -173,7 +205,7 @@
             id="lesson-description"
             class="pixel-lesson-description"
         >
-            Learn the fundamentals of HTML.
+            Learn the fundamentals.
         </p>
 
     </div>
@@ -192,12 +224,15 @@
 >
 
 
-    <!-- TOP NAV -->
+    <!-- =================================================
+         TOP NAVIGATION
+    ================================================= -->
 
     <div class="lesson-top-navigation">
 
         <a
-            href="html-roadmap.html"
+            href="#"
+            id="roadmap-link"
             class="pixel-back"
         >
             ← ROADMAP
@@ -247,7 +282,9 @@
                 <div class="pixel-window-buttons">
 
                     <span>_</span>
+
                     <span>□</span>
+
                     <span>×</span>
 
                 </div>
@@ -256,7 +293,7 @@
 
 
 
-            <!-- API CONTENT -->
+            <!-- LESSON CONTENT -->
 
             <div
                 id="lesson-content"
@@ -353,36 +390,56 @@
 
     <div class="pixel-lesson-navigation">
 
+    <button
+        type="button"
+        id="prev-lesson"
+        class="pixel-navigation-button"
+    >
+        ← PREVIOUS
+    </button>
 
-        <button
-            type="button"
-            id="prev-lesson"
-            class="pixel-navigation-button"
-        >
-            ← PREVIOUS
-        </button>
+
+    <div class="pixel-level-display">
+
+        <span class="pixel-block"></span>
+
+        LESSON
+
+        <span class="pixel-block"></span>
+
+    </div>
 
 
-        <div class="pixel-level-display">
 
-            <span class="pixel-block"></span>
 
-            LESSON
+    <a
+        href="#"
+        id="next-lesson"
+        class="pixel-navigation-button pixel-next"
+    >
+        NEXT LESSON →
+    </a>
 
-            <span class="pixel-block"></span>
+</div>
 
-        </div>
+       
 
+    <!-- =================================================
+         START QUIZ
+    ================================================= -->
+
+    <div class="lesson-quiz-section">
 
         <a
             href="#"
-            id="next-lesson"
-            class="pixel-navigation-button pixel-next"
+            id="start-quiz"
+            class="pixel-navigation-button pixel-quiz-button"
         >
-            NEXT LESSON →
+            START QUIZ →
         </a>
 
     </div>
+
 
 </main>
 
@@ -393,12 +450,15 @@
 ===================================================== -->
 
 <script src="js/config.js"></script>
+
 <script src="js/api.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script src="js/lesson.js"></script>
+
 <script src="js/script.js" defer></script>
+
 
 </body>
 
