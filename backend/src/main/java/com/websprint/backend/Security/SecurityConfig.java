@@ -16,8 +16,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.websprint.backend.Model.MyAppUserService;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -60,46 +65,62 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                // Linked the CORS Configuration source bean down below
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-    return httpSecurity
-            .csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> {})
-            .sessionManagement(session ->
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(registry -> {
+                    registry.requestMatchers(
+                            "/api/login",
+                            "/api/signup",
+                            "/api/subjects/**",
+                            "/api/levels/**",
+                            "/api/levels/*/questions",
+                            "/oauth2/authorization/google",
+                            "/oauth2/**",
+                            "/login/oauth2/code/**"
+                    ).permitAll();
 
-            .authorizeHttpRequests(registry -> {
-                registry.requestMatchers(
-                        "/api/login",
-                        "/api/signup",
-                        "/api/subjects/**",
-                        "/api/levels/**",
-                        "/oauth2/authorization/google",
-                        "/oauth2/**",
-                        "/login/oauth2/code/**"
-                ).permitAll();
+                    registry.anyRequest().authenticated();
+                })
 
-                registry.anyRequest().authenticated();
-            })
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login")
+                        .authorizationEndpoint(endpoint -> endpoint
+                                .authorizationRequestRepository(new HttpCookieOAuth2AuthorizationRequestRepository())
+                        )
+                        .successHandler(oAuth2LoginSuccessHandler)
+                )
 
-            .oauth2Login(oauth -> oauth
-                    .loginPage("/login")
-                    .authorizationEndpoint(endpoint -> endpoint
-                            .authorizationRequestRepository(new HttpCookieOAuth2AuthorizationRequestRepository())
-                    )
-                    .successHandler(oAuth2LoginSuccessHandler)
-            )
+                .exceptionHandling(ex -> ex
+                        .defaultAuthenticationEntryPointFor(
+                                apiAuthEntryPoint,
+                                new AntPathRequestMatcher("/api/**")
+                        )
+                )
 
-            .exceptionHandling(ex -> ex
-                    .defaultAuthenticationEntryPointFor(
-                            apiAuthEntryPoint,
-                            new AntPathRequestMatcher("/api/**")
-                    )
-            )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
 
-            .build();
-}
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // Whitelisting your frontend environment urls
+        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5501", "http://localhost:5501"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }

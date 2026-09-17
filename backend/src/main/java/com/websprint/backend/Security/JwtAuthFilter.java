@@ -17,9 +17,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-// on EVERY incoming request, by reading the Authorization header instead
-// of relying on a cookie. This filter is that check. It runs once per
-// request, before Spring even routes it to a @Controller method.
+// Runs on EVERY incoming request by reading the Authorization header instead
+// of relying on a cookie. This filter runs once per request, before 
+// Spring even routes it to a @Controller method.
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
@@ -47,22 +47,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = authHeader.substring(7); // strip the "Bearer " prefix
 
-        if (jwtUtil.isTokenValid(token)) {
-            String email = jwtUtil.extractEmail(token);
+        try {
+            // Check validation safely
+            if (jwtUtil.isTokenValid(token)) {
+                String email = jwtUtil.extractEmail(token);
 
-            if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = myAppUserService.loadUserByUsername(email);
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UserDetails userDetails = myAppUserService.loadUserByUsername(email);
 
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // This is the line that actually tells Spring Security
-                // "this request is authenticated, as this user" for the
-                // rest of this one request only — nothing is remembered
-                // for the next request.
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    // This line tells Spring Security "this request is authenticated, as this user" 
+                    // for the rest of this one request only.
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        } catch (Exception e) {
+            // Log the underlying problem to your terminal window for easier debugging
+            logger.error("JWT Validation failed structural check: " + e.getMessage());
+            
+            // Clear authentication context and let the request fall through to permitAll()
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
