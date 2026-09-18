@@ -1,0 +1,107 @@
+html[data-theme="light"] body {
+    background: #f5f7fa;
+    color: #1f2937;
+}
+
+html[data-theme="light"] .page-title,
+html[data-theme="light"] .auth__title,
+html[data-theme="light"] .topic-card h3,
+html[data-theme="light"] .feature-card h4,
+html[data-theme="light"] .brand__name {
+    color: #1f2937;
+}
+
+html[data-theme="light"] .page-subtitle,
+html[data-theme="light"] .auth__subtitle,
+html[data-theme="light"] .topic-card p,
+html[data-theme="light"] .auth__foot,
+html[data-theme="light"] .field label {
+    color: #64748b;
+}
+
+html[data-theme="light"] .site-header {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="light"] .card,
+html[data-theme="light"] .auth__card,
+html[data-theme="light"] .feature-card {
+    background: #ffffff;
+    border-color: #dfe5eb;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+html[data-theme="light"] .field input,
+html[data-theme="light"] .field textarea,
+html[data-theme="light"] .select {
+    background: #ffffff;
+    color: #1f2937;
+    border-color: #cbd5e1;
+}
+
+html[data-theme="light"] .field input::placeholder {
+    color: #94a3b8;
+}
+
+html[data-theme="light"] .btn--ghost {
+    color: #475569;
+    border-color: #cbd5e1;
+}
+
+html[data-theme="light"] .btn--ghost:hover {
+    background: rgba(139, 255, 176, 0.1);
+    color: #1f2937;
+}
+
+html[data-theme="light"] .progress {
+    background: #e2e8f0;
+}
+
+html[data-theme="light"] .divider::before,
+html[data-theme="light"] .divider::after {
+    background: #cbd5e1;
+}
+
+html[data-theme="light"] .provider-row {
+    border-bottom-color: #e2e8f0;
+}
+
+html[data-theme="light"] .provider-row__info {
+    color: #1f2937;
+}
+
+html[data-theme="light"] .profile-head {
+    border-bottom-color: #e2e8f0;
+}
+
+html[data-theme="light"] .badge-tile {
+    background: #f1f5f9;
+}
+
+html[data-theme="light"] .badge-tile span {
+    color: #475569;
+}
+
+html[data-theme="light"] .switch__track {
+    background: #cbd5e1;
+}
+
+html[data-theme="light"] .switch__track::before {
+    background: #ffffff;
+}
+
+html[data-theme="light"] .toggle-group .btn.is-active {
+    color: #16a34a;
+    border-color: #16a34a;
+    background: rgba(22, 163, 74, 0.08);
+}
+
+html[data-theme="light"] textarea,
+html[data-theme="light"] pre,
+html[data-theme="light"] code {
+    border-color: #cbd5e1;
+}
+
+html[data-theme="light"] .topic-icon {
+    background: #f1f5f9;
+}

@@ -26,7 +26,7 @@ async function loadSubjects() {
             if (subject.code === "HTML") {
 
                 className = "is-html";
-                icon = "</>";
+                icon = "&lt;/&gt;";
                 description =
                     "Learn the structure of the web and build the foundation of every website.";
                 buttonClass = "btn--html";

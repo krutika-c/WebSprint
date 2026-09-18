@@ -1,8 +1,12 @@
 {
     "liveServer.settings.port": 5501,
+    "liveServer.settings.root": "/frontend",
+
     "java.configuration.updateBuildConfiguration": "interactive",
+
     "java.project.sourcePaths": [
         "backend\\src\\main\\java"
     ],
+
     "java.project.referencedLibraries": []
 }

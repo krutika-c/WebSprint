@@ -632,3 +632,26 @@ body {
 .field.has-error .field__error {
     display: block;
 }
+html[data-fontsize="small"] {
+    font-size: 14px;
+}
+
+html[data-fontsize="medium"] {
+    font-size: 16px;
+}
+
+html[data-fontsize="large"] {
+    font-size: 18px;
+}
+
+html[data-fontsize="small"] {
+    font-size: 14px;
+}
+
+html[data-fontsize="medium"] {
+    font-size: 16px;
+}
+
+html[data-fontsize="large"] {
+    font-size: 18px;
+}

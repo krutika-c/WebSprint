@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/dsahboard.css" />
     <link rel="stylesheet" href="css/settings.css" />
+
+    <link rel="stylesheet" href="css/theme.css">
+    <script src="js/theme.js" defer></script>
 </head>
 <body>
 
@@ -258,20 +261,61 @@
 
     </main>
 
-    <script src="js/script.js" defer></script>
-    <script>
-        (function () {
-            "use strict";
-            document.querySelectorAll(".toggle-group").forEach(function (group) {
-                const btns = group.querySelectorAll(".btn");
-                btns.forEach(function (btn) {
-                    btn.addEventListener("click", function () {
-                        btns.forEach(function (b) { b.classList.remove("is-active"); });
-                        btn.classList.add("is-active");
+<script>
+    (function () {
+        "use strict";
+
+        // Toggle active button
+        document.querySelectorAll(".toggle-group").forEach(function (group) {
+            const btns = group.querySelectorAll(".btn");
+
+            btns.forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    btns.forEach(function (b) {
+                        b.classList.remove("is-active");
                     });
+
+                    btn.classList.add("is-active");
+
+                    // Font size
+                    if (btn.dataset.fontsize) {
+                        const size = btn.dataset.fontsize;
+
+                        document.documentElement.setAttribute(
+                            "data-fontsize",
+                            size
+                        );
+
+                        localStorage.setItem("fontSize", size);
+                    }
                 });
             });
-        })();
-    </script>
+        });
+
+        // Restore selected font size
+        const savedFontSize = localStorage.getItem("fontSize");
+
+        if (savedFontSize) {
+            document.documentElement.setAttribute(
+                "data-fontsize",
+                savedFontSize
+            );
+
+            const selectedButton = document.querySelector(
+                `[data-fontsize="${savedFontSize}"]`
+            );
+
+            if (selectedButton) {
+                document
+                    .querySelectorAll("[data-fontsize]")
+                    .forEach(function (btn) {
+                        btn.classList.remove("is-active");
+                    });
+
+                selectedButton.classList.add("is-active");
+            }
+        }
+    })();
+</script>
 </body>
 </html>
