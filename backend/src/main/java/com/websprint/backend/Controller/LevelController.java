@@ -13,8 +13,6 @@ import com.websprint.backend.Model.LessonDTO;
 import com.websprint.backend.Model.LessonRepository;
 import com.websprint.backend.Model.LevelDTO;
 import com.websprint.backend.Model.LevelRepository;
-import com.websprint.backend.Model.QuestionDTO;
-import com.websprint.backend.Model.QuestionRepository;
 import com.websprint.backend.Model.SubjectDTO;
 import com.websprint.backend.Model.SubjectRepository;
 
@@ -25,17 +23,13 @@ public class LevelController {
     private final SubjectRepository subjectRepository;
     private final LevelRepository levelRepository;
     private final LessonRepository lessonRepository;
-    private final QuestionRepository questionRepository;
-
 
     public LevelController(SubjectRepository subjectRepository,
                             LevelRepository levelRepository,
-                            LessonRepository lessonRepository,
-                            QuestionRepository questionRepository) {
+                            LessonRepository lessonRepository) {
         this.subjectRepository = subjectRepository;
         this.levelRepository = levelRepository;
         this.lessonRepository = lessonRepository;
-        this.questionRepository = questionRepository;
     }
 
     // GET /api/subjects  -> list HTML, CSS, JS for a home screen
@@ -56,17 +50,6 @@ public class LevelController {
     return levelRepository.findBySubjectCodeOrderByLevelNumber(code)
         .stream()
         .map(LevelDTO::from)
-        .toList();
-}
-@GetMapping
-public List<QuestionDTO> getQuestions(@PathVariable Long levelId) {
-    if (!levelRepository.existsById(levelId)) {
-        throw new ResourceNotFoundException("Level " + levelId + " not found");
-    }
-
-    return questionRepository.findByLevelIdOrderByOrderIndex(levelId)
-        .stream()
-        .map(QuestionDTO::from)
         .toList();
 }
 

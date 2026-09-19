@@ -36,37 +36,128 @@ async function loadLevels() {
         container.innerHTML = "";
 
         // Create each level
-        levels.forEach(level => {
+        levels.forEach((level, index) => {
 
             const step =
                 document.createElement("a");
 
-            step.className = "step";
+            // ---------------------------------------
+            // LOCK STATUS
+            //
+            // Level 1 is always open. Every level after
+            // that stays locked until the quiz on the
+            // level right before it has been completed.
+            // ---------------------------------------
+
+            const completed =
+                isLevelCompleted(level.id);
+
+            const locked =
+                index > 0 &&
+                !isLevelCompleted(levels[index - 1].id);
+
+            step.className =
+                "step" +
+                (completed ? " is-done" : "") +
+                (locked ? " is-locked" : "");
+
 
             // IMPORTANT:
             // Pass both levelId and subject
-            step.href =
+            const lessonUrl =
                 `lesson.html?levelId=${level.id}&subject=${subject}`;
 
+            if (locked) {
+
+                // Locked steps aren't real links —
+                // clicking should do nothing.
+
+                step.href = "#";
+
+                step.addEventListener(
+                    "click",
+                    event => {
+                        event.preventDefault();
+                    }
+                );
+
+                step.setAttribute(
+                    "aria-disabled",
+                    "true"
+                );
+
+            }
+
+            else {
+
+                step.href = lessonUrl;
+
+            }
+
             console.log(
-                "Creating link:",
-                step.href
+                "Creating step:",
+                lessonUrl,
+                "locked:",
+                locked,
+                "completed:",
+                completed
             );
 
-            step.innerHTML = `
-                <span class="step__num">
-                    ${level.levelNumber}
-                </span>
 
-                <div class="step__body">
-                    <h4>${level.title}</h4>
-                    <p>${level.difficulty}</p>
-                </div>
+            // NOTE: built with createElement + textContent
+            // (not innerHTML) so level titles/difficulty
+            // text is always shown as plain text, never
+            // parsed as markup.
 
-                <span class="step__status">
-                    Start
-                </span>
-            `;
+            const numSpan =
+                document.createElement("span");
+
+            numSpan.className = "step__num";
+
+            numSpan.textContent =
+                level.levelNumber;
+
+
+            const body =
+                document.createElement("div");
+
+            body.className = "step__body";
+
+            const bodyTitle =
+                document.createElement("h4");
+
+            bodyTitle.textContent =
+                level.title;
+
+            const bodyDifficulty =
+                document.createElement("p");
+
+            bodyDifficulty.textContent =
+                level.difficulty;
+
+            body.appendChild(bodyTitle);
+            body.appendChild(bodyDifficulty);
+
+
+            const status =
+                document.createElement("span");
+
+            status.className =
+                "step__status" +
+                (completed ? " is-done" : "") +
+                (locked ? " is-locked" : "");
+
+            status.textContent =
+                locked
+                    ? "🔒 Locked"
+                    : completed
+                        ? "✓ Done"
+                        : "Start";
+
+
+            step.appendChild(numSpan);
+            step.appendChild(body);
+            step.appendChild(status);
 
             container.appendChild(step);
 

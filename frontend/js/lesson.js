@@ -119,6 +119,45 @@ const lessonSubject =
 
 
         // ---------------------------------------
+        // LOCK CHECK
+        //
+        // A lesson stays locked until the quiz for
+        // the lesson right before it has been
+        // completed. Level 1 is always open.
+        // ---------------------------------------
+
+        const currentIndex =
+            levels.findIndex(
+                level =>
+                    Number(level.id) === levelId
+            );
+
+        const previousLevel =
+            currentIndex > 0
+                ? levels[currentIndex - 1]
+                : null;
+
+        if (
+            previousLevel &&
+            !isLevelCompleted(previousLevel.id)
+        ) {
+
+            console.warn(
+                "Lesson is locked, previous level not completed:",
+                previousLevel
+            );
+
+            showLessonLocked(
+                previousLevel,
+                subject
+            );
+
+            return;
+
+        }
+
+
+        // ---------------------------------------
         // CURRENT LEVEL NUMBER
         // ---------------------------------------
 
@@ -241,10 +280,10 @@ const lessonSubject =
 
 
         // ---------------------------------------
-        // SETUP QUIZ BUTTON
+        // LOAD EMBEDDED QUIZ
         // ---------------------------------------
 
-        setupQuizButton(
+        loadEmbeddedQuiz(
             levelId,
             subject
         );
@@ -288,7 +327,41 @@ function markdownToHTML(markdown) {
         typeof marked.parse === "function"
     ) {
 
-        return marked.parse(markdown);
+        // Lesson content sometimes mentions real tags
+        // (e.g. "This rule changes every <h1> heading")
+        // without wrapping them in backticks. By default
+        // marked passes raw HTML straight through, so an
+        // unescaped block tag like <h1> or <div> gets
+        // inserted into the page as a REAL element —
+        // the browser then auto-closes the surrounding
+        // <p> early and swallows the rest of the lesson
+        // text into that stray heading/div. Overriding
+        // the html renderer to escape instead of pass
+        // through fixes this without touching the seed
+        // content, and backtick code spans (e.g. `<p>`)
+        // are unaffected since those go through a
+        // different renderer method.
+
+        const renderer = new marked.Renderer();
+
+        renderer.html = (html) => {
+
+            const text =
+                (html && typeof html === "object")
+                    ? html.text
+                    : html;
+
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+
+        };
+
+        return marked.parse(
+            markdown,
+            { renderer }
+        );
 
     }
 
@@ -372,22 +445,140 @@ function markdownToHTML(markdown) {
 
 
 // ==================================================
-// QUIZ BUTTON
+// EMBEDDED QUIZ (replaces the old live preview panel)
 // ==================================================
 
-function setupQuizButton(
+let quizLevelId = null;
+
+let quizSubject = "HTML";
+
+let quizQuestions = [];
+
+let quizCurrentIndex = 0;
+
+
+// ==================================================
+// LOAD QUIZ
+// ==================================================
+
+async function loadEmbeddedQuiz(
     levelId,
     subject
 ) {
 
-    const quizButton =
-        document.getElementById("start-quiz");
+    quizLevelId = levelId;
+
+    quizSubject = subject;
+
+    quizCurrentIndex = 0;
 
 
-    if (!quizButton) {
+    const questionText =
+        document.getElementById("question-text");
+
+
+    try {
+
+        // ---------------------------------------
+        // GET QUESTIONS FOR THIS LESSON
+        // ---------------------------------------
+
+        quizQuestions =
+            await getQuestions(levelId);
+
+        console.log(
+            "Lesson quiz questions:",
+            quizQuestions
+        );
+
+
+        // ---------------------------------------
+        // NO QUESTIONS
+        // ---------------------------------------
+
+        if (
+            !quizQuestions ||
+            quizQuestions.length === 0
+        ) {
+
+            if (questionText) {
+
+                questionText.textContent =
+                    "No quiz available for this lesson yet.";
+
+            }
+
+            return;
+        }
+
+
+        // ---------------------------------------
+        // SHOW FIRST QUESTION
+        // ---------------------------------------
+
+        showQuizQuestion();
+
+    }
+
+    catch (error) {
 
         console.error(
-            "START QUIZ button not found"
+            "Embedded quiz loading error:",
+            error
+        );
+
+        if (questionText) {
+
+            questionText.textContent =
+                "Unable to load the quiz for this lesson.";
+
+        }
+
+    }
+
+}
+
+
+
+// ==================================================
+// DISPLAY QUIZ QUESTION
+// ==================================================
+
+function showQuizQuestion() {
+
+    const question =
+        quizQuestions[quizCurrentIndex];
+
+    const questionText =
+        document.getElementById("question-text");
+
+    const optionsContainer =
+        document.getElementById("options-container");
+
+    const progress =
+        document.getElementById("question-progress");
+
+    const level =
+        document.getElementById("quiz-level");
+
+    const feedback =
+        document.getElementById("answer-feedback");
+
+    const nextButton =
+        document.getElementById("next-question");
+
+
+    if (
+        !questionText ||
+        !optionsContainer ||
+        !progress ||
+        !level ||
+        !feedback ||
+        !nextButton
+    ) {
+
+        console.error(
+            "Embedded quiz elements not found"
         );
 
         return;
@@ -395,29 +586,270 @@ function setupQuizButton(
 
 
     // ---------------------------------------
-    // SET CORRECT QUIZ URL
+    // QUESTION TEXT
     // ---------------------------------------
 
-    quizButton.href =
-        `questions.html?levelId=${levelId}&subject=${encodeURIComponent(subject)}`;
+    questionText.textContent =
+        question.questionText;
 
 
-    console.log(
-        "Quiz URL:",
-        quizButton.href
+    // ---------------------------------------
+    // PROGRESS
+    // ---------------------------------------
+
+    progress.textContent =
+        `QUESTION ${quizCurrentIndex + 1} / ${quizQuestions.length}`;
+
+
+    // ---------------------------------------
+    // LEVEL
+    // ---------------------------------------
+
+    level.textContent =
+        quizLevelId;
+
+
+    // ---------------------------------------
+    // RESET OPTIONS / FEEDBACK / NEXT BUTTON
+    // ---------------------------------------
+
+    optionsContainer.innerHTML = "";
+
+    feedback.innerHTML = "";
+
+    nextButton.style.display = "none";
+
+
+    // ---------------------------------------
+    // PROGRESS BAR
+    // ---------------------------------------
+
+    const progressFill =
+        document.getElementById("quiz-progress-fill");
+
+    if (progressFill) {
+
+        const percentage =
+            ((quizCurrentIndex + 1) / quizQuestions.length) * 100;
+
+        progressFill.style.width =
+            `${percentage}%`;
+
+    }
+
+
+    // ---------------------------------------
+    // CREATE OPTIONS
+    // ---------------------------------------
+
+    question.options.forEach(
+        option => {
+
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+
+            button.className = "quiz-option";
+
+            button.dataset.optionId = option.id;
+
+
+            // NOTE: built with createElement + textContent
+            // (not innerHTML) because option text often
+            // contains raw HTML/CSS/JS snippets like
+            // "<br>" or "<!DOCTYPE html>" — inserting those
+            // via innerHTML makes the browser treat them as
+            // real tags instead of visible text, so the
+            // option silently goes blank or breaks layout.
+
+            const labelSpan =
+                document.createElement("span");
+
+            labelSpan.className = "option-label";
+
+            labelSpan.textContent =
+                option.optionLabel;
+
+
+            const textSpan =
+                document.createElement("span");
+
+            textSpan.className = "option-text";
+
+            textSpan.textContent =
+                option.optionText;
+
+
+            button.appendChild(labelSpan);
+
+            button.appendChild(textSpan);
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    submitQuizAnswer(
+                        question,
+                        option
+                    );
+
+                }
+            );
+
+            optionsContainer.appendChild(button);
+
+        }
+    );
+
+}
+
+
+
+// ==================================================
+// SUBMIT QUIZ ANSWER
+// ==================================================
+
+async function submitQuizAnswer(
+    question,
+    option
+) {
+
+    const optionsContainer =
+        document.getElementById("options-container");
+
+    const feedback =
+        document.getElementById("answer-feedback");
+
+    const nextButton =
+        document.getElementById("next-question");
+
+
+    const buttons =
+        optionsContainer.querySelectorAll(".quiz-option");
+
+    buttons.forEach(
+        button => {
+            button.disabled = true;
+        }
     );
 
 
-    // ---------------------------------------
-    // CLICK HANDLER
-    // ---------------------------------------
+    try {
 
-    quizButton.onclick = () => {
+        // ---------------------------------------
+        // SUBMIT ANSWER
+        // ---------------------------------------
 
-        window.location.href =
-            `questions.html?levelId=${levelId}&subject=${encodeURIComponent(subject)}`;
+        const result =
+            await submitAnswer(
+                quizLevelId,
+                question.id,
+                option.id
+            );
 
-    };
+        console.log(
+            "Embedded quiz answer result:",
+            result
+        );
+
+
+        // ---------------------------------------
+        // CORRECT / WRONG FEEDBACK
+        // (built with createElement + textContent —
+        // explanations also contain raw "<tag>" text
+        // that innerHTML would silently swallow)
+        // ---------------------------------------
+
+        markAnswerOptions(optionsContainer, option.id, result);
+
+        feedback.innerHTML = "";
+
+        const feedbackBox =
+            document.createElement("div");
+
+        feedbackBox.className =
+            result.correct ? "answer-correct" : "answer-wrong";
+
+        const feedbackHeading =
+            document.createElement("span");
+
+        feedbackHeading.textContent =
+            result.correct ? "✓ Correct!" : "✕ Incorrect";
+
+        const feedbackExplanation =
+            document.createElement("p");
+
+        feedbackExplanation.textContent =
+            result.explanation || "";
+
+        feedbackBox.appendChild(feedbackHeading);
+
+        feedbackBox.appendChild(feedbackExplanation);
+
+        feedback.appendChild(feedbackBox);
+
+
+        // ---------------------------------------
+        // SHOW NEXT BUTTON
+        // ---------------------------------------
+
+        nextButton.style.display = "inline-flex";
+
+        nextButton.onclick = () => {
+
+            if (quizCurrentIndex < quizQuestions.length - 1) {
+
+                quizCurrentIndex++;
+
+                showQuizQuestion();
+
+            }
+
+            else {
+
+                // Quiz finished — unlock the next
+                // lesson for this subject.
+
+                markLevelCompleted(quizLevelId);
+
+                window.location.href =
+                    `level-complete.html?levelId=${quizLevelId}&subject=${encodeURIComponent(quizSubject)}`;
+
+            }
+
+        };
+
+
+        if (quizCurrentIndex === quizQuestions.length - 1) {
+
+            nextButton.textContent =
+                "Complete Quiz ✓";
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Embedded quiz answer submission error:",
+            error
+        );
+
+        feedback.innerHTML = `
+            <div class="answer-wrong">
+                Unable to submit answer. Please try again.
+            </div>
+        `;
+
+        buttons.forEach(
+            button => {
+                button.disabled = false;
+            }
+        );
+
+    }
 
 }
 
@@ -549,21 +981,166 @@ function setupLessonNavigation(
             levels[currentIndex + 1];
 
 
-        nextButton.textContent =
-            "NEXT LESSON →";
+        // The lesson-to-lesson button skips straight
+        // past the embedded quiz, so it should only
+        // work once this lesson's quiz is done —
+        // otherwise it just walks the person into the
+        // lock screen on the next page.
+
+        const thisLevelDone =
+            isLevelCompleted(currentLevel.id);
 
 
-        nextButton.onclick =
-            (event) => {
+        if (!thisLevelDone) {
 
-                event.preventDefault();
+            nextButton.textContent =
+                "🔒 FINISH QUIZ TO CONTINUE";
 
-                window.location.href =
-                    `lesson.html?levelId=${nextLevel.id}&subject=${encodeURIComponent(subject)}`;
+            nextButton.style.opacity = "0.5";
 
-            };
+            nextButton.style.cursor = "not-allowed";
+
+            nextButton.onclick =
+                (event) => {
+
+                    event.preventDefault();
+
+                };
+
+        }
+
+        else {
+
+            nextButton.textContent =
+                "NEXT LESSON →";
+
+            nextButton.style.opacity = "1";
+
+            nextButton.style.cursor = "pointer";
+
+            nextButton.onclick =
+                (event) => {
+
+                    event.preventDefault();
+
+                    window.location.href =
+                        `lesson.html?levelId=${nextLevel.id}&subject=${encodeURIComponent(subject)}`;
+
+                };
+
+        }
 
     }
+
+}
+
+
+
+// ==================================================
+// LOCKED LESSON
+// ==================================================
+
+function showLessonLocked(
+    previousLevel,
+    subject
+) {
+
+    const title =
+        document.getElementById("lesson-title");
+
+    const description =
+        document.getElementById("lesson-description");
+
+    const content =
+        document.getElementById("lesson-content");
+
+    const quizPanel =
+        document.getElementById("lesson-quiz");
+
+    const prevButton =
+        document.getElementById("prev-lesson");
+
+    const nextButton =
+        document.getElementById("next-lesson");
+
+
+    if (title) {
+
+        title.textContent =
+            "🔒 LESSON LOCKED";
+
+    }
+
+
+    if (description) {
+
+        description.textContent =
+            `Finish the "${previousLevel.title}" quiz to unlock this lesson.`;
+
+    }
+
+
+    if (content) {
+
+        content.innerHTML = "";
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className = "lesson-error";
+
+        const message =
+            document.createElement("p");
+
+        message.textContent =
+            `Complete the quiz for "${previousLevel.title}" first to unlock this lesson.`;
+
+        const backLink =
+            document.createElement("a");
+
+        backLink.className = "btn btn--primary";
+
+        backLink.href =
+            `lesson.html?levelId=${previousLevel.id}&subject=${encodeURIComponent(subject)}`;
+
+        backLink.textContent =
+            `Go to "${previousLevel.title}" →`;
+
+        wrapper.appendChild(message);
+        wrapper.appendChild(backLink);
+
+        content.appendChild(wrapper);
+
+    }
+
+
+    // Hide the embedded quiz panel entirely —
+    // there's nothing to quiz on a locked lesson.
+
+    if (quizPanel) {
+
+        quizPanel.closest(".pixel-preview-window").style.display =
+            "none";
+
+    }
+
+
+    // Disable lesson-to-lesson navigation buttons
+    // so the person can't route around the lock.
+
+    [prevButton, nextButton].forEach(
+        button => {
+
+            if (button) {
+
+                button.style.opacity = "0.3";
+
+                button.style.pointerEvents = "none";
+
+            }
+
+        }
+    );
 
 }
 

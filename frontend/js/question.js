@@ -281,6 +281,9 @@ function showQuestion() {
             button.className =
                 "quiz-option";
 
+            button.dataset.optionId =
+                option.id;
+
 
             button.innerHTML = `
                 <span class="option-label">
@@ -395,6 +398,13 @@ async function submitAnswer(
 
         console.log(
             "Answer result:",
+            result
+        );
+
+
+        markAnswerOptions(
+            optionsContainer,
+            option.id,
             result
         );
 
