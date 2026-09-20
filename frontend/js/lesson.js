@@ -285,7 +285,8 @@ const lessonSubject =
 
         loadEmbeddedQuiz(
             levelId,
-            subject
+            subject,
+            currentNumber
         );
 
     }
@@ -450,6 +451,13 @@ function markdownToHTML(markdown) {
 
 let quizLevelId = null;
 
+// The DB primary key (quizLevelId) is what the API needs for
+// fetching/submitting; it is NOT the same as the level's position
+// within its subject (e.g. CSS level 1 can have a DB id like 41
+// once HTML/JS levels come before it). quizLevelNumber holds the
+// per-subject number (1, 2, 3...) that should be shown to the user.
+let quizLevelNumber = null;
+
 let quizSubject = "HTML";
 
 let quizQuestions = [];
@@ -463,10 +471,13 @@ let quizCurrentIndex = 0;
 
 async function loadEmbeddedQuiz(
     levelId,
-    subject
+    subject,
+    levelNumber
 ) {
 
     quizLevelId = levelId;
+
+    quizLevelNumber = levelNumber;
 
     quizSubject = subject;
 
@@ -603,10 +614,14 @@ function showQuizQuestion() {
 
     // ---------------------------------------
     // LEVEL
+    // (show the per-subject level number, not
+    // the raw database id)
     // ---------------------------------------
 
     level.textContent =
-        quizLevelId;
+        quizLevelNumber != null
+            ? quizLevelNumber
+            : quizLevelId;
 
 
     // ---------------------------------------

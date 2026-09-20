@@ -6,16 +6,23 @@
 
     <link rel="stylesheet" href="css/theme.css">
 <script src="js/theme.js" defer></script>
+<script src="js/avatar-sync.js" defer></script>
+
 </head>
 <body>
     <p>Signing you in…</p>
     <script>
         const params = new URLSearchParams(window.location.search);
         const token = params.get('token');
+        const needsUsername = params.get('needsUsername') === 'true';
 
         if (token) {
             localStorage.setItem('token', token);
-            window.location.href = 'choose-topic.html';
+            // Brand-new Google sign-ups haven't picked a username yet
+            // (see OAuth2LoginSuccessHandler) — send them to that
+            // onboarding step first, same as the signup form does for
+            // email/password accounts. Everyone else goes straight on.
+            window.location.href = needsUsername ? 'set-username.html' : 'choose-topic.html';
         } else {
             window.location.href = 'login.html';
         }

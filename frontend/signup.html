@@ -15,6 +15,22 @@
 
     <link rel="stylesheet" href="css/theme.css">
 <script src="js/theme.js" defer></script>
+<script src="js/avatar-sync.js" defer></script>
+
+<style>
+    /* Live username availability hint — same colors used on the
+       Settings/profile page (css/settings.css .field-hint), kept local
+       here so this page doesn't need to pull in that whole stylesheet. */
+    .field-hint {
+        display: block;
+        margin-top: 0.35rem;
+        font-size: 0.8rem;
+        min-height: 1.1em;
+    }
+    .field-hint.is-checking { color: #9aa4af; }
+    .field-hint.is-available { color: #8bffb0; }
+    .field-hint.is-taken { color: #ff8b8b; }
+</style>
 </head>
 <body>
 
@@ -30,8 +46,8 @@
             <h1 class="auth__title">Create Account</h1>
             <p class="auth__subtitle">Join WebSprint and start your coding journey</p>
 
-            <!-- Native form POST — field names (name, email, password, confirm)
-                 map onto SignupRequest in RegistrationController -->
+            <!-- Native form POST — field names (name, email, username, password,
+                 confirm) map onto SignupRequest in RegistrationController -->
             <form id="signupForm" novalidate>
                 <div class="field" id="f-name">
                     <label for="name">Full Name</label>
@@ -42,6 +58,13 @@
                 <div class="field" id="f-email">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="you@example.com" required />
+                    <span class="field__error"></span>
+                </div>
+
+                <div class="field" id="f-username">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="e.g. code_master99" autocomplete="off" required />
+                    <small id="username-status" class="field-hint"></small>
                     <span class="field__error"></span>
                 </div>
 

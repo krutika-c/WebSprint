@@ -17,6 +17,7 @@
 
     <link rel="stylesheet" href="css/theme.css">
 <script src="js/theme.js" defer></script>
+<script src="js/avatar-sync.js" defer></script>
 </head>
 <body>
 
@@ -42,7 +43,7 @@
 
                
                 <a href="profile.html" class="nav-link nav-link--profile" aria-label="Profile">
-                    <span class="profile-avatar--nav">CM</span>
+                    <span class="profile-avatar--nav" id="nav-avatar">CM</span>
                     <span class="profile-caret">▾</span>
                 </a>
             </nav>
@@ -81,22 +82,42 @@
             <div class="settings-left">
                 <div class="card">
                     <div class="profile-head">
-                        <div class="profile-avatar">CM</div>
+                        <div class="avatar-picker-wrap">
+                            <div class="profile-avatar" id="profile-avatar-big">CM</div>
+                            <button class="btn btn--ghost" style="padding: 4px 12px; font-size: 0.75rem; margin-top: 4px;" id="change-avatar-btn" type="button" title="Choose a preset avatar" aria-haspopup="true" aria-expanded="false">Change Avatar</button>
+
+                            <div class="avatar-picker" id="avatar-picker" hidden>
+                                <p class="avatar-picker__label">Pick an avatar</p>
+                                <div class="avatar-picker__grid" id="avatar-picker-grid"></div>
+                            </div>
+                        </div>
                         <div>
-                            <strong style="font-size: 1.1rem; color: #f0f6fc;">CodeMaster</strong>
+                            <strong style="font-size: 1.1rem; color: #f0f6fc;" id="profile-display-name">CodeMaster</strong>
                             <div class="stat__lbl">Level 12</div>
-                            <button class="btn btn--ghost" style="padding: 4px 12px; font-size: 0.75rem; margin-top: 4px;">Change Avatar</button>
                         </div>
                     </div>
 
                     <div class="field" id="f-name">
                         <label for="name">Display Name</label>
-                        <input type="text" id="name" name="name" value="CodeMaster" />
+                        <div class="field-with-action">
+                            <input type="text" id="name" name="name" value="CodeMaster" disabled />
+                            <button type="button" class="field-edit-btn" id="edit-name" aria-label="Edit display name" title="Edit display name">✎</button>
+                        </div>
+                        <small id="name-status" class="field-hint"></small>
+                    </div>
+
+                    <div class="field" id="f-username">
+                        <label for="username">Username</label>
+                        <div class="field-with-action">
+                            <input type="text" id="username" name="username" value="" placeholder="Choose a username" autocomplete="off" disabled />
+                            <button type="button" class="field-edit-btn" id="edit-username" aria-label="Edit username" title="Edit username">✎</button>
+                        </div>
+                        <small id="username-status" class="field-hint"></small>
                     </div>
 
                     <div class="field" id="f-email">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="codemaster@email.com" />
+                        <input type="email" id="email" name="email" value="codemaster@email.com" disabled />
                     </div>
 
                     <div class="field">
@@ -104,7 +125,8 @@
                         <input type="text" id="joined" value="May 12, 2024" disabled />
                     </div>
 
-                    <button class="btn btn--primary">Save Changes</button>
+                    <button class="btn btn--primary" id="save-username">Save Changes</button>
+                    <small id="save-status" class="field-hint"></small>
                 </div>
             </div>
 
@@ -126,6 +148,9 @@
 
     </main>
 
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/profile.js" defer></script>
     <script src="js/script.js" defer></script>
 </body>
 </html>

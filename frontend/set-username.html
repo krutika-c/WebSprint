@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Choose a Username · WebSprint</title>
+    <meta name="description" content="Pick your WebSprint username to finish setting up your account." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/base.css" />
+
+    <link rel="stylesheet" href="css/theme.css">
+    <script src="js/theme.js" defer></script>
+
+    <style>
+        /* Live availability / save status hint — same look as the
+           Settings page's username field (css/settings.css .field-hint),
+           kept local so this page doesn't pull in that whole stylesheet. */
+        .field-hint {
+            display: block;
+            margin-top: 0.35rem;
+            font-size: 0.8rem;
+            min-height: 1.1em;
+        }
+        .field-hint.is-checking { color: #9aa4af; }
+        .field-hint.is-available { color: #8bffb0; }
+        .field-hint.is-taken { color: #ff8b8b; }
+    </style>
+    <script src="js/avatar-sync.js" defer></script>
+
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="brand">
+            <span class="brand__logo">&lt;#&gt;</span>
+            <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+        </div>
+    </header>
+
+    <main class="auth">
+        <div class="auth__card">
+            <h1 class="auth__title">Pick Your Username</h1>
+            <p class="auth__subtitle">One last step — choose a handle for your WebSprint profile.</p>
+
+            <form id="usernameForm" novalidate>
+                <div class="field" id="f-username">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="e.g. code_master99" autocomplete="off" required />
+                    <small id="username-status" class="field-hint"></small>
+                    <span class="field__error"></span>
+                </div>
+
+                <button type="submit" class="btn btn--primary btn--block" id="continueBtn">Continue →</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/set-username.js" defer></script>
+</body>
+</html>

@@ -14,6 +14,13 @@ let currentQuestionIndex = 0;
 
 let levelId = null;
 
+// The DB primary key (levelId) is not the same as the level's
+// position within its subject (e.g. CSS level 1 can have a DB id
+// like 41 once HTML/JS levels come before it). levelNumber holds
+// the per-subject number (1, 2, 3...) that should be shown to the
+// user instead of the raw id.
+let levelNumber = null;
+
 let subject = "HTML";
 
 
@@ -57,6 +64,40 @@ async function loadQuestions() {
             "Loading questions for level:",
             levelId
         );
+
+
+        // ---------------------------------------
+        // Resolve the per-subject level number
+        // (levelId is the DB id, not the number
+        // shown to the user)
+        // ---------------------------------------
+
+        try {
+
+            const levels =
+                await getLevels(subject);
+
+            const currentLevel =
+                levels.find(
+                    level =>
+                        Number(level.id) === levelId
+                );
+
+            levelNumber =
+                currentLevel
+                    ? currentLevel.levelNumber
+                    : levelId;
+
+        } catch (levelLookupError) {
+
+            console.error(
+                "Could not resolve level number:",
+                levelLookupError
+            );
+
+            levelNumber = levelId;
+
+        }
 
 
         // ---------------------------------------
@@ -202,10 +243,14 @@ function showQuestion() {
 
     // ---------------------------------------
     // Level
+    // (show the per-subject level number, not
+    // the raw database id)
     // ---------------------------------------
 
     level.textContent =
-        levelId;
+        levelNumber != null
+            ? levelNumber
+            : levelId;
 
 
     // ---------------------------------------

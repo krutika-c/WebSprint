@@ -129,6 +129,21 @@
     return /^[A-Za-z][A-Za-z\s'-]{1,}$/.test(value);
   }
 
+  // Same rule the backend enforces (RegistrationController /
+  // UserController): 3-20 chars, lowercase letters/digits/underscore.
+  function isValidUsername(value) {
+    return /^[a-z0-9_]{3,20}$/.test(value);
+  }
+
+  function debounce(fn, delayMs) {
+    let timer = null;
+    return function () {
+      const args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () { fn.apply(null, args); }, delayMs);
+    };
+  }
+
   // Full strength rule: 6+ chars, at least one letter, one number,
   // one symbol. Returns null when the password passes.
   function validatePasswordStrength(password) {
@@ -184,11 +199,68 @@ if (loginForm) {
 
 const signupForm = document.getElementById("signupForm");
 if (signupForm) {
+
+  // ----------------------------------------------------------
+  // Username is chosen right here at signup, so check it against
+  // the backend as the person types — same endpoint the Settings
+  // page uses to check a username change later.
+  // ----------------------------------------------------------
+  const usernameInput = document.getElementById("username");
+  let usernameAvailabilityKnown = false; // becomes true once a check confirms it's free
+
+  function setUsernameHint(message, className) {
+    const el = document.getElementById("username-status");
+    if (!el) return;
+    el.textContent = message;
+    el.className = "field-hint" + (className ? " " + className : "");
+  }
+
+  const checkUsernameAvailability = debounce(async function (rawValue) {
+    const value = (rawValue || "").trim().toLowerCase();
+    usernameAvailabilityKnown = false;
+
+    if (value.length === 0) {
+      setUsernameHint("", "");
+      return;
+    }
+
+    if (!isValidUsername(value)) {
+      setUsernameHint("3-20 characters: lowercase letters, numbers, underscores.", "is-taken");
+      return;
+    }
+
+    setUsernameHint("Checking availability...", "is-checking");
+
+    try {
+      const res = await fetch(
+        "http://localhost:8080/api/users/username-availability?username=" + encodeURIComponent(value)
+      );
+      const result = await res.json();
+
+      if (result.available) {
+        usernameAvailabilityKnown = true;
+        setUsernameHint("Username is available.", "is-available");
+      } else {
+        setUsernameHint(result.reason || "That username is already taken.", "is-taken");
+      }
+    } catch (err) {
+      setUsernameHint("Couldn't check availability right now.", "is-taken");
+    }
+  }, 400);
+
+  if (usernameInput) {
+    usernameInput.addEventListener("input", function () {
+      clearError("f-username");
+      checkUsernameAvailability(usernameInput.value);
+    });
+  }
+
   signupForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     clearErrors(signupForm);
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
+    const username = (usernameInput ? usernameInput.value : "").trim().toLowerCase();
     const password = document.getElementById("password").value;
     const confirm = document.getElementById("confirm").value;
     let ok = true;
@@ -198,6 +270,10 @@ if (signupForm) {
     }
     if (!isEmail(email)) {
       showError("f-email", "Enter a valid email address.");
+      ok = false;
+    }
+    if (!isValidUsername(username)) {
+      showError("f-username", "Choose a username: 3-20 characters, lowercase letters, numbers, underscores.");
       ok = false;
     }
     if (password.length < 6) {
@@ -210,6 +286,26 @@ if (signupForm) {
     }
     if (!ok) return;
 
+    // If the availability check hasn't confirmed this exact value yet
+    // (e.g. they typed it and hit Enter immediately), verify it once
+    // more before submitting so the error, if any, shows up here
+    // rather than as a generic failure after the request.
+    if (!usernameAvailabilityKnown) {
+      try {
+        const availRes = await fetch(
+          "http://localhost:8080/api/users/username-availability?username=" + encodeURIComponent(username)
+        );
+        const availData = await availRes.json();
+        if (!availData.available) {
+          showError("f-username", availData.reason || "That username is already taken.");
+          return;
+        }
+      } catch (err) {
+        // Can't reach the server to double-check — let the signup
+        // request itself surface the final answer below.
+      }
+    }
+
     try {
       const res = await fetch("http://localhost:8080/api/signup", {
         method: "POST",
@@ -217,6 +313,7 @@ if (signupForm) {
         body: JSON.stringify({
           fullName: name,
           email: email,
+          username: username,
           password: password,
           confirmPassword: confirm,
         }),
@@ -227,7 +324,12 @@ if (signupForm) {
         localStorage.setItem("token", data.token);
         window.location.href = "choose-topic.html";
       } else {
-        showError("f-email", data.error || "Could not create account.");
+        const msg = data.error || "Could not create account.";
+        if (/username/i.test(msg)) {
+          showError("f-username", msg);
+        } else {
+          showError("f-email", msg);
+        }
       }
     } catch (err) {
       showError("f-email", "Could not reach the server. Try again.");

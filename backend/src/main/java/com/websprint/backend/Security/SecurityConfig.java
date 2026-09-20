@@ -81,6 +81,7 @@ public class SecurityConfig {
                             "/api/subjects/**",
                             "/api/levels/**",
                             "/api/levels/*/questions",
+                            "/api/users/username-availability",
                             "/oauth2/authorization/google",
                             "/oauth2/**",
                             "/login/oauth2/code/**"
