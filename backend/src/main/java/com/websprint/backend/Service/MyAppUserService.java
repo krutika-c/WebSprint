@@ -1,4 +1,4 @@
-package com.websprint.backend.Model;
+package com.websprint.backend.Service;
 
 import java.security.SecureRandom;
 import java.util.Optional;
@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.websprint.backend.Model.MyAppUser;
+import com.websprint.backend.Repository.MyAppUserRepository;
 
 import lombok.AllArgsConstructor;
 

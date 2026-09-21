@@ -11,8 +11,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import com.websprint.backend.Model.MyAppUser;
-import com.websprint.backend.Model.MyAppUserRepository;
-import com.websprint.backend.Model.MyAppUserService;
+import com.websprint.backend.Repository.MyAppUserRepository;
+import com.websprint.backend.Service.MyAppUserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

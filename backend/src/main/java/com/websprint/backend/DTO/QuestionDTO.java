@@ -1,6 +1,8 @@
-package com.websprint.backend.Model;
+package com.websprint.backend.DTO;
 
 import java.util.List;
+
+import com.websprint.backend.Model.Question;
 
 public record QuestionDTO(Long id, String questionText, String questionType, List<OptionDTO> options) {
     public static QuestionDTO from(Question q) {

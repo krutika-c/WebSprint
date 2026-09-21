@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.websprint.backend.DTO.AnswerResultDTO;
+import com.websprint.backend.DTO.QuestionDTO;
 import com.websprint.backend.Exception.ResourceNotFoundException;
 import com.websprint.backend.Model.AnswerRequest;
-import com.websprint.backend.Model.AnswerResultDTO;
 import com.websprint.backend.Model.Question;
-import com.websprint.backend.Model.QuestionDTO;
 import com.websprint.backend.Model.QuestionOption;
-import com.websprint.backend.Model.QuestionRepository;
+import com.websprint.backend.Repository.QuestionRepository;
 
 @RestController
 @RequestMapping("/api/levels/{levelId}/questions")

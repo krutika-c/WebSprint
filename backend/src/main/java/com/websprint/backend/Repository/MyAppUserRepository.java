@@ -1,8 +1,10 @@
-package com.websprint.backend.Model;
+package com.websprint.backend.Repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.websprint.backend.Model.MyAppUser;
 
 public interface MyAppUserRepository extends JpaRepository<MyAppUser, Long>{
 

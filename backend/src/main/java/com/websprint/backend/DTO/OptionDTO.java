@@ -1,5 +1,6 @@
-package com.websprint.backend.Model;
+package com.websprint.backend.DTO;
 
+import com.websprint.backend.Model.QuestionOption;
 
 public record OptionDTO(Long id, String optionLabel, String optionText) {
     // deliberately no isCorrect field, validation is done server side

@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.websprint.backend.Model.MyAppUser;
-import com.websprint.backend.Model.MyAppUserRepository;
-import com.websprint.backend.Model.MyAppUserService;
 import com.websprint.backend.Model.SignupRequest;
+import com.websprint.backend.Repository.MyAppUserRepository;
 import com.websprint.backend.Security.JwtUtil;
+import com.websprint.backend.Service.MyAppUserService;
 
 // CHANGED from @Controller to @RestController — this now returns JSON
 @RestController

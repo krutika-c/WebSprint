@@ -1,4 +1,6 @@
-package com.websprint.backend.Model;
+package com.websprint.backend.DTO;
+
+import com.websprint.backend.Model.Level;
 
 public record LevelDTO(Long id, Integer levelNumber, String difficulty, String title) {
     public static LevelDTO from(Level l) {

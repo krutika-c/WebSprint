@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.websprint.backend.DTO.LessonDTO;
+import com.websprint.backend.DTO.LevelDTO;
+import com.websprint.backend.DTO.SubjectDTO;
 import com.websprint.backend.Exception.ResourceNotFoundException;
 import com.websprint.backend.Model.Lesson;
-import com.websprint.backend.Model.LessonDTO;
-import com.websprint.backend.Model.LessonRepository;
-import com.websprint.backend.Model.LevelDTO;
-import com.websprint.backend.Model.LevelRepository;
-import com.websprint.backend.Model.SubjectDTO;
-import com.websprint.backend.Model.SubjectRepository;
+import com.websprint.backend.Repository.LessonRepository;
+import com.websprint.backend.Repository.LevelRepository;
+import com.websprint.backend.Repository.SubjectRepository;
 
 @RestController
 @RequestMapping("/api")

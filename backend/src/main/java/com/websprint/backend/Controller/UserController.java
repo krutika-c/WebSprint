@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.websprint.backend.DTO.UserProfileDTO;
 import com.websprint.backend.Exception.ResourceNotFoundException;
-import com.websprint.backend.Model.MyAppUser;
-import com.websprint.backend.Model.MyAppUserRepository;
-import com.websprint.backend.Model.MyAppUserService;
-import com.websprint.backend.Model.UserProfileDTO;
-import com.websprint.backend.Model.UsernameUpdateRequest;
 import com.websprint.backend.Model.FullNameUpdateRequest;
+import com.websprint.backend.Model.MyAppUser;
+import com.websprint.backend.Model.UsernameUpdateRequest;
+import com.websprint.backend.Repository.MyAppUserRepository;
+import com.websprint.backend.Service.MyAppUserService;
 
 // Everything here operates on the currently logged-in user, identified
 // from the JWT via the Authentication object Spring Security injects
