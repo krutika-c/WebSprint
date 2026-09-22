@@ -12,6 +12,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     initProfileSettings();
     initAvatarPicker();
+    initPasswordChange();
     loadProfileStats();
 });
 
@@ -31,8 +32,9 @@ async function loadProfileStats() {
     const lessonsEl = document.getElementById("profile-stat-lessons");
     const streakEl = document.getElementById("profile-stat-streak");
     const longestEl = document.getElementById("profile-stat-longest-streak");
+    const headXpEl = document.getElementById("profile-head-xp");
 
-    if (!xpEl && !lessonsEl && !streakEl && !longestEl) {
+    if (!xpEl && !lessonsEl && !streakEl && !longestEl && !headXpEl) {
         // Not on a page with this markup — nothing to do.
         return;
     }
@@ -46,6 +48,13 @@ async function loadProfileStats() {
 
         if (xpEl) {
             xpEl.textContent = `${(stats.totalXp || 0).toLocaleString()} XP`;
+        }
+
+        // Small line under the name/avatar in the Profile tab header.
+        // There's no separate "account level" in the backend, so this
+        // shows the person's real XP total rather than a made-up number.
+        if (headXpEl) {
+            headXpEl.textContent = `${(stats.totalXp || 0).toLocaleString()} XP`;
         }
 
         if (lessonsEl) {
@@ -122,7 +131,20 @@ async function initProfileSettings() {
             emailInput.value = profile.email;
         }
 
+        const joinedInput = document.getElementById("joined");
+        const joinedFormatted = formatJoinedDate(profile.createdAt);
+        if (joinedInput) {
+            joinedInput.value = joinedFormatted;
+        }
+
         syncIdentityDisplay();
+        syncProfileViewTab(profile);
+
+        // Password change only makes sense for accounts that have a
+        // WebSprint password in the first place (not Google sign-ins).
+        if (profile.hasPassword === false) {
+            hidePasswordSection();
+        }
 
     } catch (error) {
 
@@ -544,6 +566,14 @@ function applyAvatar(avatarId) {
         bigAvatar.textContent = preset.glyph || initials;
     }
 
+    // Read-only avatar shown on the Profile tab — same preset, just a
+    // second element to keep in sync since the two tabs don't share DOM.
+    const viewAvatar = document.getElementById("profile-avatar-view");
+    if (viewAvatar) {
+        viewAvatar.style.background = preset.bg;
+        viewAvatar.textContent = preset.glyph || initials;
+    }
+
     // The nav avatar on THIS page is just another ".profile-avatar--nav"
     // element, so let the shared function (from avatar-sync.js) handle
     // it the same way it does on every other page.
@@ -574,6 +604,59 @@ function syncIdentityDisplay() {
 }
 
 
+// ==================================================
+// PROFILE TAB (read-only overview)
+//
+// The Profile tab just displays what's already been loaded —
+// nothing here is editable, so it's populated once and never
+// needs its own save/validation logic.
+// ==================================================
+
+function syncProfileViewTab(profile) {
+
+    const usernameEl = document.getElementById("view-username");
+    const emailEl = document.getElementById("view-email");
+
+    if (usernameEl) {
+        usernameEl.textContent = profile.username ? `@${profile.username}` : "—";
+    }
+
+    if (emailEl) {
+        emailEl.textContent = profile.email || "—";
+    }
+
+    const joinedEl = document.getElementById("view-joined");
+    if (joinedEl) {
+        joinedEl.textContent = formatJoinedDate(profile.createdAt) || "—";
+    }
+
+}
+
+
+// Turns the ISO timestamp the backend sends (e.g. "2024-05-12T09:30:00Z")
+// into the friendly "May 12, 2024" format the settings page shows. Real
+// account-creation data — no more hardcoded placeholder date.
+function formatJoinedDate(isoString) {
+
+    if (!isoString) {
+        return "";
+    }
+
+    const date = new Date(isoString);
+
+    if (Number.isNaN(date.getTime())) {
+        return "";
+    }
+
+    return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    });
+
+}
+
+
 function getInitials() {
 
     const source = originalFullName || originalUsername || "Learner";
@@ -589,6 +672,114 @@ function getInitials() {
     }
 
     return (parts[0][0] + parts[1][0]).toUpperCase();
+
+}
+
+
+// ==================================================
+// CHANGE PASSWORD (Account tab)
+// ==================================================
+
+function hidePasswordSection() {
+
+    const section = document.getElementById("password-section");
+    const hint = document.getElementById("no-password-hint");
+
+    if (!section) {
+        return;
+    }
+
+    ["f-current-password", "f-new-password", "f-confirm-new-password"].forEach((id) => {
+        const field = document.getElementById(id);
+        if (field) field.hidden = true;
+    });
+
+    const changeBtn = document.getElementById("change-password-btn");
+    const status = document.getElementById("password-status");
+    if (changeBtn) changeBtn.hidden = true;
+    if (status) status.hidden = true;
+
+    if (hint) hint.hidden = false;
+
+}
+
+
+function initPasswordChange() {
+
+    const currentInput = document.getElementById("current-password");
+    const newInput = document.getElementById("new-password");
+    const confirmInput = document.getElementById("confirm-new-password");
+    const changeBtn = document.getElementById("change-password-btn");
+
+    if (!currentInput || !newInput || !confirmInput || !changeBtn) {
+        return;
+    }
+
+    changeBtn.addEventListener("click", async (event) => {
+
+        event.preventDefault();
+
+        const currentPassword = currentInput.value;
+        const newPassword = newInput.value;
+        const confirmPassword = confirmInput.value;
+
+        if (!currentPassword) {
+            setHint("password-status", "Enter your current password.", "is-taken");
+            return;
+        }
+
+        if (newPassword.length < 8) {
+            setHint("password-status", "New password must be at least 8 characters.", "is-taken");
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            setHint("password-status", "New passwords don't match.", "is-taken");
+            return;
+        }
+
+        if (newPassword === currentPassword) {
+            setHint("password-status", "New password must be different from your current password.", "is-taken");
+            return;
+        }
+
+        setHint("password-status", "Updating...", "is-checking");
+        changeBtn.disabled = true;
+
+        try {
+
+            await apiFetch("/api/users/password", {
+                method: "PUT",
+                body: JSON.stringify({
+                    currentPassword: currentPassword,
+                    newPassword: newPassword
+                })
+            });
+
+            setHint("password-status", "Password updated.", "is-available", 4000);
+
+            currentInput.value = "";
+            newInput.value = "";
+            confirmInput.value = "";
+
+        } catch (error) {
+
+            console.error("Could not update password:", error);
+
+            const serverMessage = error && error.body && error.body.error;
+
+            setHint(
+                "password-status",
+                serverMessage || "Couldn't update your password — check your current password and try again.",
+                "is-taken",
+                6000
+            );
+
+        } finally {
+            changeBtn.disabled = false;
+        }
+
+    });
 
 }
 

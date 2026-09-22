@@ -20,10 +20,28 @@
   ---------------------------------------------------------- */
   document.querySelectorAll("[data-tabs]").forEach(function (group) {
     const tabs = group.querySelectorAll(".tab");
+
+    // Optional: a tab can point at a panel (elsewhere on the page,
+    // marked [data-tab-panel]) via data-tab-target="panel-id". Pages
+    // that don't use this (just the visual is-active toggle) are
+    // unaffected — this only runs when a matching panel exists.
+    const panels = document.querySelectorAll("[data-tab-panel]");
+
     tabs.forEach(function (tab) {
       tab.addEventListener("click", function () {
         tabs.forEach(function (t) { t.classList.remove("is-active"); });
         tab.classList.add("is-active");
+
+        const targetId = tab.getAttribute("data-tab-target");
+        if (!targetId || panels.length === 0) {
+          return;
+        }
+
+        panels.forEach(function (panel) {
+          const isTarget = panel.id === targetId;
+          panel.hidden = !isTarget;
+          panel.classList.toggle("is-active", isTarget);
+        });
       });
     });
   });

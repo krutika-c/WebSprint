@@ -78,51 +78,9 @@
 
        
         <div class="ach-grid">
-
-           
-            <div class="card ach is-unlocked" data-state="unlocked">
-                <div class="ach__icon">🥇</div>
-                <h4>First Lesson</h4>
-                <p>Complete your first lesson</p>
-            </div>
-            <div class="card ach is-unlocked" data-state="unlocked">
-                <div class="ach__icon">📘</div>
-                <h4>HTML Explorer</h4>
-                <p>Complete 5 HTML levels</p>
-            </div>
-            <div class="card ach is-unlocked" data-state="unlocked">
-                <div class="ach__icon">🎨</div>
-                <h4>CSS Stylist</h4>
-                <p>Complete 5 CSS levels</p>
-            </div>
-            <div class="card ach is-unlocked" data-state="unlocked">
-                <div class="ach__icon">⚙️</div>
-                <h4>JS Beginner</h4>
-                <p>Complete 5 JS levels</p>
-            </div>
-
-            
-            <div class="card ach is-locked" data-state="locked">
-                <div class="ach__icon">🔒</div>
-                <h4>Full Stack Hero</h4>
-                <p>Complete all courses</p>
-            </div>
-            <div class="card ach is-locked" data-state="locked">
-                <div class="ach__icon">🔒</div>
-                <h4>1000 XP Club</h4>
-                <p>Earn 1000 XP</p>
-            </div>
-            <div class="card ach is-locked" data-state="locked">
-                <div class="ach__icon">🔒</div>
-                <h4>Consistency King</h4>
-                <p>Maintain a 7-day streak</p>
-            </div>
-            <div class="card ach is-locked" data-state="locked">
-                <div class="ach__icon">🔒</div>
-                <h4>Project Master</h4>
-                <p>Complete 3 projects</p>
-            </div>
-
+            <!-- Cards are rendered by js/achievements.js from the user's
+                 real progress/XP/streak data (see GET /api/progress and
+                 GET /api/me/stats) — nothing here is hardcoded anymore. -->
         </div>
 
         
@@ -130,6 +88,10 @@
 
     </main>
 
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/achievements.js"></script>
     <script src="js/script.js" defer></script>
 </body>
 </html>

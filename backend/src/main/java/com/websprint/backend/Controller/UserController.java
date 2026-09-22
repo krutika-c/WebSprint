@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import com.websprint.backend.DTO.UserProfileDTO;
 import com.websprint.backend.Exception.ResourceNotFoundException;
 import com.websprint.backend.Model.FullNameUpdateRequest;
 import com.websprint.backend.Model.MyAppUser;
+import com.websprint.backend.Model.PasswordUpdateRequest;
 import com.websprint.backend.Model.UsernameUpdateRequest;
 import com.websprint.backend.Repository.MyAppUserRepository;
 import com.websprint.backend.Service.MyAppUserService;
@@ -36,11 +38,14 @@ public class UserController {
 
     private final MyAppUserRepository userRepository;
     private final MyAppUserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     public UserController(MyAppUserRepository userRepository,
-                           @Qualifier("myAppUserService") MyAppUserService userService) {
+                           @Qualifier("myAppUserService") MyAppUserService userService,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // GET /api/users/me -> the logged-in user's profile, including username.
@@ -161,6 +166,54 @@ public class UserController {
         userRepository.save(user);
 
         return ResponseEntity.ok(UserProfileDTO.from(user));
+    }
+
+    // PUT /api/users/password  { "currentPassword": "...", "newPassword": "..." }
+    // Changes the logged-in user's password. Requires the current password
+    // to be re-entered and verified server-side — never trust that whoever
+    // holds a valid JWT right now is still the account owner sitting at the
+    // keyboard. Accounts with no password set (Google sign-in only) can't
+    // use this until they have one.
+    @PutMapping("/password")
+    public ResponseEntity<?> updatePassword(
+            @RequestBody PasswordUpdateRequest request,
+            Authentication authentication) {
+
+        MyAppUser user = requireCurrentUser(authentication);
+
+        if (user.getPassword_hash() == null || user.getPassword_hash().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "This account doesn't have a WebSprint password to change — it signed in with Google."
+            ));
+        }
+
+        String currentPassword = request.getCurrentPassword();
+        String newPassword = request.getNewPassword();
+
+        if (currentPassword == null || currentPassword.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Enter your current password."));
+        }
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword_hash())) {
+            return ResponseEntity.status(401).body(Map.of("error", "Current password is incorrect."));
+        }
+
+        if (newPassword == null || newPassword.length() < 8) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "New password must be at least 8 characters."
+            ));
+        }
+
+        if (passwordEncoder.matches(newPassword, user.getPassword_hash())) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "New password must be different from your current password."
+            ));
+        }
+
+        user.setPassword_hash(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of("message", "Password updated."));
     }
 
     private MyAppUser requireCurrentUser(Authentication authentication) {
