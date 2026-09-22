@@ -68,6 +68,10 @@ async function getQuestions(levelId) {
 
 /* =====================================================
    SUBMIT ANSWER
+
+   Instant per-question right/wrong feedback only. Doesn't
+   touch progress, XP or streaks — see submitLevelAttempt
+   for that.
 ===================================================== */
 
 async function submitAnswer(levelId, questionId, optionId) {
@@ -82,6 +86,60 @@ async function submitAnswer(levelId, questionId, optionId) {
             })
         }
     );
+
+}
+
+
+/* =====================================================
+   SUBMIT LEVEL ATTEMPT
+
+   The real scoring call. Sends every answer for the level
+   at once; the server grades it, updates progress, awards
+   XP (level-completed / perfect-score / streak-bonus),
+   extends the streak and unlocks the next level. Returns a
+   SubmitResultResponse — see js/progress.js for the shape.
+===================================================== */
+
+async function submitLevelAttempt(levelId, answers) {
+
+    return apiFetch(
+        `/api/levels/${levelId}/attempts`,
+        {
+            method: "POST",
+
+            body: JSON.stringify({
+                answers: answers
+            })
+        }
+    );
+
+}
+
+
+/* =====================================================
+   GET PROGRESS
+
+   Every level, with this user's real status (locked /
+   unlocked / completed), best score and attempt count.
+===================================================== */
+
+async function getMyProgress() {
+
+    return apiFetch(`/api/progress`);
+
+}
+
+
+/* =====================================================
+   GET STATS
+
+   { totalXp, currentStreak, longestStreak } for the
+   logged-in user.
+===================================================== */
+
+async function getMyStats() {
+
+    return apiFetch(`/api/me/stats`);
 
 }
 
@@ -117,90 +175,13 @@ function markAnswerOptions(container, pickedOptionId, result) {
 
 
 /* =====================================================
-   LESSON LOCKING (frontend-only for now)
+   LESSON LOCKING
 
-   Tracks which lessons have had their quiz completed,
-   so the roadmap and the lesson page itself can lock
-   the next lesson until that happens.
-
-   NOTE: this is stored in the browser only (localStorage),
-   not on the backend yet — it will reset if the person
-   clears their browser data or switches devices. This can
-   be swapped for a real per-user backend endpoint later
-   without changing how the rest of the app calls these
-   three functions.
+   Used to be tracked client-side in localStorage. Now that
+   the backend has real per-user progress (locked/unlocked/
+   completed, persisted, synced across devices), lock state
+   comes from js/progress.js (isLevelCompleted/isLevelLocked
+   backed by getMyProgress()) instead. Nothing here anymore —
+   kept as a marker in case any old code still imports this
+   file expecting these names.
 ===================================================== */
-
-const COMPLETED_LEVELS_KEY = "websprint_completed_levels";
-
-
-function getCompletedLevelIds() {
-
-    try {
-
-        const raw =
-            localStorage.getItem(COMPLETED_LEVELS_KEY);
-
-        const parsed =
-            raw ? JSON.parse(raw) : [];
-
-        return Array.isArray(parsed) ? parsed : [];
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Could not read completed levels:",
-            error
-        );
-
-        return [];
-
-    }
-
-}
-
-
-function isLevelCompleted(levelId) {
-
-    return getCompletedLevelIds().includes(
-        Number(levelId)
-    );
-
-}
-
-
-function markLevelCompleted(levelId) {
-
-    const completed =
-        getCompletedLevelIds();
-
-    const id =
-        Number(levelId);
-
-    if (!completed.includes(id)) {
-
-        completed.push(id);
-
-        try {
-
-            localStorage.setItem(
-                COMPLETED_LEVELS_KEY,
-                JSON.stringify(completed)
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Could not save completed level:",
-                error
-            );
-
-        }
-
-    }
-
-}

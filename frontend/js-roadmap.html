@@ -109,22 +109,22 @@
                 <p class="section-label">Your Progress</p>
 
                 <div class="ring-wrap">
-                    <div class="ring" style="--val: 0">
+                    <div class="ring" id="progress-ring" style="--val: 0">
                         <div class="ring__label">
-                            <b>0%</b>
-                            <span>0 of 20 completed</span>
+                            <b id="progress-ring-pct">0%</b>
+                            <span id="progress-ring-label">0 of 0 completed</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="kv">
                     <span>XP Earned</span>
-                    <b>0 XP</b>
+                    <b id="xp-earned">0 XP</b>
                 </div>
 
                 <div class="kv">
                     <span>Next Reward</span>
-                    <b>🏆 Level 1</b>
+                    <b id="next-reward">🏆 —</b>
                 </div>
 
             </aside>
@@ -141,6 +141,7 @@
     <!-- ═══ JAVASCRIPT ═══ -->
     <script src="js/config.js"></script>
     <script src="js/api.js"></script>
+    <script src="js/progress.js"></script>
     <script src="js/levels.js"></script>
     <script src="js/script.js" defer></script>
 

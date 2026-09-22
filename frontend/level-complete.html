@@ -61,10 +61,10 @@
         <div class="course-hero__content">
             <div class="course-hero__badge">
                 <span class="badge badge--beginner">🎉 COMPLETED</span>
-                <span class="badge badge--course">LEVEL 1</span>
+                <span class="badge badge--course" id="complete-level-badge">LEVEL 1</span>
             </div>
             <h1 class="course-hero__title">Level Complete!</h1>
-            <p class="course-hero__desc">
+            <p class="course-hero__desc" id="complete-hero-desc">
                 Amazing work! You have completed HTML Level 1.
             </p>
         </div>
@@ -77,19 +77,23 @@
         <div class="card celebrate">
             <div class="celebrate__trophy">🏆</div>
             <h2 class="celebrate__title">Level Complete!</h2>
-            <p class="celebrate__subtitle">Amazing work! You have completed HTML Level 1.</p>
-            <div class="reward-row">
-                <div class="reward">
+            <p class="celebrate__subtitle" id="complete-subtitle">Amazing work! You have completed HTML Level 1.</p>
+            <div class="reward-row" id="reward-row">
+                <div class="reward" id="reward-xp">
                     <span class="reward__icon">⭐</span>
-                    <span class="reward__text">+100 XP</span>
+                    <span class="reward__text" id="reward-xp-text">+0 XP</span>
                 </div>
-                <div class="reward">
-                    <span class="reward__icon">🎖️</span>
-                    <span class="reward__text">+1 Badge</span>
+                <div class="reward" id="reward-streak">
+                    <span class="reward__icon">🔥</span>
+                    <span class="reward__text" id="reward-streak-text">0-Day Streak</span>
+                </div>
+                <div class="reward" id="reward-total-xp">
+                    <span class="reward__icon">🏆</span>
+                    <span class="reward__text" id="reward-total-xp-text">0 Total XP</span>
                 </div>
             </div>
-            <p class="unlock-note">🔓 HTML Level 2 is unlocked</p>
-            <a href="html-roadmap.html" class="btn btn--primary btn--block">Continue Learning →</a>
+            <p class="unlock-note" id="complete-unlock-note">🔓 HTML Level 2 is unlocked</p>
+            <a href="html-roadmap.html" id="continue-learning-link" class="btn btn--primary btn--block">Continue Learning →</a>
         </div>
 
        
@@ -97,6 +101,10 @@
 
     </main>
 
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/level-complete.js"></script>
     <script src="js/script.js" defer></script>
 </body>
 </html>

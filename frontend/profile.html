@@ -134,10 +134,11 @@
             <aside class="settings-right">
                 <div class="card">
                     <p class="section-label">Your Stats</p>
-                    <div class="kv"><span>Total XP</span><b>1,450 XP</b></div>
-                    <div class="kv"><span>Lessons Completed</span><b>22</b></div>
+                    <div class="kv"><span>Total XP</span><b id="profile-stat-xp">0 XP</b></div>
+                    <div class="kv"><span>Lessons Completed</span><b id="profile-stat-lessons">0</b></div>
                     <div class="kv"><span>Badges Earned</span><b>8</b></div>
-                    <div class="kv"><span>Current Streak</span><b>7 Days</b></div>
+                    <div class="kv"><span>Current Streak</span><b id="profile-stat-streak">0 Days</b></div>
+                    <div class="kv"><span>Longest Streak</span><b id="profile-stat-longest-streak">0 Days</b></div>
                     <a href="login.html" class="btn btn--ghost btn--block" style="margin-top: 1.5rem;">Log Out</a>
                 </div>
             </aside>
@@ -150,6 +151,7 @@
 
     <script src="js/config.js" defer></script>
     <script src="js/api.js" defer></script>
+    <script src="js/progress.js" defer></script>
     <script src="js/profile.js" defer></script>
     <script src="js/script.js" defer></script>
 </body>

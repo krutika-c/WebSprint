@@ -59,6 +59,18 @@ async function loadQuestions() {
             subject
         );
 
+        // FIX: this link was hardcoded to html-roadmap.html
+        // in the markup, so "Back to Roadmap" sent people
+        // doing a CSS or JS quiz to the HTML roadmap instead
+        // of their own subject's roadmap.
+        const backLink =
+            document.getElementById("quiz-back-link");
+
+        if (backLink) {
+            backLink.href =
+                `${subject.toLowerCase()}-roadmap.html`;
+        }
+
 
         console.log(
             "Loading questions for level:",

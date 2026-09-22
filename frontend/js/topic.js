@@ -15,7 +15,7 @@ async function loadSubjects() {
 
         container.innerHTML = "";
 
-        subjects.forEach(subject => {
+        for (const subject of subjects) {
 
             let className = "";
             let icon = "";
@@ -51,6 +51,23 @@ async function loadSubjects() {
                 page = "js-roadmap.html";
             }
 
+            // Real per-subject completion, if the progress module and
+            // an active session are available — falls back to 0% for
+            // a logged-out visitor or if either call fails.
+            let percent = 0;
+
+            try {
+
+                if (typeof getLevels === "function" && typeof getSubjectProgress === "function") {
+                    const subjectLevels = await getLevels(subject.code);
+                    const subjectProgress = await getSubjectProgress(subjectLevels);
+                    percent = subjectProgress.percent;
+                }
+
+            } catch (error) {
+                console.error(`Could not load progress for ${subject.code}:`, error);
+            }
+
             const card = document.createElement("div");
 
             card.className = `card topic-card ${className}`;
@@ -69,12 +86,12 @@ async function loadSubjects() {
                 </span>
 
                 <div class="progress">
-                    <div class="progress__fill" style="width: 0%"></div>
+                    <div class="progress__fill" style="width: ${percent}%"></div>
                 </div>
 
                 <div class="progress__meta">
                     <span>Progress</span>
-                    <span>0%</span>
+                    <span>${percent}%</span>
                 </div>
 
                 <a href="${page}"
@@ -84,7 +101,7 @@ async function loadSubjects() {
             `;
 
             container.appendChild(card);
-        });
+        }
 
     } catch (error) {
 

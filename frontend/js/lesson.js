@@ -139,7 +139,7 @@ const lessonSubject =
 
         if (
             previousLevel &&
-            !isLevelCompleted(previousLevel.id)
+            !(await isLevelCompleted(previousLevel.id))
         ) {
 
             console.warn(
@@ -464,6 +464,13 @@ let quizQuestions = [];
 
 let quizCurrentIndex = 0;
 
+// questionId -> optionId, one entry per answered question. Sent to
+// POST /api/levels/{levelId}/attempts when the quiz finishes — that
+// call is the one that actually grades the level, awards XP and
+// extends the streak (the per-question /answer call above is just
+// instant right/wrong feedback while the person is answering).
+let quizAnswers = new Map();
+
 
 // ==================================================
 // LOAD QUIZ
@@ -482,6 +489,8 @@ async function loadEmbeddedQuiz(
     quizSubject = subject;
 
     quizCurrentIndex = 0;
+
+    quizAnswers = new Map();
 
 
     const questionText =
@@ -769,6 +778,11 @@ async function submitQuizAnswer(
         );
 
 
+        // Record the choice for the real, server-graded
+        // submission when the quiz finishes.
+        quizAnswers.set(question.id, option.id);
+
+
         // ---------------------------------------
         // CORRECT / WRONG FEEDBACK
         // (built with createElement + textContent —
@@ -823,13 +837,10 @@ async function submitQuizAnswer(
 
             else {
 
-                // Quiz finished — unlock the next
-                // lesson for this subject.
-
-                markLevelCompleted(quizLevelId);
-
-                window.location.href =
-                    `level-complete.html?levelId=${quizLevelId}&subject=${encodeURIComponent(quizSubject)}`;
+                // Quiz finished — send every answer to the
+                // server so it can grade the attempt, update
+                // progress, award XP and extend the streak.
+                finishQuiz();
 
             }
 
@@ -871,10 +882,103 @@ async function submitQuizAnswer(
 
 
 // ==================================================
+// FINISH QUIZ
+//
+// Submits every recorded answer to the server in one
+// call. The server re-grades everything itself (the
+// per-question /answer calls above are display-only),
+// so this is the only place XP, streaks and unlocks
+// actually happen. The full result is handed to
+// level-complete.html via sessionStorage — it can't
+// come through the URL cleanly and re-fetching it
+// there would just repeat the submission.
+// ==================================================
+
+async function finishQuiz() {
+
+    const nextButton =
+        document.getElementById("next-question");
+
+    const feedback =
+        document.getElementById("answer-feedback");
+
+    if (nextButton) {
+        nextButton.disabled = true;
+        nextButton.textContent = "Submitting…";
+    }
+
+    const answers =
+        Array.from(quizAnswers.entries()).map(
+            ([questionId, optionId]) => ({ questionId, optionId })
+        );
+
+    try {
+
+        const result =
+            await submitLevelAttempt(quizLevelId, answers);
+
+        console.log(
+            "Level attempt result:",
+            result
+        );
+
+        // Progress/stats are cached per page load — make sure
+        // the roadmap and stat chips on the next page fetch
+        // fresh numbers instead of what was true before this
+        // attempt.
+        if (typeof refreshProgressAndStats === "function") {
+            await refreshProgressAndStats();
+        }
+
+        sessionStorage.setItem(
+            "websprint_last_result",
+            JSON.stringify({ ...result, subject: quizSubject })
+        );
+
+        window.location.href =
+            `level-complete.html?levelId=${quizLevelId}&subject=${encodeURIComponent(quizSubject)}`;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Level attempt submission error:",
+            error
+        );
+
+        if (feedback) {
+
+            feedback.innerHTML = "";
+
+            const errorBox =
+                document.createElement("div");
+
+            errorBox.className = "answer-wrong";
+
+            errorBox.textContent =
+                "Couldn't save your results. Check your connection and try again.";
+
+            feedback.appendChild(errorBox);
+
+        }
+
+        if (nextButton) {
+            nextButton.disabled = false;
+            nextButton.textContent = "Complete Quiz ✓";
+        }
+
+    }
+
+}
+
+
+
+// ==================================================
 // LESSON NAVIGATION
 // ==================================================
 
-function setupLessonNavigation(
+async function setupLessonNavigation(
     levels,
     currentLevel,
     subject
@@ -1003,7 +1107,7 @@ function setupLessonNavigation(
         // lock screen on the next page.
 
         const thisLevelDone =
-            isLevelCompleted(currentLevel.id);
+            await isLevelCompleted(currentLevel.id);
 
 
         if (!thisLevelDone) {

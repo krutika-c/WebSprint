@@ -12,7 +12,63 @@
 document.addEventListener("DOMContentLoaded", () => {
     initProfileSettings();
     initAvatarPicker();
+    loadProfileStats();
 });
+
+
+// ==================================================
+// STATS PANEL (Total XP / Lessons Completed / Streaks)
+//
+// Independent of initProfileSettings above — runs even if this
+// page doesn't have the username/name editing markup, and vice
+// versa a login failure there shouldn't blank out stats that
+// did load successfully.
+// ==================================================
+
+async function loadProfileStats() {
+
+    const xpEl = document.getElementById("profile-stat-xp");
+    const lessonsEl = document.getElementById("profile-stat-lessons");
+    const streakEl = document.getElementById("profile-stat-streak");
+    const longestEl = document.getElementById("profile-stat-longest-streak");
+
+    if (!xpEl && !lessonsEl && !streakEl && !longestEl) {
+        // Not on a page with this markup — nothing to do.
+        return;
+    }
+
+    try {
+
+        const [stats, completed] = await Promise.all([
+            getMyStats(),
+            countCompletedLevels()
+        ]);
+
+        if (xpEl) {
+            xpEl.textContent = `${(stats.totalXp || 0).toLocaleString()} XP`;
+        }
+
+        if (lessonsEl) {
+            lessonsEl.textContent = String(completed);
+        }
+
+        if (streakEl) {
+            const days = stats.currentStreak || 0;
+            streakEl.textContent = `${days} Day${days === 1 ? "" : "s"}`;
+        }
+
+        if (longestEl) {
+            const days = stats.longestStreak || 0;
+            longestEl.textContent = `${days} Day${days === 1 ? "" : "s"}`;
+        }
+
+    } catch (error) {
+
+        console.error("Could not load profile stats:", error);
+
+    }
+
+}
 
 
 let originalUsername = "";

@@ -605,6 +605,19 @@ body {
     cursor: not-allowed;
 }
 
+/* Shown when we couldn't confirm this level's real status (the
+   progress request failed) — visually distinct from both "done" and
+   "locked" so it doesn't read as either a confirmed success or a
+   confirmed lock. See js/levels.js renderProgressWarning/loadLevels. */
+.step.is-unknown {
+    border-style: dashed;
+    border-color: rgba(255, 213, 138, 0.35);
+}
+
+.step.is-unknown:hover {
+    border-color: rgba(255, 213, 138, 0.55);
+}
+
 .step__num {
     display: flex;
     align-items: center;
@@ -660,6 +673,11 @@ body {
 .step__status.is-locked {
     background: rgba(255, 255, 255, 0.04);
     color: #5f6b7a;
+}
+
+.step__status.is-unknown {
+    background: rgba(255, 213, 138, 0.12);
+    color: #ffd58a;
 }
 
 /* ─── Roadmap Sidebar ─── */
