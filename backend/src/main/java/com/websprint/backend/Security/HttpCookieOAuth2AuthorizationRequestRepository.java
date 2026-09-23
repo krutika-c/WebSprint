@@ -1,7 +1,6 @@
 package com.websprint.backend.Security;
 
 import java.util.Base64;
-import java.util.Optional;
 
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
