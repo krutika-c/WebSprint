@@ -20,7 +20,22 @@ async function apiFetch(endpoint, options = {}) {
     );
 
     if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
+
+        // Try to read the server's error body (e.g. { "error": "..." })
+        // so callers that want a specific message can show one. Kept
+        // optional/best-effort — existing callers that only relied on
+        // the generic "API Error: <status>" message are unaffected.
+        let body = null;
+        try {
+            body = await response.clone().json();
+        } catch (parseError) {
+            body = null;
+        }
+
+        const error = new Error(`API Error: ${response.status}`);
+        error.status = response.status;
+        error.body = body;
+        throw error;
     }
 
     return response.json();

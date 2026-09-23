@@ -14,11 +14,12 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    .settings-left > .card,
-    .settings-right > .card,
-    .settings-stack > .card {
-    height: 100%;
 }
+
+.settings-left > .card,
+.settings-right > .card,
+.settings-stack > .card {
+    height: 100%;
 }
 
 /* ─── Profile Head ─── */
@@ -121,6 +122,10 @@
     margin-top: 0.35rem;
     font-size: 0.8rem;
     min-height: 1.1em;
+}
+
+.field-hint[hidden] {
+    display: none;
 }
 
 .field-hint.is-checking {
@@ -473,6 +478,13 @@
     color: #0b0d10;
     background: #8bffb0;
     border-color: #8bffb0;
+}
+
+/* ─── Section divider (Change Password, etc. on the Account tab) ─── */
+.settings-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* ─── Avatar picker ─── */
