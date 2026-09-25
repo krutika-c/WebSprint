@@ -1,3 +1,35 @@
+// Each level already carries a real `difficulty` ("Beginner" /
+// "Intermediate" / "Advanced") from the backend — the roadmap pages
+// show it per-step already. This picks the difficulty of whichever
+// level the user hasn't completed yet (i.e. what they're currently
+// on), so the Topics card badge reflects that instead of always
+// saying "Beginner". Once every level in the subject is completed,
+// it falls back to the highest level's difficulty.
+async function getCurrentTier(subjectLevels) {
+
+    if (!subjectLevels.length) {
+        return "Beginner";
+    }
+
+    const sorted = [...subjectLevels].sort((a, b) => a.levelNumber - b.levelNumber);
+    const map = await getProgressMap();
+
+    const nextLevel = sorted.find(level => {
+        const row = map.get(Number(level.id));
+        return !row || row.status !== "completed";
+    });
+
+    if (nextLevel) {
+        return nextLevel.difficulty || "Beginner";
+    }
+
+    // Every level in the subject is completed — show the top tier
+    // rather than reverting to "Beginner".
+    return sorted[sorted.length - 1].difficulty || "Beginner";
+
+}
+
+
 async function loadSubjects() {
 
     const container = document.getElementById("subjects-container");
@@ -55,6 +87,7 @@ async function loadSubjects() {
             // an active session are available — falls back to 0% for
             // a logged-out visitor or if either call fails.
             let percent = 0;
+            let tier = "Beginner";
 
             try {
 
@@ -62,11 +95,17 @@ async function loadSubjects() {
                     const subjectLevels = await getLevels(subject.code);
                     const subjectProgress = await getSubjectProgress(subjectLevels);
                     percent = subjectProgress.percent;
+                    tier = await getCurrentTier(subjectLevels);
                 }
 
             } catch (error) {
                 console.error(`Could not load progress for ${subject.code}:`, error);
             }
+
+            const tierIcon =
+                tier === "Advanced" ? "🔥" :
+                tier === "Intermediate" ? "🚀" :
+                "⚡";
 
             const card = document.createElement("div");
 
@@ -82,7 +121,7 @@ async function loadSubjects() {
                 <p>${description}</p>
 
                 <span class="badge badge--beginner">
-                    ⚡ Beginner
+                    ${tierIcon} ${tier}
                 </span>
 
                 <div class="progress">

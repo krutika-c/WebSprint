@@ -129,6 +129,12 @@ function renderRealResult(result, subject, levelId) {
                 `${(result.totalXp || 0).toLocaleString()} Total XP`;
         }
 
+        // Progress just changed server-side, so this is the moment
+        // any achievement's check() could newly pass.
+        if (typeof window.WEBSPRINT_CHECK_NEW_ACHIEVEMENTS === "function") {
+            window.WEBSPRINT_CHECK_NEW_ACHIEVEMENTS();
+        }
+
     }
 
     // ---------------------------------------

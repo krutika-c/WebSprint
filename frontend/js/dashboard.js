@@ -18,6 +18,13 @@ async function loadDashboard() {
         loadCourseCards()
     ]);
 
+    // Catches unlocks that don't happen mid-quiz — e.g. a streak
+    // achievement that only becomes true once the day's login itself
+    // updates the streak.
+    if (typeof window.WEBSPRINT_CHECK_NEW_ACHIEVEMENTS === "function") {
+        window.WEBSPRINT_CHECK_NEW_ACHIEVEMENTS();
+    }
+
 }
 
 

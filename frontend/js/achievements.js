@@ -151,6 +151,13 @@ function renderAchievementCard(achievement, unlocked, ctx) {
 }
 
 
+async function countEarnedAchievements() {
+    const ctx = await buildAchievementContext();
+    return ACHIEVEMENTS.filter(achievement => achievement.check(ctx)).length;
+}
+window.WEBSPRINT_COUNT_EARNED_ACHIEVEMENTS = countEarnedAchievements;
+
+
 async function loadAchievements() {
 
     const grid = document.querySelector(".ach-grid");

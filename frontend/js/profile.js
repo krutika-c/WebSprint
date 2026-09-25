@@ -30,20 +30,24 @@ async function loadProfileStats() {
 
     const xpEl = document.getElementById("profile-stat-xp");
     const lessonsEl = document.getElementById("profile-stat-lessons");
+    const badgesEl = document.getElementById("profile-stat-badges");
     const streakEl = document.getElementById("profile-stat-streak");
     const longestEl = document.getElementById("profile-stat-longest-streak");
     const headXpEl = document.getElementById("profile-head-xp");
 
-    if (!xpEl && !lessonsEl && !streakEl && !longestEl && !headXpEl) {
+    if (!xpEl && !lessonsEl && !badgesEl && !streakEl && !longestEl && !headXpEl) {
         // Not on a page with this markup — nothing to do.
         return;
     }
 
     try {
 
-        const [stats, completed] = await Promise.all([
+        const [stats, completed, badgesEarned] = await Promise.all([
             getMyStats(),
-            countCompletedLevels()
+            countCompletedLevels(),
+            typeof window.WEBSPRINT_COUNT_EARNED_ACHIEVEMENTS === "function"
+                ? window.WEBSPRINT_COUNT_EARNED_ACHIEVEMENTS().catch(() => null)
+                : Promise.resolve(null)
         ]);
 
         if (xpEl) {
@@ -59,6 +63,13 @@ async function loadProfileStats() {
 
         if (lessonsEl) {
             lessonsEl.textContent = String(completed);
+        }
+
+        // Only overwrite the "0" placeholder once we actually have a
+        // real count — js/achievements.js failing to load (or its
+        // own fetches failing) shouldn't make this look like 0 badges.
+        if (badgesEl && badgesEarned !== null) {
+            badgesEl.textContent = String(badgesEarned);
         }
 
         if (streakEl) {
@@ -429,12 +440,9 @@ function initAvatarPicker() {
         const swatch = document.createElement("button");
         swatch.type = "button";
         swatch.className = "avatar-option";
-        swatch.style.background = preset.bg;
-        swatch.setAttribute("aria-label", preset.glyph ? `${preset.glyph} avatar` : "Default avatar");
+        swatch.setAttribute("aria-label", preset.id === "default" ? "Default avatar" : `${preset.id} avatar`);
         swatch.dataset.avatarId = preset.id;
-        if (preset.glyph) {
-            swatch.textContent = preset.glyph;
-        }
+        window.WEBSPRINT_APPLY_PRESET_VISUAL(swatch, preset, "");
 
         swatch.addEventListener("click", () => {
             selectAvatar(preset.id);
@@ -561,18 +569,12 @@ function applyAvatar(avatarId) {
     localStorage.setItem(INITIALS_STORAGE_KEY, initials);
 
     const bigAvatar = document.getElementById("profile-avatar-big");
-    if (bigAvatar) {
-        bigAvatar.style.background = preset.bg;
-        bigAvatar.textContent = preset.glyph || initials;
-    }
+    window.WEBSPRINT_APPLY_PRESET_VISUAL(bigAvatar, preset, initials);
 
     // Read-only avatar shown on the Profile tab — same preset, just a
     // second element to keep in sync since the two tabs don't share DOM.
     const viewAvatar = document.getElementById("profile-avatar-view");
-    if (viewAvatar) {
-        viewAvatar.style.background = preset.bg;
-        viewAvatar.textContent = preset.glyph || initials;
-    }
+    window.WEBSPRINT_APPLY_PRESET_VISUAL(viewAvatar, preset, initials);
 
     // The nav avatar on THIS page is just another ".profile-avatar--nav"
     // element, so let the shared function (from avatar-sync.js) handle

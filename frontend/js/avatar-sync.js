@@ -21,17 +21,35 @@
     // the avatar picker grid — profile.js reads it from
     // window.WEBSPRINT_AVATAR_PRESETS so there's only one copy.
     var AVATAR_PRESETS = [
-        { id: "default", bg: "linear-gradient(135deg, #8bffb0, #264de4)" },
-        { id: "rocket",  bg: "linear-gradient(135deg, #a78bfa, #6d28d9)", glyph: "🚀" },
-        { id: "fire",    bg: "linear-gradient(135deg, #ff9a5a, #ff5a8a)", glyph: "🔥" },
-        { id: "cat",     bg: "linear-gradient(135deg, #5ad1ff, #1d4ed8)", glyph: "🐱" },
-        { id: "bolt",    bg: "linear-gradient(135deg, #ffe08a, #f59e0b)", glyph: "⚡" },
-        { id: "blossom", bg: "linear-gradient(135deg, #ff8bd6, #db2777)", glyph: "🌸" },
-        { id: "game",    bg: "linear-gradient(135deg, #6ee7b7, #0891b2)", glyph: "🎮" },
-        { id: "brain",   bg: "linear-gradient(135deg, #c4b5fd, #4338ca)", glyph: "🧠" }
+        { id: "default", bg: "linear-gradient(135deg, #8bffb0, #264de4)", img: "Images/1.png" },
+        { id: "rocket",  bg: "linear-gradient(135deg, #a78bfa, #6d28d9)", img: "Images/2.png" },
+        { id: "fire",    bg: "linear-gradient(135deg, #ff9a5a, #ff5a8a)", img: "Images/3.png" },
+        { id: "cat",     bg: "linear-gradient(135deg, #5ad1ff, #1d4ed8)", img: "Images/4.png" },
+        { id: "bolt",    bg: "linear-gradient(135deg, #ffe08a, #f59e0b)", img: "Images/5.png" },
+        { id: "blossom", bg: "linear-gradient(135deg, #ff8bd6, #db2777)", img: "Images/6.png" },
+        { id: "game",    bg: "linear-gradient(135deg, #6ee7b7, #0891b2)", img: "Images/7.png" },
+        { id: "brain",   bg: "linear-gradient(135deg, #c4b5fd, #4338ca)", img: "Images/8.png" }
     ];
 
     window.WEBSPRINT_AVATAR_PRESETS = AVATAR_PRESETS;
+
+    // Shared by avatar-sync.js and profile.js: paints a preset onto an
+    // avatar element — a photo (cover-fit background image) when the
+    // preset has one, otherwise the old gradient + glyph/initials.
+    function applyPresetVisual(el, preset, fallbackText) {
+        if (!el) return;
+        el.style.background = preset.bg;
+        if (preset.img) {
+            el.style.backgroundImage = "url('" + preset.img + "')";
+            el.style.backgroundSize = "cover";
+            el.style.backgroundPosition = "center";
+            el.style.backgroundRepeat = "no-repeat";
+            el.textContent = "";
+        } else {
+            el.textContent = preset.glyph || fallbackText;
+        }
+    }
+    window.WEBSPRINT_APPLY_PRESET_VISUAL = applyPresetVisual;
 
     function applyStoredAvatarToNav() {
 
@@ -43,8 +61,7 @@
         })[0] || AVATAR_PRESETS[0];
 
         document.querySelectorAll(".profile-avatar--nav").forEach(function (el) {
-            el.style.background = preset.bg;
-            el.textContent = preset.glyph || initials;
+            applyPresetVisual(el, preset, initials);
         });
 
     }
