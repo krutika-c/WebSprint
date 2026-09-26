@@ -38,13 +38,11 @@ import com.websprint.backend.Service.StreakService.StreakView;
 @Service
 public class ProgressService {
 
-    // ---- Game rules: change these numbers freely ----
     static final int PASS_MARK = 60;              // score (%) needed to complete a level
     static final int PERFECT_SCORE = 100;
-    static final int XP_LEVEL_COMPLETED = 100;    // once per level, ever
     static final int XP_PERFECT_SCORE = 50;       // once per level, ever
-    static final int XP_STREAK_BONUS = 50;        // every Nth consecutive day
-    static final int STREAK_BONUS_EVERY_N_DAYS = 7;
+    static final int XP_STREAK_BONUS = 10;        // every Nth consecutive day
+    static final int STREAK_BONUS_EVERY_N_DAYS = 30;
 
     private final UserLevelProgressRepository progressRepository;
     private final XpEventRepository xpRepository;
@@ -118,7 +116,7 @@ public class ProgressService {
         List<XpAward> awards = new ArrayList<>();
         if (firstCompletion && !xpRepository.existsByUserIdAndLevelIdAndReason(
                 userId, levelId, XpReason.LEVEL_COMPLETED)) {
-            awards.add(new XpAward(XpReason.LEVEL_COMPLETED, XP_LEVEL_COMPLETED));
+            awards.add(new XpAward(XpReason.LEVEL_COMPLETED, score));
         }
         if (score == PERFECT_SCORE && !xpRepository.existsByUserIdAndLevelIdAndReason(
                 userId, levelId, XpReason.PERFECT_SCORE)) {
