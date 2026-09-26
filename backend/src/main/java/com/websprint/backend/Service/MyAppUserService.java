@@ -23,15 +23,23 @@ public class MyAppUserService implements UserDetailsService {
     private final MyAppUserRepository repository; 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Optional<MyAppUser> user = repository.findByEmail(username);
 
     if (user.isPresent()) {
         MyAppUser userObj = user.get();
 
+        // Google-signup users have no real password. Spring Security's
+        // User.builder() refuses a null password, so we hand it a
+        // placeholder that will never actually be checked against
+        // anything (JwtAuthFilter never compares credentials).
+        String passwordForSecurity = userObj.getPassword_hash() != null
+                ? userObj.getPassword_hash()
+                : "OAUTH2_USER_NO_PASSWORD";
+
         return User.builder()
             .username(userObj.getEmail())
-            .password(userObj.getPassword_hash())
+            .password(passwordForSecurity)
             .roles("USER")
             .build();
     } else {
