@@ -105,29 +105,64 @@ function renderRealResult(result, subject, levelId) {
     if (els.subtitle) els.subtitle.textContent = scoreLine;
 
     // ---------------------------------------
-    // REWARDS — only meaningful when the attempt passed
+    // REWARDS
+    //
+    // The backend counts ANY attempt (pass or fail) as activity for
+    // the daily streak, so the streak is always shown. XP rewards are
+    // only shown when this attempt actually earned some.
     // ---------------------------------------
 
     if (els.rewardRow) {
-        els.rewardRow.style.display = passed ? "" : "none";
+        els.rewardRow.style.display = "";
     }
 
-    if (passed) {
+    if (els.rewardStreakText) {
+        const days = result.currentStreak || 0;
+        els.rewardStreakText.textContent =
+            `${days}-Day Streak`;
+    }
+
+    const earnedXp = passed || (result.xpGained || 0) > 0;
+
+    if (els.rewardXp) {
+        els.rewardXp.style.display = earnedXp ? "" : "none";
+    }
+
+    if (els.rewardTotalXp) {
+        els.rewardTotalXp.style.display = earnedXp ? "" : "none";
+    }
+
+    if (earnedXp) {
 
         if (els.rewardXpText) {
-            els.rewardXpText.textContent = `+${result.xpGained} XP`;
-        }
-
-        if (els.rewardStreakText) {
-            const days = result.currentStreak || 0;
-            els.rewardStreakText.textContent =
-                `${days}-Day Streak`;
+            els.rewardXpText.textContent = `+${result.xpGained || 0} XP`;
         }
 
         if (els.rewardTotalXpText) {
             els.rewardTotalXpText.textContent =
                 `${(result.totalXp || 0).toLocaleString()} Total XP`;
         }
+
+    }
+
+    // Streak bonus: the backend adds +10 XP every 30th consecutive
+    // day, reported as a STREAK_BONUS entry in xpAwards.
+    const streakBonus =
+        (result.xpAwards || []).find(a => a.reason === "STREAK_BONUS");
+
+    if (els.streakBonusNote) {
+
+        if (streakBonus) {
+            els.streakBonusNote.style.display = "";
+            els.streakBonusNote.textContent =
+                `🔥 ${result.currentStreak}-day streak bonus: +${streakBonus.amount} XP`;
+        } else {
+            els.streakBonusNote.style.display = "none";
+        }
+
+    }
+
+    if (passed) {
 
         // Progress just changed server-side, so this is the moment
         // any achievement's check() could newly pass.
@@ -218,6 +253,10 @@ function renderFallback(subject, levelId) {
         els.rewardRow.style.display = "none";
     }
 
+    if (els.streakBonusNote) {
+        els.streakBonusNote.style.display = "none";
+    }
+
     function render(levelNumber, nextLevelNumber) {
 
         if (els.badge) {
@@ -283,9 +322,12 @@ function getElements() {
         heroDesc: document.getElementById("complete-hero-desc"),
         subtitle: document.getElementById("complete-subtitle"),
         rewardRow: document.getElementById("reward-row"),
+        rewardXp: document.getElementById("reward-xp"),
         rewardXpText: document.getElementById("reward-xp-text"),
         rewardStreakText: document.getElementById("reward-streak-text"),
+        rewardTotalXp: document.getElementById("reward-total-xp"),
         rewardTotalXpText: document.getElementById("reward-total-xp-text"),
+        streakBonusNote: document.getElementById("streak-bonus-note"),
         unlockNote: document.getElementById("complete-unlock-note"),
         continueLink: document.getElementById("continue-learning-link")
     };

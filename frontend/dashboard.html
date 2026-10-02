@@ -61,7 +61,7 @@
             </div>
             <h1 class="course-hero__title">Dashboard</h1>
             <p class="course-hero__desc">
-                Welcome back, CodeMaster! Here's your progress summary.
+                Welcome back, <span id="dash-username">there</span>! Here's your progress summary.
             </p>
         </div>
     </section>
@@ -164,11 +164,11 @@
         
         <div class="card recent-achievement">
             <p class="section-label">Recent Achievement</p>
-            <div class="recent-achievement__content">
-                <div class="recent-achievement__icon">🏅</div>
+            <div class="recent-achievement__content" id="recent-achievement">
+                <div class="recent-achievement__icon" id="recent-ach-icon">🏅</div>
                 <div class="recent-achievement__info">
-                    <strong>HTML Explorer</strong>
-                    <span class="stat__lbl">Complete HTML Level 5 · 2h ago</span>
+                    <strong id="recent-ach-title">Loading…</strong>
+                    <span class="stat__lbl" id="recent-ach-desc"></span>
                 </div>
                 <a href="achivements.html" class="btn btn--ghost">View All</a>
             </div>
