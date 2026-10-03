@@ -15,11 +15,12 @@
 
 
   <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/quiz-bg.css">
 <script src="js/theme.js" defer></script>
 <script src="js/avatar-sync.js" defer></script>
 
 </head>
-<body>
+<body class="quiz-bg">
   <div id="shell" data-active="tests">
     <a href="h1.html" class="back-btn">← Back</a>
     <div class="page-head">
@@ -27,27 +28,17 @@
       <p class="page-subtitle">Test your knowledge and find your starting point</p>
     </div>
     <div class="card quiz">
-      <p class="question-num">Question 1 of 10</p>
-      <h2 class="question">What does HTML stand for?</h2>
-      <div class="options">
-        <button class="option is-selected">
-          <span class="option__key">A</span> Hyper Text Markup Language
-        </button>
-        <button class="option">
-          <span class="option__key">B</span> High Tech Modern Language
-        </button>
-        <button class="option">
-          <span class="option__key">C</span> Hyperlinks and Text Markup Language
-        </button>
-        <button class="option">
-          <span class="option__key">D</span> Home Tool Markup Language
-        </button>
-      </div>
+      <p class="question-num">Loading…</p>
+      <h2 class="question"></h2>
+      <div class="options"></div>
       <div class="editor-actions mt-24">
-        <a href="test-result.html" class="btn btn--primary">Next →</a>
+        <button type="button" class="btn btn--primary">Next →</button>
       </div>
     </div>
   </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/placement-test.js"></script>
   <script src="js/script.js" defer></script>
 </body>
 </html>

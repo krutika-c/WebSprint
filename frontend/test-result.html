@@ -71,68 +71,24 @@
     <!-- ═══ MAIN CONTENT ═══ -->
     <main id="shell" data-active="tests">
 
-        <!-- ─── Result Cards ─── -->
-        <div class="grid grid--3 result-grid">
-            <!-- HTML -->
-            <div class="card result-card is-html">
-                <h3>HTML</h3>
-                <div class="score">85%</div>
-                <div class="score-bar">
-                    <div class="score-bar__fill" style="width: 85%;"></div>
-                </div>
-            </div>
-            <!-- CSS -->
-            <div class="card result-card is-css">
-                <h3>CSS</h3>
-                <div class="score">40%</div>
-                <div class="score-bar">
-                    <div class="score-bar__fill" style="width: 40%;"></div>
-                </div>
-            </div>
-            <!-- JavaScript -->
-            <div class="card result-card is-js">
-                <h3>JavaScript</h3>
-                <div class="score">25%</div>
-                <div class="score-bar">
-                    <div class="score-bar__fill" style="width: 25%;"></div>
-                </div>
-            </div>
+        <!-- ─── Result Cards (filled in by js/placement-result.js) ─── -->
+        <div class="grid grid--3 result-grid" id="result-grid">
+            <p>Loading your results…</p>
         </div>
 
         <!-- ─── Recommended Path ─── -->
         <div class="card path-card">
             <p class="section-label">Recommended Path</p>
-            <div class="path-list">
-                <div class="path-item">
-                    <div class="path-item__icon is-html">&lt;/&gt;</div>
-                    <div class="path-item__info">
-                        <strong>HTML</strong>
-                        <span class="path-item__level">Start from Level 4</span>
-                    </div>
-                </div>
-                <div class="path-item">
-                    <div class="path-item__icon is-css">#</div>
-                    <div class="path-item__info">
-                        <strong>CSS</strong>
-                        <span class="path-item__level">Start from Level 2</span>
-                    </div>
-                </div>
-                <div class="path-item">
-                    <div class="path-item__icon is-js">JS</div>
-                    <div class="path-item__info">
-                        <strong>JavaScript</strong>
-                        <span class="path-item__level">Start from Level 1</span>
-                    </div>
-                </div>
-            </div>
+            <div class="path-list" id="path-list"></div>
             <a href="choose-topic.html" class="btn btn--primary btn--block">Generate Learning Path →</a>
         </div>
 
-        <!-- Page indicator -->
-        <div class="page-indicator">4. YOUR RESULT</div>
 
     </main>
 
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/placement-result.js"></script>
     <script src="js/script.js" defer></script>
 </body>
 </html>

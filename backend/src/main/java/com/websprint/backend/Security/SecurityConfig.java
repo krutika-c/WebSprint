@@ -82,6 +82,7 @@ public class SecurityConfig {
                             "/api/levels/*/lesson",
                             "/api/levels/*/questions",
                             "/api/levels/*/questions/*/answer",
+                            "/api/placement-test/questions",
                             "/api/users/username-availability",
                             "/oauth2/authorization/google",
                             "/oauth2/**",

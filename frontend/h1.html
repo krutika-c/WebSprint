@@ -18,6 +18,18 @@
 <script src="js/theme.js" defer></script>
 <script src="js/avatar-sync.js" defer></script>
 
+<!-- If a token exists we may redirect (placement test already taken), so hide the
+     page until js/home.js has checked. Failsafe un-hides it after 2.5s. -->
+<script>
+    if (localStorage.getItem("token")) {
+        document.documentElement.classList.add("checking");
+        setTimeout(function () {
+            document.documentElement.classList.remove("checking");
+        }, 2500);
+    }
+</script>
+<style>html.checking body { visibility: hidden; }</style>
+
 </head>
 <body>
 
@@ -42,9 +54,13 @@
             web development skills one challenge at a time.
         </p>
 
-        <div class="buttons">
-            <a href="choose-topic.html" class="play-btn">▶ START GAME</a>
-            <!--<a href="choose-topic.html" class="skip-btn">SKIP TEST →</a>-->
+        <div class="buttons" id="start-buttons">
+            <button type="button" class="play-btn" id="start-game-btn">▶ START GAME</button>
+        </div>
+
+        <div class="buttons start-choices" id="start-choices" hidden>
+            <a href="genre-test.html" class="play-btn">📝 TAKE QUIZ</a>
+            <a href="choose-topic.html" class="skip-btn">SKIP QUIZ →</a>
         </div>
 
         <div class="stats">

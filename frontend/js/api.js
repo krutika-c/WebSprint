@@ -200,3 +200,44 @@ function markAnswerOptions(container, pickedOptionId, result) {
    kept as a marker in case any old code still imports this
    file expecting these names.
 ===================================================== */
+
+/* =====================================================
+   PLACEMENT TEST ("genre test")
+
+   getPlacementQuestions(): every question across all 3
+   subjects, each tagged with subjectCode. Public endpoint.
+
+   submitPlacementTest(answers): answers is a flat array of
+   { questionId, optionId } covering every subject at once.
+   Server grades each subject, backfills level progress to
+   match, and returns per-subject results.
+===================================================== */
+
+async function getPlacementQuestions() {
+
+    return apiFetch(`/api/placement-test/questions`);
+
+}
+
+// { taken: true/false } — whether the logged-in user has already completed
+// the placement test (it's one-time only; see js/home.js and placement-test.js).
+async function getPlacementStatus() {
+
+    return apiFetch(`/api/placement-test/status`);
+
+}
+
+async function submitPlacementTest(answers) {
+
+    return apiFetch(
+        `/api/placement-test/submit`,
+        {
+            method: "POST",
+
+            body: JSON.stringify({
+                answers: answers
+            })
+        }
+    );
+
+}

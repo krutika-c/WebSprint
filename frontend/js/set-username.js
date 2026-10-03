@@ -37,7 +37,7 @@ async function initSetUsername() {
     try {
         const profile = await apiFetch("/api/users/me");
         if (profile.username && profile.username.trim() !== "") {
-            window.location.href = "choose-topic.html";
+            window.location.href = "h1.html";
             return;
         }
     } catch (error) {
@@ -122,7 +122,7 @@ async function saveUsername(rawValue, continueBtn) {
             body: JSON.stringify({ username: value })
         });
 
-        window.location.href = "choose-topic.html";
+        window.location.href = "h1.html";
 
     } catch (error) {
         console.error("Could not save username:", error);

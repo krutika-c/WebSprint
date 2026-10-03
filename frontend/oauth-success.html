@@ -22,7 +22,9 @@
             // (see OAuth2LoginSuccessHandler) — send them to that
             // onboarding step first, same as the signup form does for
             // email/password accounts. Everyone else goes straight on.
-            window.location.href = needsUsername ? 'set-username.html' : 'choose-topic.html';
+            window.location.href = needsUsername ? 'set-username.html' : 'h1.html';
+            // h1.html sends anyone who's already taken the placement test
+            // on to choose-topic.html, so returning Google users skip it.
         } else {
             window.location.href = 'login.html';
         }

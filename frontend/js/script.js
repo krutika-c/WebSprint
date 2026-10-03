@@ -205,7 +205,22 @@ if (loginForm) {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        window.location.href = "h1.html";
+
+        // Returning users who've already taken the placement test skip the
+        // landing page and go straight to the app.
+        let destination = "h1.html";
+        try {
+          const statusRes = await fetch("http://localhost:8080/api/placement-test/status", {
+            headers: { Authorization: "Bearer " + data.token },
+          });
+          if (statusRes.ok) {
+            const status = await statusRes.json();
+            if (status.taken) destination = "choose-topic.html";
+          }
+        } catch (e) {
+          // Can't tell — fall back to the landing page, which re-checks itself.
+        }
+        window.location.href = destination;
       } else {
         showError("f-password", data.error || "Login failed. Try again.");
       }
@@ -340,7 +355,8 @@ if (signupForm) {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        window.location.href = "choose-topic.html";
+        // New account -> landing page (START GAME -> take / skip the quiz).
+        window.location.href = "h1.html";
       } else {
         const msg = data.error || "Could not create account.";
         if (/username/i.test(msg)) {
