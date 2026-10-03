@@ -1170,3 +1170,88 @@ html[data-theme="light"] .options-container button.quiz-option.is-wrong .option-
 html[data-theme="light"] .options-container button.quiz-option.is-wrong::after {
     color: var(--l-danger);
 }
+
+/* =========================================================
+   LIGHT THEME — contrast fixes (appended; later rules win)
+   Only affects html[data-theme="light"].
+========================================================= */
+
+/* Faint text was ~2.9:1 on the light background; darkened to ~4.5:1.
+   This variable drives section labels, "// LESSON" labels, back links,
+   footers, placeholders and "Start from Level N" text. */
+html[data-theme="light"] {
+    --l-faint: #64748b;
+}
+
+/* Profile page name beside the avatar: inline style forced #f0f6fc */
+html[data-theme="light"] #profile-display-name {
+    color: var(--l-text) !important;
+}
+
+/* Disabled inputs (username / name / email / joined on the profile
+   page): base CSS fades them to 40% opacity, which made dark text
+   look washed out on the light surface. */
+html[data-theme="light"] .field input:disabled {
+    opacity: 1;
+    color: var(--l-text-2);
+    -webkit-text-fill-color: var(--l-text-2);
+    background: var(--l-surface-3);
+    cursor: not-allowed;
+}
+
+/* Achievements: active filter tab was white on a pale tint, and the
+   "1 / 5" progress text was neon green on white */
+html[data-theme="light"] .filter-tab.is-active {
+    color: var(--l-accent-strong);
+    background: var(--l-accent-soft);
+}
+
+html[data-theme="light"] .ach__progress {
+    color: var(--l-accent-strong) !important;
+    opacity: 1;
+}
+
+html[data-theme="light"] .ach.is-locked p {
+    color: var(--l-muted);
+    opacity: 1;
+}
+
+/* Roadmaps: locked steps keep their dimmed look but stay readable */
+html[data-theme="light"] .step.is-locked {
+    opacity: 0.75;
+}
+
+/* Lesson page: the main lesson window stayed dark (#0b0f12) while its
+   text switched to dark slate, making lesson text unreadable. */
+html[data-theme="light"] .pixel-lesson-window {
+    background: var(--l-surface);
+    border-color: var(--l-border);
+    box-shadow: var(--l-shadow);
+}
+
+html[data-theme="light"] .pixel-navigation-button {
+    background: var(--l-surface);
+    border-color: var(--l-border-strong);
+    color: var(--l-text-2);
+}
+
+html[data-theme="light"] .pixel-navigation-button:hover {
+    border-color: var(--l-accent);
+    color: var(--l-accent-strong);
+}
+
+html[data-theme="light"] .lesson-error p {
+    color: var(--l-text-2);
+}
+
+html[data-theme="light"] .pixel-window-buttons span {
+    color: var(--l-faint);
+}
+
+html[data-theme="light"] .slash {
+    color: var(--l-faint);
+}
+
+html[data-theme="light"] .step__status.is-locked {
+    color: var(--l-muted);
+}
