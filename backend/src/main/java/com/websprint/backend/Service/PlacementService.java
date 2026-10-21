@@ -1,5 +1,6 @@
 package com.websprint.backend.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,27 +21,37 @@ import com.websprint.backend.Model.PlacementQuestion;
 import com.websprint.backend.Model.Subject;
 import com.websprint.backend.Model.UserLevelProgress;
 import com.websprint.backend.Model.UserPlacementResult;
+import com.websprint.backend.Model.XpEvent;
+import com.websprint.backend.Model.XpReason;
 import com.websprint.backend.Repository.LevelRepository;
 import com.websprint.backend.Repository.PlacementQuestionRepository;
 import com.websprint.backend.Repository.UserLevelProgressRepository;
 import com.websprint.backend.Repository.UserPlacementResultRepository;
+import com.websprint.backend.Repository.XpEventRepository;
 
 @Service
 public class PlacementService {
+
+    /** XP given for each level the placement test lets the user skip.
+     *  Keep this well below what actually playing a level earns (roughly a fifth). */
+    private static final int PLACEMENT_BONUS_PER_SKIPPED_LEVEL = 20;
 
     private final PlacementQuestionRepository placementQuestionRepository;
     private final LevelRepository levelRepository;
     private final UserLevelProgressRepository progressRepository;
     private final UserPlacementResultRepository placementResultRepository;
+    private final XpEventRepository xpEventRepository;
 
     public PlacementService(PlacementQuestionRepository placementQuestionRepository,
                              LevelRepository levelRepository,
                              UserLevelProgressRepository progressRepository,
-                             UserPlacementResultRepository placementResultRepository) {
+                             UserPlacementResultRepository placementResultRepository,
+                             XpEventRepository xpEventRepository) {
         this.placementQuestionRepository = placementQuestionRepository;
         this.levelRepository = levelRepository;
         this.progressRepository = progressRepository;
         this.placementResultRepository = placementResultRepository;
+        this.xpEventRepository = xpEventRepository;
     }
 
     public List<PlacementQuestion> getAllQuestions() {
@@ -60,9 +71,10 @@ public class PlacementService {
 
     /**
      * Grades every subject's answers, works out a starting level per subject,
-     * backfills that user's level progress to match, and records the result.
+     * backfills that user's level progress to match, awards a small XP bonus for
+     * the levels skipped, and records the result.
      * @Transactional so a failure partway through never leaves one subject
-     * updated and another not.
+     * updated and another not (and never leaves progress saved without its XP).
      *
      * The test can only ever be taken once per user — enforced here (not just
      * hidden in the UI) so a direct/replayed API call can't retake it either.
@@ -109,9 +121,23 @@ public class PlacementService {
             Level placedLevel = levels.get(placedIndex);
 
             // Levels before the placed one: treated as already mastered.
+            // Count only the ones THIS call newly completed, so a level the user
+            // already played (and earned XP for) isn't paid a second time.
+            int newlySkipped = 0;
             for (int i = 0; i < placedIndex; i++) {
-                ensureAtLeastCompleted(userId, levels.get(i).getId());
+                if (ensureAtLeastCompleted(userId, levels.get(i).getId())) {
+                    newlySkipped++;
+                }
             }
+
+            // Small one-time reward: ledger row (the history) + running total on the user.
+            int bonus = newlySkipped * PLACEMENT_BONUS_PER_SKIPPED_LEVEL;
+            if (bonus > 0) {
+                xpEventRepository.save(
+                        new XpEvent(userId, bonus, XpReason.PLACEMENT_BONUS, placedLevel.getId()));
+                xpEventRepository.incrementTotalXp(userId, bonus);
+            }
+
             // The placed level itself: open, but still has to be actually played
             // (and passed) to count as completed and earn XP.
             ensureAtLeastUnlocked(userId, placedLevel.getId());
@@ -131,17 +157,32 @@ public class PlacementService {
         return new PlacementResultDTO(results);
     }
 
+    /**
+     * Grades one subject. `correct` and `total` stay plain counts (for display,
+     * e.g. "7 of 10"), but `scorePercent` is WEIGHTED by each question's
+     * difficulty: a correct answer earns `difficulty` points, and the score is
+     * points earned / points available. So hard questions move the score more
+     * than easy ones.
+     */
     private Grade grade(List<PlacementQuestion> questions, Map<Long, Long> chosen) {
         int correct = 0;
+        int earnedWeight = 0;
+        int totalWeight = 0;
+
         for (PlacementQuestion q : questions) {
+            int weight = q.getDifficulty();
+            totalWeight += weight;
+
             Long optionId = chosen.get(q.getId());
             if (optionId != null && q.getOptions().stream()
                     .anyMatch(o -> o.getId().equals(optionId) && o.isCorrect())) {
                 correct++;
+                earnedWeight += weight;
             }
         }
+
         int total = questions.size();
-        int scorePercent = Math.round(correct * 100f / total);
+        int scorePercent = totalWeight == 0 ? 0 : Math.round(earnedWeight * 100f / totalWeight);
         return new Grade(correct, total, scorePercent);
     }
 
@@ -157,14 +198,19 @@ public class PlacementService {
     }
 
     /** Marks a level completed, but never downgrades a level that's already
-     *  completed (e.g. from real play before the user took this test). */
-    private void ensureAtLeastCompleted(Long userId, Long levelId) {
+     *  completed (e.g. from real play before the user took this test).
+     *  @return true only if THIS call is what completed the level. */
+    private boolean ensureAtLeastCompleted(Long userId, Long levelId) {
         UserLevelProgress progress = progressRepository.findByUserIdAndLevelId(userId, levelId)
                 .orElseGet(() -> new UserLevelProgress(userId, levelId, LevelStatus.locked));
-        if (progress.getStatus() != LevelStatus.completed) {
+
+        boolean newlyCompleted = progress.getStatus() != LevelStatus.completed;
+        if (newlyCompleted) {
             progress.setStatus(LevelStatus.completed);
+            progress.setCompletedAt(Instant.now());
         }
         progressRepository.save(progress);
+        return newlyCompleted;
     }
 
     /** Opens a level if it was locked; leaves it alone if it's already

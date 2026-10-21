@@ -3,6 +3,8 @@ package com.websprint.backend.Model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +44,13 @@ public class PlacementQuestion {
     @Column(name = "order_index")
     private Integer orderIndex;
 
+    /** 1 = easy ... 5 = hard. Used as the weight when the placement test is scored.
+     *  @JsonIgnore keeps it out of the JSON sent to the browser, so users can't
+     *  see which questions are weighted heavily. */
+    @JsonIgnore
+    @Column(nullable = false)
+    private int difficulty = 1;
+
     @OneToMany(mappedBy = "placementQuestion", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderBy("orderIndex ASC")
     private List<PlacementQuestionOption> options = new ArrayList<>();
@@ -63,6 +72,9 @@ public class PlacementQuestion {
 
     public Integer getOrderIndex() { return orderIndex; }
     public void setOrderIndex(Integer orderIndex) { this.orderIndex = orderIndex; }
+
+    public int getDifficulty() { return difficulty; }
+    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
 
     public List<PlacementQuestionOption> getOptions() { return options; }
     public void setOptions(List<PlacementQuestionOption> options) { this.options = options; }
