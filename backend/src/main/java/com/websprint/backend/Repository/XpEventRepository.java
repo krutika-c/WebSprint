@@ -22,4 +22,8 @@ public interface XpEventRepository extends JpaRepository<XpEvent, Long> {
     // Returns null if the user doesn't exist.
     @Query(value = "SELECT total_xp FROM my_app_user WHERE id = :userId", nativeQuery = true)
     Integer findTotalXp(@Param("userId") Long userId);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("delete from XpEvent e where e.userId = :userId")
+    void deleteForUser(@Param("userId") Long userId);
 }
