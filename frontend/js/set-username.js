@@ -12,9 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
     initSetUsername();
 });
 
+const ONBOARDING_FLAG = "websprint.needsUsername";
+
 let availabilityCheckToken = 0;
 
-async function initSetUsername() {
+function initSetUsername() {
 
     const usernameInput = document.getElementById("username");
     const form = document.getElementById("usernameForm");
@@ -30,19 +32,18 @@ async function initSetUsername() {
         return;
     }
 
-    // If this account already has a username (e.g. the person reloaded
-    // this page, or navigated back here after already finishing
-    // onboarding), there's nothing left to do — send them on rather
-    // than making them pick another one.
-    try {
-        const profile = await apiFetch("/api/users/me");
-        if (profile.username && profile.username.trim() !== "") {
-            window.location.href = "h1.html";
-            return;
-        }
-    } catch (error) {
-        console.error("Could not load profile:", error);
+    // Only people sent here by a fresh Google sign-up (see
+    // oauth-success.html) have something to onboard. We deliberately do
+    // NOT ask the server "do I have a username?" via GET /api/users/me:
+    // that endpoint generates one on the fly when it's blank, so the
+    // answer was always "yes" and this page redirected away before the
+    // person could type anything.
+    if (!sessionStorage.getItem(ONBOARDING_FLAG)) {
+        window.location.replace("h1.html");
+        return;
     }
+
+    usernameInput.focus();
 
     usernameInput.addEventListener(
         "input",
@@ -122,11 +123,25 @@ async function saveUsername(rawValue, continueBtn) {
             body: JSON.stringify({ username: value })
         });
 
+        sessionStorage.removeItem(ONBOARDING_FLAG);
         window.location.href = "h1.html";
 
     } catch (error) {
         console.error("Could not save username:", error);
-        setHint("That username couldn't be saved — it may already be taken.", "is-taken");
+
+        if (error.status === 401 || error.status === 403) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const serverMessage = error.body && error.body.error;
+        setHint(
+            serverMessage ||
+                (error.status === 409
+                    ? "That username is already taken."
+                    : "Couldn't save your username. Please try again."),
+            "is-taken"
+        );
         if (continueBtn) continueBtn.disabled = false;
     }
 }

@@ -538,6 +538,10 @@ async function loadEmbeddedQuiz(
 
         showQuizQuestion();
 
+        // Tell js/quiz-focus.js the quiz is ready to be started
+        // (it shows the "Start Quiz" screen and handles focus mode).
+        document.dispatchEvent(new CustomEvent("quiz:ready"));
+
     }
 
     catch (error) {
@@ -934,6 +938,10 @@ async function finishQuiz() {
             "websprint_last_result",
             JSON.stringify({ ...result, subject: quizSubject })
         );
+
+        // Quiz is done — release focus mode so leaving the page
+        // isn't blocked.
+        document.dispatchEvent(new CustomEvent("quiz:finished"));
 
         window.location.href =
             `level-complete.html?levelId=${quizLevelId}&subject=${encodeURIComponent(quizSubject)}`;

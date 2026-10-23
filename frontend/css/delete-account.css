@@ -1,0 +1,275 @@
+/* =====================================================
+   Delete-account confirmation modal
+   Used by profile.html and settings.html via js/delete-account.js
+===================================================== */
+
+body.da-lock {
+    overflow: hidden;
+}
+
+.da-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(5, 7, 9, 0.72);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.18s ease;
+}
+
+.da-overlay[hidden] {
+    display: none;
+}
+
+.da-overlay.is-open {
+    opacity: 1;
+}
+
+.da-dialog {
+    width: 100%;
+    max-width: 440px;
+    max-height: calc(100vh - 2.5rem);
+    overflow-y: auto;
+    padding: 1.75rem 1.75rem 1.5rem;
+    background: #12161b;
+    color: #e0e6ed;
+    border: 1px solid rgba(255, 122, 122, 0.3);
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    transform: translateY(8px) scale(0.98);
+    transition: transform 0.18s ease;
+    outline: none;
+}
+
+.da-overlay.is-open .da-dialog {
+    transform: none;
+}
+
+.da-icon {
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+}
+
+.da-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.da-desc {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: #9aa7b4;
+    margin-bottom: 0.9rem;
+}
+
+.da-list {
+    list-style: none;
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 0.9rem;
+    background: rgba(255, 122, 122, 0.06);
+    border: 1px solid rgba(255, 122, 122, 0.15);
+    border-radius: 8px;
+    font-size: 0.86rem;
+    color: #c7d0d9;
+}
+
+.da-list li {
+    padding: 0.2rem 0 0.2rem 1.1rem;
+    position: relative;
+}
+
+.da-list li::before {
+    content: "✕";
+    position: absolute;
+    left: 0;
+    color: #ff7a7a;
+    font-size: 0.7rem;
+    top: 0.32rem;
+}
+
+.da-label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+    color: #c7d0d9;
+}
+
+.da-label strong {
+    font-family: 'JetBrains Mono', monospace;
+    color: #ff7a7a;
+    letter-spacing: 0.04em;
+}
+
+.da-input {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    background: #0b0d10;
+    color: #e0e6ed;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.da-input:focus {
+    border-color: #ff7a7a;
+    box-shadow: 0 0 0 3px rgba(255, 122, 122, 0.18);
+}
+
+.da-input:disabled {
+    opacity: 0.6;
+}
+
+.da-status {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #ff9c9c;
+    background: rgba(255, 122, 122, 0.08);
+    border-radius: 8px;
+}
+
+.da-status[hidden] {
+    display: none;
+}
+
+.da-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+}
+
+.da-confirm {
+    padding: 0.6rem 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    background: #d63c3c;
+    border: 1px solid #d63c3c;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.da-confirm:hover:not(:disabled) {
+    background: #e85050;
+}
+
+.da-confirm:focus-visible {
+    outline: 2px solid #ff7a7a;
+    outline-offset: 2px;
+}
+
+.da-confirm:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.da-confirm.is-loading:disabled {
+    opacity: 0.75;
+    cursor: progress;
+}
+
+.da-success {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.da-success[hidden],
+.da-form[hidden] {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .da-dialog {
+        padding: 1.4rem 1.2rem 1.2rem;
+    }
+
+    .da-actions {
+        flex-direction: column-reverse;
+    }
+
+    .da-actions .btn,
+    .da-actions .da-confirm {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .da-overlay,
+    .da-dialog {
+        transition: none;
+    }
+}
+
+/* ───────── Light theme ───────── */
+
+html[data-theme="light"] .da-overlay {
+    background: rgba(22, 32, 43, 0.45);
+}
+
+html[data-theme="light"] .da-dialog {
+    background: var(--l-surface, #ffffff);
+    color: var(--l-text, #16202b);
+    border-color: rgba(220, 38, 38, 0.35);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+}
+
+html[data-theme="light"] .da-desc {
+    color: var(--l-muted, #5b6b7f);
+}
+
+html[data-theme="light"] .da-list {
+    background: rgba(220, 38, 38, 0.05);
+    border-color: rgba(220, 38, 38, 0.2);
+    color: var(--l-text-2, #334155);
+}
+
+html[data-theme="light"] .da-list li::before,
+html[data-theme="light"] .da-label strong {
+    color: var(--l-danger, #dc2626);
+}
+
+html[data-theme="light"] .da-label {
+    color: var(--l-text-2, #334155);
+}
+
+html[data-theme="light"] .da-input {
+    background: #f8fafc;
+    color: var(--l-text, #16202b);
+    border-color: var(--l-border-strong, #cbd5e1);
+}
+
+html[data-theme="light"] .da-input:focus {
+    border-color: var(--l-danger, #dc2626);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+html[data-theme="light"] .da-status {
+    color: var(--l-danger, #dc2626);
+    background: rgba(220, 38, 38, 0.08);
+}
+
+html[data-theme="light"] .da-confirm {
+    background: var(--l-danger, #dc2626);
+    border-color: var(--l-danger, #dc2626);
+}
+
+html[data-theme="light"] .da-confirm:hover:not(:disabled) {
+    background: #b91c1c;
+}
