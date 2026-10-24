@@ -100,6 +100,14 @@
     color: #3a4755;
 }
 
+.ach__progress {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #8bffb0 !important;
+    opacity: 0.7;
+    margin-top: 0.2rem !important;
+}
+
 /* ─── Responsive ─── */
 @media (max-width: 480px) {
     .ach-grid {

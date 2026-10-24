@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <title>Level Complete · WebSprint</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="description" content="You completed an HTML level on WebSprint." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,6 +19,13 @@
     <link rel="stylesheet" href="css/header.css" />
     
     <link rel="stylesheet" href="css/level-done.css" />
+    <link rel="stylesheet" href="css/achievement-toast.css" />
+
+
+    <link rel="stylesheet" href="css/theme.css">
+<script src="js/theme.js" defer></script>
+<script src="js/avatar-sync.js" defer></script>
+
 </head>
 <body>
 
@@ -22,8 +33,10 @@
     <header class="site-header">
         <div class="header-inner">
             <div class="brand">
+                <a href="h1.html" class="brand" style="text-decoration: none;">
                 <span class="brand__logo">&lt;#&gt;</span>
                 <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </a>
             </div>
             <nav class="main-nav">
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
@@ -53,10 +66,10 @@
         <div class="course-hero__content">
             <div class="course-hero__badge">
                 <span class="badge badge--beginner">🎉 COMPLETED</span>
-                <span class="badge badge--course">LEVEL 1</span>
+                <span class="badge badge--course" id="complete-level-badge">LEVEL 1</span>
             </div>
             <h1 class="course-hero__title">Level Complete!</h1>
-            <p class="course-hero__desc">
+            <p class="course-hero__desc" id="complete-hero-desc">
                 Amazing work! You have completed HTML Level 1.
             </p>
         </div>
@@ -69,26 +82,38 @@
         <div class="card celebrate">
             <div class="celebrate__trophy">🏆</div>
             <h2 class="celebrate__title">Level Complete!</h2>
-            <p class="celebrate__subtitle">Amazing work! You have completed HTML Level 1.</p>
-            <div class="reward-row">
-                <div class="reward">
+            <p class="celebrate__subtitle" id="complete-subtitle">Amazing work! You have completed HTML Level 1.</p>
+            <div class="reward-row" id="reward-row">
+                <div class="reward" id="reward-xp">
                     <span class="reward__icon">⭐</span>
-                    <span class="reward__text">+100 XP</span>
+                    <span class="reward__text" id="reward-xp-text">+0 XP</span>
                 </div>
-                <div class="reward">
-                    <span class="reward__icon">🎖️</span>
-                    <span class="reward__text">+1 Badge</span>
+                <div class="reward" id="reward-streak">
+                    <span class="reward__icon">🔥</span>
+                    <span class="reward__text" id="reward-streak-text">0-Day Streak</span>
+                </div>
+                <div class="reward" id="reward-total-xp">
+                    <span class="reward__icon">🏆</span>
+                    <span class="reward__text" id="reward-total-xp-text">0 Total XP</span>
                 </div>
             </div>
-            <p class="unlock-note">🔓 HTML Level 2 is unlocked</p>
-            <a href="html-roadmap.html" class="btn btn--primary btn--block">Continue Learning →</a>
+            <p class="unlock-note" id="streak-bonus-note" style="display: none;"></p>
+            <p class="unlock-note" id="complete-unlock-note">🔓 HTML Level 2 is unlocked</p>
+            <a href="html-roadmap.html" id="continue-learning-link" class="btn btn--primary btn--block">Continue Learning →</a>
         </div>
 
        
-        <div class="page-indicator">3. LEVEL COMPLETE</div>
+        <div class="page-indicator"></div>
 
     </main>
 
-    <script src="script.js" defer></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/achievement-toast.js"></script>
+    <script src="js/level-complete.js"></script>
+    <script src="js/script.js" defer></script>
 </body>
 </html>

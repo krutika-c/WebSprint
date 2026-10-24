@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Achievements · WebSprint</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="description" content="Collect badges and show your progress on WebSprint." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +17,10 @@
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/achivements.css" />
+
+    <link rel="stylesheet" href="css/theme.css">
+<script src="js/theme.js" defer></script>
+<script src="js/avatar-sync.js" defer></script>
 </head>
 <body>
 
@@ -21,13 +28,15 @@
     <header class="site-header">
         <div class="header-inner">
             <div class="brand">
+                <a href="h1.html" class="brand" style="text-decoration: none;">
                 <span class="brand__logo">&lt;#&gt;</span>
                 <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </a>
             </div>
             <nav class="main-nav">
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
                 <a href="choose-topic.html" class="nav-link">Topics</a>
-                <a href="achievements.html" class="nav-link">Achievements</a>
+                <a href="achivements.html" class="nav-link">Achievements</a>
                
                 <a href="settings.html" class="nav-link nav-link--icon" aria-label="Settings">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -72,58 +81,21 @@
 
        
         <div class="ach-grid">
-
-           
-            <div class="card ach is-unlocked" data-state="unlocked">
-                <div class="ach__icon">🥇</div>
-                <h4>First Lesson</h4>
-                <p>Complete your first lesson</p>
-            </div>
-            <div class="card ach is-unlocked" data-state="unlocked">
-                <div class="ach__icon">📘</div>
-                <h4>HTML Explorer</h4>
-                <p>Complete 5 HTML levels</p>
-            </div>
-            <div class="card ach is-unlocked" data-state="unlocked">
-                <div class="ach__icon">🎨</div>
-                <h4>CSS Stylist</h4>
-                <p>Complete 5 CSS levels</p>
-            </div>
-            <div class="card ach is-unlocked" data-state="unlocked">
-                <div class="ach__icon">⚙️</div>
-                <h4>JS Beginner</h4>
-                <p>Complete 5 JS levels</p>
-            </div>
-
-            
-            <div class="card ach is-locked" data-state="locked">
-                <div class="ach__icon">🔒</div>
-                <h4>Full Stack Hero</h4>
-                <p>Complete all courses</p>
-            </div>
-            <div class="card ach is-locked" data-state="locked">
-                <div class="ach__icon">🔒</div>
-                <h4>1000 XP Club</h4>
-                <p>Earn 1000 XP</p>
-            </div>
-            <div class="card ach is-locked" data-state="locked">
-                <div class="ach__icon">🔒</div>
-                <h4>Consistency King</h4>
-                <p>Maintain a 7-day streak</p>
-            </div>
-            <div class="card ach is-locked" data-state="locked">
-                <div class="ach__icon">🔒</div>
-                <h4>Project Master</h4>
-                <p>Complete 3 projects</p>
-            </div>
-
+            <!-- Cards are rendered by js/achievements.js from the user's
+                 real progress/XP/streak data (see GET /api/progress and
+                 GET /api/me/stats) — nothing here is hardcoded anymore. -->
         </div>
 
         
-        <div class="page-indicator">5. ACHIEVEMENTS</div>
+        <div class="page-indicator"></div>
 
     </main>
 
-    <script src="script.js" defer></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/script.js" defer></script>
 </body>
 </html>

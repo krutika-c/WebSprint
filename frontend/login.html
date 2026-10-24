@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login · WebSprint</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="description" content="Log in to WebSprint and continue your coding journey." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,65 +15,69 @@
         rel="stylesheet"
     />
     <link rel="stylesheet" href="css/base.css" />
+
+    <link rel="stylesheet" href="css/theme.css">
+<script src="js/theme.js" defer></script>
+<script src="js/avatar-sync.js" defer></script>
+
 </head>
 <body>
 
-   
     <header class="site-header">
         <div class="brand">
-            <span class="brand__logo">&lt;#&gt;</span>
+                <span class="brand__logo">&lt;#&gt;</span>
                 <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </a>
         </div>
     </header>
 
-    
     <main class="auth">
         <div class="auth__card">
             <h1 class="auth__title">Welcome Back</h1>
             <p class="auth__subtitle">Log in to keep leveling up your skills</p>
 
             <form id="loginForm" novalidate>
-                
                 <div class="field" id="f-email">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="you@example.com" />
-                    <p class="field__error">Enter a valid email address.</p>
+                    <input type="text" id="email" name="email" placeholder="you@example.com" />
+                    <span class="field__error"></span>
                 </div>
 
-                
                 <div class="field" id="f-password">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" />
-                    <p class="field__error">Password must be at least 6 characters.</p>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" placeholder="••••••••" />
+
+                        <button type="button" class="password-toggle" data-target="password" aria-label="Show password">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+                    <span class="field__error"></span>
                 </div>
 
-               
                 <div class="auth__row">
                     <label class="muted">
-                        <input type="checkbox" /> Remember me
+                        <label><input type="checkbox" id="remember-me"> Remember me</label>
                     </label>
                     <a href="#">Forgot password?</a>
                 </div>
 
-               
-                <a href="h1.html" class="btn btn--primary btn--block">Log In →</a>
-
-
+                <button type="submit" class="btn btn--primary btn--block">Log In →</button>
             </form>
 
-         
             <div class="divider">OR</div>
 
-            
-            <button class="btn btn--ghost btn--block">Continue with Google</button>
+            <a class="btn btn--ghost btn--block" href="http://localhost:8080/oauth2/authorization/google">Continue with Google</a>
 
-           
             <p class="auth__foot">
                 Don't have an account? <a href="signup.html">Sign up</a>
             </p>
         </div>
     </main>
 
-    <script src="script.js" defer></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/password.js" defer></script>
+    <script src="js/script.js" defer></script>
 </body>
 </html>

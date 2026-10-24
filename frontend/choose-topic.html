@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Choose Your Topic · WebSprint</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="description" content="Pick a technology and start your learning journey." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +17,10 @@
      <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/topic.css" />
+
+    <link rel="stylesheet" href="css/theme.css">
+<script src="js/theme.js" defer></script>
+<script src="js/avatar-sync.js" defer></script>
 </head>
 <body>
 
@@ -21,8 +28,10 @@
     <header class="site-header">
         <div class="header-inner">
             <div class="brand">
+                <a href="h1.html" class="brand" style="text-decoration: none;">
                 <span class="brand__logo">&lt;#&gt;</span>
                 <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </a>
             </div>
             <nav class="main-nav">
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
@@ -56,55 +65,7 @@
         </div>
 
 
-        <div class="grid grid--3">
-
-            <!-- HTML -->
-            <div class="card topic-card is-html">
-                <div class="topic-icon is-html">&lt;/&gt;</div>
-                <h3>HTML</h3>
-                <p>Learn the structure of the web and build the foundation of every website.</p>
-                <span class="badge badge--beginner">⚡ Beginner</span>
-                <div class="progress">
-                    <div class="progress__fill" style="width: 0%"></div>
-                </div>
-                <div class="progress__meta">
-                    <span>Progress</span>
-                    <span>0%</span>
-                </div>
-                <a href="html-roadmap.html" class="btn btn--html btn--block">Start Learning →</a>
-            </div>
-
-            <!-- CSS -->
-            <div class="card topic-card is-css">
-                <div class="topic-icon is-css">#</div>
-                <h3>CSS</h3>
-                <p>Style your webpages with colors, fonts and make them beautiful.</p>
-                <span class="badge badge--beginner">⚡ Beginner</span>
-                <div class="progress">
-                    <div class="progress__fill" style="width: 0%"></div>
-                </div>
-                <div class="progress__meta">
-                    <span>Progress</span>
-                    <span>0%</span>
-                </div>
-                <a href="css-roadmap.html" class="btn btn--css btn--block">Start Learning →</a>
-            </div>
-
-            <!-- JavaScript -->
-            <div class="card topic-card is-js">
-                <div class="topic-icon is-js">JS</div>
-                <h3>JavaScript</h3>
-                <p>Add interactivity and bring your websites to life with JavaScript.</p>
-                <span class="badge badge--beginner">⚡ Beginner</span>
-                <div class="progress">
-                    <div class="progress__fill" style="width: 0%"></div>
-                </div>
-                <div class="progress__meta">
-                    <span>Progress</span>
-                    <span>0%</span>
-                </div>
-                <a href="js-roadmap.html" class="btn btn--js btn--block">Start Learning →</a>
-            </div>
+        <div class="grid grid--3" id="subjects-container">
         </div>
 
         
@@ -114,31 +75,18 @@
                 <h4>Learn. Practice. Level Up!</h4>
                 <p>Master each technology step by step with hands-on challenges, real projects and fun scenarios.</p>
             </div>
-
-            <div class="feature-grid">
-                <div class="feature-item">
-                    <span class="feature-item__icon">🛠️</span>
-                    <span class="feature-item__label">Hands-on Practice</span>
-                    <span class="feature-item__value">0%</span>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-item__icon">📈</span>
-                    <span class="feature-item__label">Level Based Learning</span>
-                    <span class="feature-item__value">0%</span>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-item__icon">🎯</span>
-                    <span class="feature-item__label">Track Your Progress</span>
-                    <span class="feature-item__value">0%</span>
-                </div>
-            </div>
         </div>
 
         
-        <div class="page-indicator">1. CHOOSE TOPIC PAGE</div>
+        <div class="page-indicator"></div>
 
     </main>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/topic.js"></script>
+    <script src="js/script.js" defer></script>
 
-    <script src="script.js" defer></script>
 </body>
 </html>

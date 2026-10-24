@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HTML Roadmap · WebSprint</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="description" content="Learn HTML step by step with the WebSprint roadmap." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,15 +17,22 @@
     <link rel="stylesheet" href="css/roadmap.css" />
       <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/header.css" />
+
+    <link rel="stylesheet" href="css/theme.css">
+<script src="js/theme.js" defer></script>
+<script src="js/avatar-sync.js" defer></script>
+
 </head>
-<body>
+<body data-subject="HTML">
 
     
     <header class="site-header">
         <div class="header-inner">
             <div class="brand">
+                <a href="h1.html" class="brand" style="text-decoration: none;">
                 <span class="brand__logo">&lt;#&gt;</span>
                 <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </a>
             </div>
             <nav class="main-nav">
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
@@ -78,91 +88,49 @@
         <div class="roadmap">
 
          
-            <div class="roadmap__list">
-
-              
-                <a href="lesson.html" class="step is-done">
-                    <span class="step__num">✓</span>
-                    <div class="step__body">
-                        <h4>HTML Basics</h4>
-                        <p>Learn what HTML is and how it works.</p>
-                    </div>
-                    <span class="step__status is-done">Completed</span>
-                </a>
-
-               
-                <div class="step is-locked">
-                    <span class="step__num">2</span>
-                    <div class="step__body">
-                        <h4>Tags &amp; Elements</h4>
-                        <p>Learn about headings, paragraphs and more.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
-
-               
-                <div class="step is-locked">
-                    <span class="step__num">3</span>
-                    <div class="step__body">
-                        <h4>Lists &amp; Tables</h4>
-                        <p>Organize content using lists and tables.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
-
-               
-                <div class="step is-locked">
-                    <span class="step__num">4</span>
-                    <div class="step__body">
-                        <h4>Forms</h4>
-                        <p>Create forms and take user input.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
-
-                
-                <div class="step is-locked">
-                    <span class="step__num">5</span>
-                    <div class="step__body">
-                        <h4>Semantic HTML</h4>
-                        <p>Write cleaner and more meaningful code.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
-
-                
-                <div class="step is-locked">
-                    <span class="step__num">6</span>
-                    <div class="step__body">
-                        <h4>Mini Project</h4>
-                        <p>Build a simple webpage.</p>
-                    </div>
-                    <span class="step__status is-locked">🔒 Locked</span>
-                </div>
+            <div class="roadmap__list" id="levels-container">
+                <!-- Levels will be loaded from backend -->
             </div>
 
            
             <aside class="roadmap__sidebar card">
+
                 <p class="section-label">Your Progress</p>
+
                 <div class="ring-wrap">
-                    <div class="ring" style="--val: 16">
+                    <div class="ring" id="progress-ring" style="--val: 0">
                         <div class="ring__label">
-                            <b>16%</b>
-                            <span>1 of 6 completed</span>
+                            <b id="progress-ring-pct">0%</b>
+                            <span id="progress-ring-label">0 of 0 completed</span>
                         </div>
                     </div>
                 </div>
-                <div class="kv"><span>XP Earned</span><b>250 XP</b></div>
-                <div class="kv"><span>Next Reward</span><b>🏆 Level 2</b></div>
-            </aside>
 
+                <div class="kv">
+                    <span>XP Earned</span>
+                    <b id="xp-earned">0 XP</b>
+                </div>
+
+                <div class="kv">
+                    <span>Next Reward</span>
+                    <b id="next-reward">🏆 —</b>
+                </div>
+
+
+            </aside>
         </div>
 
         
-        <div class="page-indicator">2. HTML ROADMAP</div>
+        <div class="page-indicator"></div>
 
     </main>
 
-    <script src="script.js" defer></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/levels.js"></script>
+    <script src="js/script.js" defer></script>
+    
 </body>
 </html>

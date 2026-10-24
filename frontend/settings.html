@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Settings · WebSprint</title>
+   <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="description" content="Manage your WebSprint app settings, accessibility, learning preferences and connected accounts." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,12 +18,20 @@
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/dsahboard.css" />
     <link rel="stylesheet" href="css/settings.css" />
+    <link rel="stylesheet" href="css/delete-account.css" />
+
+    <link rel="stylesheet" href="css/theme.css">
+    <script src="js/theme.js" defer></script>
+    <script src="js/avatar-sync.js" defer></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/delete-account.js" defer></script>
+
 </head>
 <body>
 
     <header class="site-header">
         <div class="header-inner">
-            <a href="dashboard.html" class="brand" style="text-decoration: none;">
+            <a href="h1.html" class="brand" style="text-decoration: none;">
                 <span class="brand__logo">&lt;#&gt;</span>
                 <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
             </a>
@@ -188,7 +199,7 @@
                     <p class="stat__lbl" style="margin-bottom:0.8rem;">
                         Deleting your account is permanent and cannot be undone.
                     </p>
-                    <button class="btn btn--danger">Delete Account</button>
+                    <button class="btn btn--danger" type="button" id="delete-account-btn">Delete Account</button>
                 </div>
             </div>
 
@@ -258,20 +269,61 @@
 
     </main>
 
-    <script src="js/script.js" defer></script>
-    <script>
-        (function () {
-            "use strict";
-            document.querySelectorAll(".toggle-group").forEach(function (group) {
-                const btns = group.querySelectorAll(".btn");
-                btns.forEach(function (btn) {
-                    btn.addEventListener("click", function () {
-                        btns.forEach(function (b) { b.classList.remove("is-active"); });
-                        btn.classList.add("is-active");
+<script>
+    (function () {
+        "use strict";
+
+        // Toggle active button
+        document.querySelectorAll(".toggle-group").forEach(function (group) {
+            const btns = group.querySelectorAll(".btn");
+
+            btns.forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    btns.forEach(function (b) {
+                        b.classList.remove("is-active");
                     });
+
+                    btn.classList.add("is-active");
+
+                    // Font size
+                    if (btn.dataset.fontsize) {
+                        const size = btn.dataset.fontsize;
+
+                        document.documentElement.setAttribute(
+                            "data-fontsize",
+                            size
+                        );
+
+                        localStorage.setToken("fontSize", size);
+                    }
                 });
             });
-        })();
-    </script>
+        });
+
+        // Restore selected font size
+        const savedFontSize = localStorage.getToken("fontSize");
+
+        if (savedFontSize) {
+            document.documentElement.setAttribute(
+                "data-fontsize",
+                savedFontSize
+            );
+
+            const selectedButton = document.querySelector(
+                `[data-fontsize="${savedFontSize}"]`
+            );
+
+            if (selectedButton) {
+                document
+                    .querySelectorAll("[data-fontsize]")
+                    .forEach(function (btn) {
+                        btn.classList.remove("is-active");
+                    });
+
+                selectedButton.classList.add("is-active");
+            }
+        }
+    })();
+</script>
 </body>
 </html>

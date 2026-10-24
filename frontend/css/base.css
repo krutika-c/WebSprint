@@ -43,9 +43,9 @@ body {
 }
 
 .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 .brand__logo {
@@ -441,7 +441,60 @@ body {
     color: #7a8796;
     margin-top: 0.2rem;
 }
+/*password*/
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
 
+.password-wrapper input {
+    width: 100%;
+    padding-right: 45px;
+    box-sizing: border-box;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    border: none;
+    background: transparent;
+    padding: 5px;
+
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+}
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    border: none;
+    background: transparent;
+
+    padding: 6px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #777;
+}
+
+.password-toggle:hover {
+    color: #222;
+}
+
+.password-toggle svg {
+    width: 19px;
+    height: 19px;
+    stroke-width: 2;
+}
 /* Feature section */
 .feature-section {
     margin-top: 2.5rem;
@@ -562,4 +615,43 @@ body {
     .card {
         padding: 1.5rem 1rem;
     }
+}
+
+.field__error {
+    display: none;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #ff6b6b;
+}
+
+.field.has-error input {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 1px rgba(255, 107, 107, 0.25);
+}
+
+.field.has-error .field__error {
+    display: block;
+}
+html[data-fontsize="small"] {
+    font-size: 14px;
+}
+
+html[data-fontsize="medium"] {
+    font-size: 16px;
+}
+
+html[data-fontsize="large"] {
+    font-size: 18px;
+}
+
+html[data-fontsize="small"] {
+    font-size: 14px;
+}
+
+html[data-fontsize="medium"] {
+    font-size: 16px;
+}
+
+html[data-fontsize="large"] {
+    font-size: 18px;
 }

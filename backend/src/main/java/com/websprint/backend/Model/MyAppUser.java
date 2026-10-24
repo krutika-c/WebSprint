@@ -2,6 +2,7 @@ package com.websprint.backend.Model;
 
 import java.time.Instant;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,15 @@ public class MyAppUser {
     private String auth_provider;
     private Instant created_at;
     private Instant last_login;
+
+    // A public-facing handle, distinct from the login email.
+    // Nullable so existing rows aren't broken; a default is
+    // generated for anyone who doesn't have one yet (see
+    // MyAppUserService.generateUniqueUsername). Unique so two
+    // people can't collide — Postgres allows multiple NULLs
+    // under a UNIQUE constraint, so this is safe pre-backfill.
+    @Column(unique = true, length = 30)
+    private String username;
 
     public Long getId() {
         return id;
@@ -83,6 +93,14 @@ public class MyAppUser {
 
     public void setLast_login(Instant last_login) {
         this.last_login = last_login;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 }

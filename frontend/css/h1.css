@@ -135,6 +135,9 @@ body{
 .play-btn,
 .skip-btn{
     text-decoration:none;
+    font-family:inherit;
+    cursor:pointer;
+    border:none;
     font-size:15px;
 
     padding:18px 30px;
@@ -167,6 +170,19 @@ body{
 .skip-btn:hover{
     background:rgba(143,255,226,.12);
     transform:translateY(-4px);
+}
+
+.start-choices[hidden]{
+    display:none;
+}
+
+.start-choices{
+    animation:choicesIn .35s ease;
+}
+
+@keyframes choicesIn{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 .stats{

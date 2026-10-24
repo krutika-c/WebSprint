@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard · WebSprint</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="description" content="Track your courses, XP, badges and streak on WebSprint." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +17,12 @@
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/header.css" />   
      <link rel="stylesheet" href="css/dsahboard.css" />
+     <link rel="stylesheet" href="css/achievement-toast.css" />
+
+     <link rel="stylesheet" href="css/theme.css">
+<script src="js/theme.js" defer></script>
+<script src="js/avatar-sync.js" defer></script>
+
 </head>
 <body>
 
@@ -21,8 +30,10 @@
     <header class="site-header">
         <div class="header-inner">
             <div class="brand">
+                <a href="h1.html" class="brand" style="text-decoration: none;">
                 <span class="brand__logo">&lt;#&gt;</span>
                 <span class="brand__name">WEB<span class="sprint">SPRINT</span></span>
+            </a>
             </div>
             <nav class="main-nav">
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
@@ -53,7 +64,7 @@
             </div>
             <h1 class="course-hero__title">Dashboard</h1>
             <p class="course-hero__desc">
-                Welcome back, CodeMaster! Here's your progress summary.
+                Welcome back, <span id="dash-username">there</span>! Here's your progress summary.
             </p>
         </div>
     </section>
@@ -65,28 +76,28 @@
             <div class="card stat">
                 <div class="stat__icon">🏅</div>
                 <div class="stat__info">
-                    <div class="stat__val">12</div>
-                    <div class="stat__lbl">Level</div>
+                    <div class="stat__val" id="dash-levels-completed">0</div>
+                    <div class="stat__lbl">Levels Completed</div>
                 </div>
             </div>
             <div class="card stat">
                 <div class="stat__icon">🔥</div>
                 <div class="stat__info">
-                    <div class="stat__val">1,450</div>
+                    <div class="stat__val" id="dash-xp">0</div>
                     <div class="stat__lbl">XP</div>
                 </div>
             </div>
             <div class="card stat">
                 <div class="stat__icon">🎖️</div>
                 <div class="stat__info">
-                    <div class="stat__val">8</div>
-                    <div class="stat__lbl">Badges</div>
+                    <div class="stat__val" id="dash-longest-streak">0 Days</div>
+                    <div class="stat__lbl">Longest Streak</div>
                 </div>
             </div>
             <div class="card stat">
                 <div class="stat__icon">⚡</div>
                 <div class="stat__info">
-                    <div class="stat__val">7 Days</div>
+                    <div class="stat__val" id="dash-streak">0 Days</div>
                     <div class="stat__lbl">Streak</div>
                 </div>
             </div>
@@ -94,60 +105,60 @@
 
         <!-- ─── Your Courses ─── -->
         <p class="section-label">Your Courses</p>
-        <div class="grid grid--3 course-grid">
+        <div class="grid grid--3 course-grid" id="course-grid">
             <!-- HTML -->
-            <div class="card course-card">
+            <div class="card course-card" data-subject="HTML">
                 <div class="course-card__top">
                     <div class="course-icon is-html">&lt;/&gt;</div>
                     <div>
                         <strong>HTML</strong>
-                        <div class="stat__lbl">12 / 15 Lessons</div>
+                        <div class="stat__lbl" data-course-lessons>0 / 0 Lessons</div>
                     </div>
                 </div>
                 <div class="progress">
-                    <div class="progress__fill" style="width: 80%"></div>
+                    <div class="progress__fill" data-course-fill style="width: 0%"></div>
                 </div>
                 <div class="progress__meta">
-                    <span>80%</span>
-                    <span>In progress</span>
+                    <span data-course-pct>0%</span>
+                    <span data-course-state>In progress</span>
                 </div>
                 <a href="html-roadmap.html" class="btn btn--ghost btn--block">Continue</a>
             </div>
 
             <!-- CSS -->
-            <div class="card course-card">
+            <div class="card course-card" data-subject="CSS">
                 <div class="course-card__top">
                     <div class="course-icon is-css">#</div>
                     <div>
                         <strong>CSS</strong>
-                        <div class="stat__lbl">7 / 15 Lessons</div>
+                        <div class="stat__lbl" data-course-lessons>0 / 0 Lessons</div>
                     </div>
                 </div>
                 <div class="progress">
-                    <div class="progress__fill" style="width: 45%"></div>
+                    <div class="progress__fill" data-course-fill style="width: 0%"></div>
                 </div>
                 <div class="progress__meta">
-                    <span>45%</span>
-                    <span>In progress</span>
+                    <span data-course-pct>0%</span>
+                    <span data-course-state>In progress</span>
                 </div>
                 <a href="css-roadmap.html" class="btn btn--ghost btn--block">Continue</a>
             </div>
 
             <!-- JavaScript -->
-            <div class="card course-card">
+            <div class="card course-card" data-subject="JS">
                 <div class="course-card__top">
                     <div class="course-icon is-js">JS</div>
                     <div>
                         <strong>JavaScript</strong>
-                        <div class="stat__lbl">3 / 15 Lessons</div>
+                        <div class="stat__lbl" data-course-lessons>0 / 0 Lessons</div>
                     </div>
                 </div>
                 <div class="progress">
-                    <div class="progress__fill" style="width: 20%"></div>
+                    <div class="progress__fill" data-course-fill style="width: 0%"></div>
                 </div>
                 <div class="progress__meta">
-                    <span>20%</span>
-                    <span>In progress</span>
+                    <span data-course-pct>0%</span>
+                    <span data-course-state>In progress</span>
                 </div>
                 <a href="js-roadmap.html" class="btn btn--ghost btn--block">Continue</a>
             </div>
@@ -156,21 +167,28 @@
         
         <div class="card recent-achievement">
             <p class="section-label">Recent Achievement</p>
-            <div class="recent-achievement__content">
-                <div class="recent-achievement__icon">🏅</div>
+            <div class="recent-achievement__content" id="recent-achievement">
+                <div class="recent-achievement__icon" id="recent-ach-icon">🏅</div>
                 <div class="recent-achievement__info">
-                    <strong>HTML Explorer</strong>
-                    <span class="stat__lbl">Complete HTML Level 5 · 2h ago</span>
+                    <strong id="recent-ach-title">Loading…</strong>
+                    <span class="stat__lbl" id="recent-ach-desc"></span>
                 </div>
                 <a href="achivements.html" class="btn btn--ghost">View All</a>
             </div>
         </div>
 
         
-        <div class="page-indicator">0. DASHBOARD</div>
+        <div class="page-indicator"></div>
 
     </main>
 
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/achievement-toast.js"></script>
+    <script src="js/dashboard.js"></script>
     <script src="js/script.js" defer></script>
 </body>
 </html>

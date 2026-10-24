@@ -1,10 +1,10 @@
-root {
+/* fixed: was "root {" (missing colon) so none of the CSS variables applied */
+:root {
   --bg:            #070b12;
   --bg-2:          #0a0f18;
   --surface:       #0e141f;
   --surface-2:     #121a27;
   --surface-3:     #16202f;
-  --border:        #1d2troublesome;
   --border:        #1d2a3d;
   --border-soft:   #16202f;
   --text:          #e6edf6;
