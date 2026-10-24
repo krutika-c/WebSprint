@@ -36,7 +36,13 @@ public class AuthController {
             return ResponseEntity.status(401).body(Map.of("error", "Invalid email or password"));
         }
 
-        String token = jwtUtil.generateToken(request.getEmail());
+        // "Remember me" ticked -> long-lived token (30 days); otherwise the normal short one (1 day).
+        // Boolean.TRUE.equals(...) is false when the field is missing (null), so older clients still work.
+        long ttl = Boolean.TRUE.equals(request.getRememberMe())
+                ? JwtUtil.LONG_TTL_MS
+                : JwtUtil.SHORT_TTL_MS;
+
+        String token = jwtUtil.generateToken(request.getEmail(), ttl);
         return ResponseEntity.ok(Map.of("token", token));
     }
 }

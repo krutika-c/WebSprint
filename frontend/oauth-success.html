@@ -13,13 +13,24 @@
 </head>
 <body>
     <p>Signing you in…</p>
+
+    <!-- No "defer" here on purpose: the inline script below runs immediately
+         and needs setToken() to already exist. -->
+    <script src="js/auth.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const token = params.get('token');
         const needsUsername = params.get('needsUsername') === 'true';
 
         if (token) {
-            localStorage.setItem('token', token);
+            // Google sign-ins are ALWAYS remembered: the token goes in localStorage,
+            // so it survives closing the browser. (The backend gives Google tokens
+            // a 30-day lifetime; see OAuth2LoginSuccessHandler.)
+            setToken(token, true);
+
+            // Remove the token from the address bar so it doesn't stay in browser history.
+            history.replaceState(null, '', window.location.pathname);
+
             // Brand-new Google sign-ups haven't picked a username yet
             // (see OAuth2LoginSuccessHandler) — send them to that
             // onboarding step first, same as the signup form does for

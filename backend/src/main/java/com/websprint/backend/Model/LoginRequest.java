@@ -21,4 +21,9 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    private Boolean rememberMe; 
+
+    public Boolean getRememberMe() { return rememberMe; }
+    public void setRememberMe(Boolean rememberMe) { this.rememberMe = rememberMe; }
 }

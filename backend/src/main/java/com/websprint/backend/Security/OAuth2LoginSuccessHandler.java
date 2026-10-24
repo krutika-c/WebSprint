@@ -71,7 +71,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         user.setLast_login(Instant.now());
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), JwtUtil.LONG_TTL_MS);
         boolean needsUsername = user.getUsername() == null || user.getUsername().isBlank();
 
         response.sendRedirect(frontendUrl + "/oauth-success.html?token=" + token

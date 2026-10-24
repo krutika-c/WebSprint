@@ -1,9 +1,11 @@
 package com.websprint.backend.Security;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -13,21 +15,37 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
 
-    // TODO: move this out of code into application.properties
-    // (e.g. jwt.secret=...) and inject with @Value once you set that up.
-    // Must be at least 32 characters for the HS256 algorithm below.
-    private final SecretKey secretKey = Keys.hmacShaKeyFor(
-            "change-this-to-a-real-256-bit-secret-key-stored-safely".getBytes()
-    );
+    // How long a token lives. The 'L' makes these long (64-bit) numbers: 30 days in
+    // milliseconds is about 2.6 billion, which would overflow a plain int (max ~2.1 billion).
+    public static final long SHORT_TTL_MS = 24L * 60 * 60 * 1000;       // 1 day  (normal login)
+    public static final long LONG_TTL_MS  = 30L * 24 * 60 * 60 * 1000;  // 30 days (remember me)
 
-    private final long EXPIRATION_MS = 24 * 60 * 60 * 1000; // 1 day
+    private final SecretKey secretKey;
 
-    // Called once, at login/signup, to create the token.
+    // The signing secret now comes from application.properties (jwt.secret=...)
+    // instead of being written in code. Spring fills in the value when it creates this class.
+    // If the property is missing, the app refuses to start, which is what you want.
+    public JwtUtil(@Value("${jwt.secret}") String secret) {
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        if (keyBytes.length < 32) {
+            throw new IllegalStateException(
+                    "jwt.secret must be at least 32 characters. Set a long random value in application.properties.");
+        }
+        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    // Existing callers (e.g. signup) keep working and get the short lifetime.
     public String generateToken(String email) {
+        return generateToken(email, SHORT_TTL_MS);
+    }
+
+    // Called once, at login/signup, to create the token. ttlMillis decides how long it stays valid.
+    public String generateToken(String email, long ttlMillis) {
+        Date now = new Date();
         return Jwts.builder()
                 .subject(email)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
+                .issuedAt(now)
+                .expiration(new Date(now.getTime() + ttlMillis))
                 .signWith(secretKey)
                 .compact();
     }

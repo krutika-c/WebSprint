@@ -5,13 +5,24 @@
      authFetch. Reusable helper for any future call to a
      protected endpoint (lessons, quizzes, progress). Attaches
      the JWT automatically.
+
+     getToken() / clearToken() come from js/auth.js, which must be
+     loaded BEFORE this file. If the server answers 401 (token
+     expired, or the account was deleted), the user is sent back
+     to the login page instead of being left on a broken page.
   ---------------------------------------------------------- */
   window.authFetch = function (url, options) {
     options = options || {};
     options.headers = Object.assign({}, options.headers, {
-      Authorization: "Bearer " + (localStorage.getItem("token") || ""),
+      Authorization: "Bearer " + getToken(),
     });
-    return fetch(url, options);
+    return fetch(url, options).then(function (res) {
+      if (res.status === 401) {
+        clearToken();
+        window.location.href = "login.html";
+      }
+      return res;
+    });
   };
 
   /* ----------------------------------------------------------
@@ -176,199 +187,238 @@
   /* ----------------------------------------------------------
      3. Login — real field name is "username" (Spring Security's
      default), even though it holds an email address.
+
+     "Remember me": the checkbox value is sent to the backend (which
+     picks a 30-day or 1-day token) and decides where the token is
+     stored (localStorage = survives closing the browser,
+     sessionStorage = gone when the tab closes). See js/auth.js.
   ---------------------------------------------------------- */
   const loginForm = document.getElementById("loginForm");
-if (loginForm) {
-  loginForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    clearErrors(loginForm);
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    let ok = true;
-    if (!isEmail(email)) {
-      showError("f-email", "Enter a valid email address.");
-      ok = false;
-    }
-    if (password.length < 6) {
-      showError("f-password", "Password must be at least 6 characters.");
-      ok = false;
-    }
-    if (!ok) return;
+  if (loginForm) {
+    loginForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      clearErrors(loginForm);
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const rememberBox = document.getElementById("remember-me");
+      const rememberMe = !!(rememberBox && rememberBox.checked);
+      let ok = true;
+      if (!isEmail(email)) {
+        showError("f-email", "Enter a valid email address.");
+        ok = false;
+      }
+      if (password.length < 6) {
+        showError("f-password", "Password must be at least 6 characters.");
+        ok = false;
+      }
+      if (!ok) return;
 
-    try {
-      const res = await fetch("http://localhost:8080/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email, password: password }),
-      });
-      const data = await res.json();
+      try {
+        const res = await fetch("http://localhost:8080/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, password: password, rememberMe: rememberMe }),
+        });
+        const data = await res.json();
 
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
+        if (res.ok) {
+          setToken(data.token, rememberMe);
 
-        // Returning users who've already taken the placement test skip the
-        // landing page and go straight to the app.
-        let destination = "h1.html";
-        try {
-          const statusRes = await fetch("http://localhost:8080/api/placement-test/status", {
-            headers: { Authorization: "Bearer " + data.token },
-          });
-          if (statusRes.ok) {
-            const status = await statusRes.json();
-            if (status.taken) destination = "choose-topic.html";
+          // Returning users who've already taken the placement test skip the
+          // landing page and go straight to the app.
+          let destination = "h1.html";
+          try {
+            const statusRes = await fetch("http://localhost:8080/api/placement-test/status", {
+              headers: { Authorization: "Bearer " + data.token },
+            });
+            if (statusRes.ok) {
+              const status = await statusRes.json();
+              if (status.taken) destination = "choose-topic.html";
+            }
+          } catch (e) {
+            // Can't tell — fall back to the landing page, which re-checks itself.
           }
-        } catch (e) {
-          // Can't tell — fall back to the landing page, which re-checks itself.
+          window.location.href = destination;
+        } else {
+          showError("f-password", data.error || "Login failed. Try again.");
         }
-        window.location.href = destination;
-      } else {
-        showError("f-password", data.error || "Login failed. Try again.");
+      } catch (err) {
+        showError("f-password", "Could not reach the server. Try again.");
       }
-    } catch (err) {
-      showError("f-password", "Could not reach the server. Try again.");
-    }
-  });
-}
-
-const signupForm = document.getElementById("signupForm");
-if (signupForm) {
-
-  // ----------------------------------------------------------
-  // Username is chosen right here at signup, so check it against
-  // the backend as the person types — same endpoint the Settings
-  // page uses to check a username change later.
-  // ----------------------------------------------------------
-  const usernameInput = document.getElementById("username");
-  let usernameAvailabilityKnown = false; // becomes true once a check confirms it's free
-
-  function setUsernameHint(message, className) {
-    const el = document.getElementById("username-status");
-    if (!el) return;
-    el.textContent = message;
-    el.className = "field-hint" + (className ? " " + className : "");
-  }
-
-  const checkUsernameAvailability = debounce(async function (rawValue) {
-    const value = (rawValue || "").trim().toLowerCase();
-    usernameAvailabilityKnown = false;
-
-    if (value.length === 0) {
-      setUsernameHint("", "");
-      return;
-    }
-
-    if (!isValidUsername(value)) {
-      setUsernameHint("3-20 characters: lowercase letters, numbers, underscores.", "is-taken");
-      return;
-    }
-
-    setUsernameHint("Checking availability...", "is-checking");
-
-    try {
-      const res = await fetch(
-        "http://localhost:8080/api/users/username-availability?username=" + encodeURIComponent(value)
-      );
-      const result = await res.json();
-
-      if (result.available) {
-        usernameAvailabilityKnown = true;
-        setUsernameHint("Username is available.", "is-available");
-      } else {
-        setUsernameHint(result.reason || "That username is already taken.", "is-taken");
-      }
-    } catch (err) {
-      setUsernameHint("Couldn't check availability right now.", "is-taken");
-    }
-  }, 400);
-
-  if (usernameInput) {
-    usernameInput.addEventListener("input", function () {
-      clearError("f-username");
-      checkUsernameAvailability(usernameInput.value);
     });
   }
 
-  signupForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    clearErrors(signupForm);
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const username = (usernameInput ? usernameInput.value : "").trim().toLowerCase();
-    const password = document.getElementById("password").value;
-    const confirm = document.getElementById("confirm").value;
-    let ok = true;
-    if (name.length < 2) {
-      showError("f-name", "Please enter your name.");
-      ok = false;
-    }
-    if (!isEmail(email)) {
-      showError("f-email", "Enter a valid email address.");
-      ok = false;
-    }
-    if (!isValidUsername(username)) {
-      showError("f-username", "Choose a username: 3-20 characters, lowercase letters, numbers, underscores.");
-      ok = false;
-    }
-    if (password.length < 6) {
-      showError("f-password", "Password must be at least 6 characters.");
-      ok = false;
-    }
-    if (confirm !== password) {
-      showError("f-confirm", "Passwords do not match.");
-      ok = false;
-    }
-    if (!ok) return;
+  // "Continue with Google" is a plain link, so the page is about to be left.
+  // Save the checkbox choice first; oauth-success.html reads it when the
+  // user comes back from Google and stores the token accordingly.
+  const googleBtn = document.getElementById("googleBtn");
+  if (googleBtn) {
+    googleBtn.addEventListener("click", function () {
+      const box = document.getElementById("remember-me");
+      sessionStorage.setItem("pendingRemember", box && box.checked ? "true" : "false");
+    });
+  }
 
-    // If the availability check hasn't confirmed this exact value yet
-    // (e.g. they typed it and hit Enter immediately), verify it once
-    // more before submitting so the error, if any, shows up here
-    // rather than as a generic failure after the request.
-    if (!usernameAvailabilityKnown) {
+  const signupForm = document.getElementById("signupForm");
+  if (signupForm) {
+
+    // ----------------------------------------------------------
+    // Username is chosen right here at signup, so check it against
+    // the backend as the person types — same endpoint the Settings
+    // page uses to check a username change later.
+    // ----------------------------------------------------------
+    const usernameInput = document.getElementById("username");
+    let usernameAvailabilityKnown = false; // becomes true once a check confirms it's free
+
+    function setUsernameHint(message, className) {
+      const el = document.getElementById("username-status");
+      if (!el) return;
+      el.textContent = message;
+      el.className = "field-hint" + (className ? " " + className : "");
+    }
+
+    const checkUsernameAvailability = debounce(async function (rawValue) {
+      const value = (rawValue || "").trim().toLowerCase();
+      usernameAvailabilityKnown = false;
+
+      if (value.length === 0) {
+        setUsernameHint("", "");
+        return;
+      }
+
+      if (!isValidUsername(value)) {
+        setUsernameHint("3-20 characters: lowercase letters, numbers, underscores.", "is-taken");
+        return;
+      }
+
+      setUsernameHint("Checking availability...", "is-checking");
+
       try {
-        const availRes = await fetch(
-          "http://localhost:8080/api/users/username-availability?username=" + encodeURIComponent(username)
+        const res = await fetch(
+          "http://localhost:8080/api/users/username-availability?username=" + encodeURIComponent(value)
         );
-        const availData = await availRes.json();
-        if (!availData.available) {
-          showError("f-username", availData.reason || "That username is already taken.");
-          return;
+        const result = await res.json();
+
+        if (result.available) {
+          usernameAvailabilityKnown = true;
+          setUsernameHint("Username is available.", "is-available");
+        } else {
+          setUsernameHint(result.reason || "That username is already taken.", "is-taken");
         }
       } catch (err) {
-        // Can't reach the server to double-check — let the signup
-        // request itself surface the final answer below.
+        setUsernameHint("Couldn't check availability right now.", "is-taken");
       }
+    }, 400);
+
+    if (usernameInput) {
+      usernameInput.addEventListener("input", function () {
+        clearError("f-username");
+        checkUsernameAvailability(usernameInput.value);
+      });
     }
 
-    try {
-      const res = await fetch("http://localhost:8080/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: name,
-          email: email,
-          username: username,
-          password: password,
-          confirmPassword: confirm,
-        }),
-      });
-      const data = await res.json();
+    signupForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      clearErrors(signupForm);
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const username = (usernameInput ? usernameInput.value : "").trim().toLowerCase();
+      const password = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm").value;
+      let ok = true;
+      if (name.length < 2) {
+        showError("f-name", "Please enter your name.");
+        ok = false;
+      }
+      if (!isEmail(email)) {
+        showError("f-email", "Enter a valid email address.");
+        ok = false;
+      }
+      if (!isValidUsername(username)) {
+        showError("f-username", "Choose a username: 3-20 characters, lowercase letters, numbers, underscores.");
+        ok = false;
+      }
+      if (password.length < 6) {
+        showError("f-password", "Password must be at least 6 characters.");
+        ok = false;
+      }
+      if (confirm !== password) {
+        showError("f-confirm", "Passwords do not match.");
+        ok = false;
+      }
+      if (!ok) return;
 
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        // New account -> landing page (START GAME -> take / skip the quiz).
-        window.location.href = "h1.html";
-      } else {
-        const msg = data.error || "Could not create account.";
-        if (/username/i.test(msg)) {
-          showError("f-username", msg);
-        } else {
-          showError("f-email", msg);
+      // If the availability check hasn't confirmed this exact value yet
+      // (e.g. they typed it and hit Enter immediately), verify it once
+      // more before submitting so the error, if any, shows up here
+      // rather than as a generic failure after the request.
+      if (!usernameAvailabilityKnown) {
+        try {
+          const availRes = await fetch(
+            "http://localhost:8080/api/users/username-availability?username=" + encodeURIComponent(username)
+          );
+          const availData = await availRes.json();
+          if (!availData.available) {
+            showError("f-username", availData.reason || "That username is already taken.");
+            return;
+          }
+        } catch (err) {
+          // Can't reach the server to double-check — let the signup
+          // request itself surface the final answer below.
         }
       }
-    } catch (err) {
-      showError("f-email", "Could not reach the server. Try again.");
-    }
-  });
-}
+
+      try {
+        const res = await fetch("http://localhost:8080/api/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fullName: name,
+            email: email,
+            username: username,
+            password: password,
+            confirmPassword: confirm,
+          }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          // New signups get the normal 1-day token (not "remembered").
+          setToken(data.token, false);
+          // New account -> landing page (START GAME -> take / skip the quiz).
+          window.location.href = "h1.html";
+        } else {
+          const msg = data.error || "Could not create account.";
+          if (/username/i.test(msg)) {
+            showError("f-username", msg);
+          } else {
+            showError("f-email", msg);
+          }
+        }
+      } catch (err) {
+        showError("f-email", "Could not reach the server. Try again.");
+      }
+    });
+  }
+
+    // If a token is already stored (remember me), skip the login form.
+  // Plain fetch on purpose: authFetch redirects to login on 401, which would loop.
+  if (loginForm && getToken()) {
+    (async function () {
+      try {
+        const res = await fetch("http://localhost:8080/api/placement-test/status", {
+          headers: { Authorization: "Bearer " + getToken() },
+        });
+        if (res.ok) {
+          const status = await res.json();
+          window.location.href = status.taken ? "choose-topic.html" : "h1.html";
+        } else if (res.status === 401) {
+          clearToken();   // stale token: show the normal login form
+        }
+      } catch (err) {
+        // Server unreachable: just show the login form.
+      }
+    })();
+  }
 
 })();

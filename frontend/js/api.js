@@ -1,6 +1,6 @@
 async function apiFetch(endpoint, options = {}) {
 
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
     const headers = {
         "Content-Type": "application/json",
@@ -20,6 +20,13 @@ async function apiFetch(endpoint, options = {}) {
     );
 
     if (!response.ok) {
+
+        // Expired token, or the account was deleted: send the user back to
+        // login instead of leaving a page full of failed requests.
+        if (response.status === 401) {
+            clearToken();
+            window.location.href = "login.html";
+        }
 
         // Try to read the server's error body (e.g. { "error": "..." })
         // so callers that want a specific message can show one. Kept

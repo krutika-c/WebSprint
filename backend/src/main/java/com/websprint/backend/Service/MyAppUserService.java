@@ -12,40 +12,44 @@ import org.springframework.stereotype.Service;
 import com.websprint.backend.Model.MyAppUser;
 import com.websprint.backend.Repository.MyAppUserRepository;
 
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor // Lombok automatically creates the constructor for repository injection
 public class MyAppUserService implements UserDetailsService {
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    private final MyAppUserRepository repository; 
+    private final MyAppUserRepository repository;
+
+    // The ONLY constructor. Spring calls it and passes in the repository.
+    // (Do not add a second, empty constructor: when a class has more than one,
+    // Spring picks the empty one and leaves `repository` null.)
+    public MyAppUserService(MyAppUserRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
-public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Optional<MyAppUser> user = repository.findByEmail(username);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<MyAppUser> user = repository.findByEmail(username);
 
-    if (user.isPresent()) {
-        MyAppUser userObj = user.get();
+        if (user.isPresent()) {
+            MyAppUser userObj = user.get();
 
-        // Google-signup users have no real password. Spring Security's
-        // User.builder() refuses a null password, so we hand it a
-        // placeholder that will never actually be checked against
-        // anything (JwtAuthFilter never compares credentials).
-        String passwordForSecurity = userObj.getPassword_hash() != null
-                ? userObj.getPassword_hash()
-                : "OAUTH2_USER_NO_PASSWORD";
+            // Google-signup users have no real password. Spring Security's
+            // User.builder() refuses a null password, so we hand it a
+            // placeholder that will never actually be checked against
+            // anything (JwtAuthFilter never compares credentials).
+            String passwordForSecurity = userObj.getPassword_hash() != null
+                    ? userObj.getPassword_hash()
+                    : "OAUTH2_USER_NO_PASSWORD";
 
-        return User.builder()
-            .username(userObj.getEmail())
-            .password(passwordForSecurity)
-            .roles("USER")
-            .build();
-    } else {
-        throw new UsernameNotFoundException("User not found with identifier: " + username);
+            return User.builder()
+                .username(userObj.getEmail())
+                .password(passwordForSecurity)
+                .roles("USER")
+                .build();
+        } else {
+            throw new UsernameNotFoundException("User not found with identifier: " + username);
+        }
     }
-}
 
     // ==================================================
     // USERNAME AVAILABILITY / DEFAULTS

@@ -294,14 +294,14 @@
                             size
                         );
 
-                        localStorage.setItem("fontSize", size);
+                        localStorage.setToken("fontSize", size);
                     }
                 });
             });
         });
 
         // Restore selected font size
-        const savedFontSize = localStorage.getItem("fontSize");
+        const savedFontSize = localStorage.getToken("fontSize");
 
         if (savedFontSize) {
             document.documentElement.setAttribute(
